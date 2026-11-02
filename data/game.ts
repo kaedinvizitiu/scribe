@@ -1,3 +1,6 @@
+import { build2027Calendar } from "./calendar-2027";
+import { YEAR_QUESTIONS, YEAR_QUESTION_POOLS } from "./year-questions";
+
 export const TIERS = {
   ink: { label: "Mustard Seed", points: 100, symbol: "●" },
   bronze: { label: "Manna", points: 250, symbol: "◆" },
@@ -26,6 +29,7 @@ export type Question = {
 
 export type DailyScroll = {
   id: string;
+  dateKey: string;
   title: string;
   subtitle: string;
   deepQuestionId: string;
@@ -50,7 +54,7 @@ const q = (id: string, prompt: string, category: string, answers: AcceptedAnswer
   answers,
 });
 
-export const QUESTIONS: Question[] = [
+const CORE_QUESTIONS: Question[] = [
   q("apostle", "Name one of Jesus’ twelve apostles.", "People", [
     answer("Peter", "ink", "Matthew 10:2", "Peter is named first in Matthew’s list of the twelve.", ["Simon Peter", "Simon"]),
     answer("John", "ink", "Matthew 10:2", "John, the brother of James, was one of the twelve."),
@@ -257,7 +261,6 @@ export const QUESTIONS: Question[] = [
     answer("Fisherman", "ink", "Matthew 4:18", "Peter and Andrew were fishermen."),
     answer("Shepherd", "ink", "1 Samuel 16:11", "David was tending sheep when Samuel came."),
     answer("Carpenter", "bronze", "Mark 6:3", "Jesus was known in Nazareth as the carpenter."),
-    answer("Tax collector", "bronze", "Matthew 9:9", "Matthew was sitting at the tax booth."),
     answer("Tentmaker", "silver", "Acts 18:3", "Paul, Aquila, and Priscilla worked as tentmakers."),
     answer("Physician", "silver", "Colossians 4:14", "Luke is called the beloved physician."),
     answer("Cupbearer", "gold", "Nehemiah 1:11", "Nehemiah served as the king’s cupbearer."),
@@ -294,30 +297,38 @@ export const QUESTIONS: Question[] = [
   ]),
 ];
 
-const schedules = [
-  ["apostle", "judah-king", "bible-animal", "paul-city", "parable", "ot-woman", "named-well"],
-  ["jacob-son", "jesus-miracle", "mountain", "paul-companion", "bible-occupation", "prophet", "gate"],
-  ["judge", "river", "ot-woman", "revelation-church", "tabernacle-object", "dreamer", "biblical-island"],
-  ["tribe", "apostle", "jesus-miracle", "paul-city", "prophet", "bible-animal", "named-well"],
-  ["judah-king", "parable", "mountain", "paul-companion", "ot-woman", "bible-occupation", "gate"],
-  ["jacob-son", "river", "judge", "revelation-church", "dreamer", "tabernacle-object", "biblical-island"],
-  ["apostle", "tribe", "paul-city", "jesus-miracle", "bible-animal", "prophet", "named-well"],
-  ["ot-woman", "judah-king", "parable", "mountain", "paul-companion", "bible-occupation", "gate"],
-  ["judge", "jacob-son", "river", "dreamer", "revelation-church", "tabernacle-object", "biblical-island"],
-  ["tribe", "apostle", "bible-animal", "paul-city", "jesus-miracle", "prophet", "named-well"],
-  ["judah-king", "ot-woman", "parable", "mountain", "paul-companion", "bible-occupation", "gate"],
-  ["jacob-son", "judge", "river", "revelation-church", "tabernacle-object", "dreamer", "biblical-island"],
-  ["apostle", "tribe", "jesus-miracle", "paul-city", "prophet", "bible-animal", "named-well"],
-  ["ot-woman", "judah-king", "parable", "mountain", "paul-companion", "bible-occupation", "gate"],
-];
+const BASE_QUESTIONS: Question[] = [...CORE_QUESTIONS, ...YEAR_QUESTIONS];
 
-export const DAILY_SCROLLS: DailyScroll[] = schedules.map((questionIds, index) => ({
-  id: `sample-${String(index + 1).padStart(2, "0")}`,
-  title: `Daily Scroll ${String(index + 1).padStart(2, "0")}`,
-  subtitle: "Seven questions from across Scripture",
-  questionIds,
-  deepQuestionId: questionIds[6],
-}));
+function alternatePrompt(prompt: string, style: "identify" | "example") {
+  const remainder = prompt.replace(/^Name\s+/i, "").replace(/^one\s+/i, "one ");
+  if (style === "identify") return `Identify ${remainder.charAt(0).toLowerCase()}${remainder.slice(1)}`;
+  return `Give one biblical example: ${remainder.charAt(0).toLowerCase()}${remainder.slice(1)}`;
+}
+
+function promptVariants(question: Question): Question[] {
+  return [
+    question,
+    { ...question, id: `${question.id}-identify`, prompt: alternatePrompt(question.prompt, "identify") },
+    { ...question, id: `${question.id}-example`, prompt: alternatePrompt(question.prompt, "example") },
+  ];
+}
+
+function poolVariants(questionIds: readonly string[]) {
+  return [
+    ...questionIds,
+    ...questionIds.map((id) => `${id}-identify`),
+    ...questionIds.map((id) => `${id}-example`),
+  ];
+}
+
+export const QUESTIONS: Question[] = BASE_QUESTIONS.flatMap(promptVariants);
+
+export const DAILY_SCROLLS: DailyScroll[] = build2027Calendar({
+  oldTestament: poolVariants(["jacob-son", "judge", "judah-king", "ot-woman", "tribe", "tabernacle-object", ...YEAR_QUESTION_POOLS.oldTestament]),
+  newTestament: poolVariants(["apostle", "paul-city", "jesus-miracle", "parable", "paul-companion", "revelation-church", ...YEAR_QUESTION_POOLS.newTestament]),
+  wholeBible: poolVariants(["bible-animal", "prophet", "mountain", "dreamer", "river", "bible-occupation", ...YEAR_QUESTION_POOLS.wholeBible]),
+  niche: poolVariants(["named-well", "gate", "biblical-island", ...YEAR_QUESTION_POOLS.niche]),
+});
 
 export function normalizeAnswer(value: string) {
   return value
@@ -407,6 +418,9 @@ export function getPacificDateKey(date = new Date()) {
 }
 
 export function getDailyScroll(date = new Date()) {
+  const dateKey = getPacificDateKey(date);
+  const scheduled = DAILY_SCROLLS.find((scroll) => scroll.dateKey === dateKey);
+  if (scheduled) return scheduled;
   const [year, month, day] = getPacificDateKey(date).split("-").map(Number);
   const dayNumber = Math.floor(Date.UTC(year, month - 1, day) / 86_400_000);
   return DAILY_SCROLLS[((dayNumber % DAILY_SCROLLS.length) + DAILY_SCROLLS.length) % DAILY_SCROLLS.length];

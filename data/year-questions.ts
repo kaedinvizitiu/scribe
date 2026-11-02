@@ -1,0 +1,454 @@
+import type { AcceptedAnswer, Question, Tier } from "./game";
+
+type Entry = [label: string, tier: Tier, reference: string, aliases?: string[], note?: string];
+
+const slug = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+function groupedQuestion(id: string, prompt: string, category: string, entries: Entry[]): Question {
+  const answers: AcceptedAnswer[] = entries.map(([label, tier, reference, aliases = [], note]) => ({
+    id: slug(label), label, tier, reference, aliases,
+    note: note ?? `${label} is included in this biblical group; see ${reference}.`,
+  }));
+  return { id, prompt, category, answers };
+}
+
+export const YEAR_QUESTIONS: Question[] = [
+  groupedQuestion("egypt-plague", "Name one of the ten plagues of Egypt.", "Exodus", [
+    ["Water turned to blood", "ink", "Exodus 7:20–21", ["blood", "Nile to blood"]],
+    ["Frogs", "ink", "Exodus 8:6"], ["Gnats", "bronze", "Exodus 8:17", ["lice"]],
+    ["Flies", "bronze", "Exodus 8:24"], ["Death of livestock", "silver", "Exodus 9:6", ["livestock", "cattle died"]],
+    ["Boils", "silver", "Exodus 9:10"], ["Hail", "gold", "Exodus 9:23–24"],
+    ["Locusts", "gold", "Exodus 10:13–15"], ["Darkness", "pearl", "Exodus 10:22–23"],
+    ["Death of the firstborn", "pearl", "Exodus 12:29", ["firstborn"]],
+  ]),
+  groupedQuestion("minor-prophet-book", "Name a book of the Minor Prophets.", "Books", [
+    ["Hosea", "ink", "Hosea 1:1"], ["Jonah", "ink", "Jonah 1:1"], ["Amos", "bronze", "Amos 1:1"],
+    ["Micah", "bronze", "Micah 1:1"], ["Joel", "silver", "Joel 1:1"], ["Malachi", "silver", "Malachi 1:1"],
+    ["Zechariah", "gold", "Zechariah 1:1"], ["Habakkuk", "gold", "Habakkuk 1:1"],
+    ["Obadiah", "pearl", "Obadiah 1"], ["Nahum", "pearl", "Nahum 1:1"],
+    ["Zephaniah", "pearl", "Zephaniah 1:1"], ["Haggai", "pearl", "Haggai 1:1"],
+  ]),
+  groupedQuestion("northern-king", "Name a king of the northern kingdom of Israel.", "Kings", [
+    ["Jeroboam", "ink", "1 Kings 12:20", ["Jeroboam I"]], ["Ahab", "ink", "1 Kings 16:29"],
+    ["Jehu", "bronze", "2 Kings 9:13"], ["Omri", "bronze", "1 Kings 16:23"],
+    ["Hoshea", "silver", "2 Kings 17:1"], ["Pekah", "silver", "2 Kings 15:27"],
+    ["Jehoahaz", "gold", "2 Kings 13:1"], ["Menahem", "gold", "2 Kings 15:17"],
+    ["Pekahiah", "pearl", "2 Kings 15:23"], ["Shallum", "pearl", "2 Kings 15:13"],
+  ]),
+  groupedQuestion("elijah-elisha-miracle", "Name a miracle associated with Elijah or Elisha.", "Prophets", [
+    ["Fire on Mount Carmel", "ink", "1 Kings 18:36–38", ["fire from heaven"]],
+    ["Naaman healed", "ink", "2 Kings 5:14", ["healing Naaman"]],
+    ["Widow’s oil multiplied", "bronze", "2 Kings 4:1–7", ["oil multiplied"]],
+    ["Shunammite’s son raised", "bronze", "2 Kings 4:32–37", ["raised the Shunammite boy"]],
+    ["Axe head floated", "silver", "2 Kings 6:5–7", ["floating axe head"]],
+    ["Ravens fed Elijah", "silver", "1 Kings 17:4–6"],
+    ["Poisonous stew purified", "gold", "2 Kings 4:38–41", ["healed the stew"]],
+    ["Dead man revived by Elisha’s bones", "pearl", "2 Kings 13:20–21", ["Elisha's bones"]],
+  ]),
+  groupedQuestion("israel-festival", "Name a biblical feast or appointed festival of Israel.", "Worship", [
+    ["Passover", "ink", "Leviticus 23:5"], ["Feast of Unleavened Bread", "ink", "Leviticus 23:6", ["Unleavened Bread"]],
+    ["Feast of Weeks", "bronze", "Leviticus 23:15–16", ["Weeks", "Pentecost"]],
+    ["Feast of Booths", "silver", "Leviticus 23:34", ["Booths", "Tabernacles", "Sukkot"]],
+    ["Day of Atonement", "gold", "Leviticus 23:27", ["Yom Kippur"]],
+    ["Feast of Trumpets", "gold", "Leviticus 23:24", ["Trumpets"]],
+    ["Firstfruits", "pearl", "Leviticus 23:10–14", ["Feast of Firstfruits"]],
+  ]),
+  groupedQuestion("city-of-refuge", "Name one of Israel’s cities of refuge.", "Places", [
+    ["Hebron", "ink", "Joshua 20:7"], ["Shechem", "bronze", "Joshua 20:7"],
+    ["Kedesh", "silver", "Joshua 20:7"], ["Ramoth-gilead", "gold", "Joshua 20:8", ["Ramoth Gilead"]],
+    ["Bezer", "pearl", "Joshua 20:8"], ["Golan", "pearl", "Joshua 20:8"],
+  ]),
+  groupedQuestion("canaan-people", "Name a people group living in Canaan before Israel’s conquest.", "Nations", [
+    ["Canaanites", "ink", "Deuteronomy 7:1"], ["Amorites", "ink", "Deuteronomy 7:1"],
+    ["Hittites", "bronze", "Deuteronomy 7:1"], ["Jebusites", "silver", "Deuteronomy 7:1"],
+    ["Hivites", "gold", "Deuteronomy 7:1"], ["Perizzites", "pearl", "Deuteronomy 7:1"],
+    ["Girgashites", "pearl", "Deuteronomy 7:1"],
+  ]),
+  groupedQuestion("david-son", "Name a son of David.", "People", [
+    ["Solomon", "ink", "2 Samuel 12:24"], ["Absalom", "ink", "2 Samuel 3:3"],
+    ["Amnon", "bronze", "2 Samuel 3:2"], ["Adonijah", "bronze", "2 Samuel 3:4"],
+    ["Nathan", "silver", "2 Samuel 5:14"], ["Chileab", "gold", "2 Samuel 3:3", ["Daniel"]],
+    ["Shephatiah", "pearl", "2 Samuel 3:4"], ["Ithream", "pearl", "2 Samuel 3:5"],
+  ]),
+  groupedQuestion("ot-priest", "Name a priest or high priest in the Old Testament.", "Worship", [
+    ["Aaron", "ink", "Exodus 28:1"], ["Eli", "ink", "1 Samuel 1:9"],
+    ["Eleazar", "bronze", "Numbers 20:25–28"], ["Abiathar", "silver", "1 Samuel 22:20"],
+    ["Zadok", "silver", "2 Samuel 8:17"], ["Hilkiah", "gold", "2 Kings 22:8"],
+    ["Jehozadak", "pearl", "1 Chronicles 6:15", ["Jozadak"]], ["Pashhur", "pearl", "Jeremiah 20:1"],
+  ]),
+  groupedQuestion("genesis-woman", "Name a woman who appears in Genesis.", "People", [
+    ["Eve", "ink", "Genesis 3:20"], ["Sarah", "ink", "Genesis 17:15", ["Sarai"]],
+    ["Rebekah", "bronze", "Genesis 24:67"], ["Rachel", "bronze", "Genesis 29:28"],
+    ["Leah", "silver", "Genesis 29:23"], ["Hagar", "silver", "Genesis 16:1"],
+    ["Tamar", "gold", "Genesis 38:6"], ["Keturah", "gold", "Genesis 25:1"],
+    ["Milcah", "pearl", "Genesis 11:29"], ["Basemath", "pearl", "Genesis 26:34"],
+  ]),
+  groupedQuestion("esther-person", "Name a person in the book of Esther.", "People", [
+    ["Esther", "ink", "Esther 2:7", ["Hadassah"]], ["Mordecai", "ink", "Esther 2:5"],
+    ["Haman", "bronze", "Esther 3:1"], ["King Ahasuerus", "bronze", "Esther 1:1", ["Ahasuerus", "Xerxes"]],
+    ["Vashti", "silver", "Esther 1:9"], ["Zeresh", "gold", "Esther 5:10"],
+    ["Bigthan", "pearl", "Esther 2:21", ["Bigthana"]], ["Harbona", "pearl", "Esther 7:9"],
+  ]),
+  groupedQuestion("ruth-person", "Name a person in the book of Ruth.", "People", [
+    ["Ruth", "ink", "Ruth 1:4"], ["Naomi", "ink", "Ruth 1:2"], ["Boaz", "bronze", "Ruth 2:1"],
+    ["Orpah", "silver", "Ruth 1:4"], ["Elimelech", "gold", "Ruth 1:2"],
+    ["Mahlon", "pearl", "Ruth 1:2"], ["Chilion", "pearl", "Ruth 1:2"],
+  ]),
+  groupedQuestion("fruit-of-spirit", "Name a fruit of the Spirit listed in Galatians 5.", "Teachings", [
+    ["Love", "ink", "Galatians 5:22"], ["Joy", "ink", "Galatians 5:22"], ["Peace", "bronze", "Galatians 5:22"],
+    ["Patience", "bronze", "Galatians 5:22"], ["Kindness", "silver", "Galatians 5:22"],
+    ["Goodness", "silver", "Galatians 5:22"], ["Faithfulness", "gold", "Galatians 5:22"],
+    ["Gentleness", "gold", "Galatians 5:23"], ["Self-control", "pearl", "Galatians 5:23", ["self control"]],
+  ]),
+  groupedQuestion("armor-of-god", "Name a piece of the armor of God in Ephesians 6.", "Teachings", [
+    ["Shield of faith", "ink", "Ephesians 6:16", ["shield"]], ["Sword of the Spirit", "bronze", "Ephesians 6:17", ["sword"]],
+    ["Helmet of salvation", "silver", "Ephesians 6:17", ["helmet"]],
+    ["Breastplate of righteousness", "gold", "Ephesians 6:14", ["breastplate"]],
+    ["Belt of truth", "pearl", "Ephesians 6:14", ["belt"]],
+    ["Shoes of the gospel of peace", "pearl", "Ephesians 6:15", ["shoes", "gospel shoes"]],
+  ]),
+  groupedQuestion("pauline-letter", "Name a New Testament letter traditionally attributed to Paul.", "Books", [
+    ["Romans", "ink", "Romans 1:1"], ["1 Corinthians", "ink", "1 Corinthians 1:1", ["First Corinthians"]],
+    ["Galatians", "bronze", "Galatians 1:1"], ["Ephesians", "bronze", "Ephesians 1:1"],
+    ["Philippians", "silver", "Philippians 1:1"], ["Colossians", "silver", "Colossians 1:1"],
+    ["1 Thessalonians", "gold", "1 Thessalonians 1:1", ["First Thessalonians"]],
+    ["Philemon", "gold", "Philemon 1"], ["2 Timothy", "pearl", "2 Timothy 1:1", ["Second Timothy"]],
+    ["Titus", "pearl", "Titus 1:1"],
+  ]),
+  groupedQuestion("general-epistle", "Name a New Testament General Epistle.", "Books", [
+    ["James", "ink", "James 1:1"], ["1 Peter", "ink", "1 Peter 1:1", ["First Peter"]],
+    ["1 John", "bronze", "1 John 1:1", ["First John"]], ["Jude", "silver", "Jude 1"],
+    ["2 Peter", "gold", "2 Peter 1:1", ["Second Peter"]], ["2 John", "pearl", "2 John 1", ["Second John"]],
+    ["3 John", "pearl", "3 John 1", ["Third John"]], ["Hebrews", "pearl", "Hebrews 1:1"],
+  ]),
+  groupedQuestion("jesus-city", "Name a town or city Jesus visited during his earthly ministry.", "Places", [
+    ["Jerusalem", "ink", "Matthew 21:10"], ["Bethlehem", "ink", "Luke 2:4–7"],
+    ["Nazareth", "bronze", "Luke 4:16"], ["Capernaum", "bronze", "Matthew 4:13"],
+    ["Bethany", "silver", "John 11:18"], ["Jericho", "silver", "Luke 19:1"],
+    ["Cana", "gold", "John 2:1"], ["Sychar", "pearl", "John 4:5"], ["Nain", "pearl", "Luke 7:11"],
+  ]),
+  groupedQuestion("jesus-healed-person", "Name a person Jesus healed or restored by name or description.", "Signs", [
+    ["Bartimaeus", "ink", "Mark 10:46–52"], ["The paralytic", "ink", "Mark 2:3–12", ["paralyzed man"]],
+    ["The woman with the flow of blood", "bronze", "Mark 5:25–34", ["bleeding woman"]],
+    ["The centurion’s servant", "bronze", "Matthew 8:5–13"], ["Malchus", "silver", "Luke 22:50–51"],
+    ["The man born blind", "silver", "John 9:1–7"], ["Jairus’s daughter", "gold", "Mark 5:22–43"],
+    ["The Syrophoenician woman’s daughter", "pearl", "Mark 7:25–30", ["Canaanite woman's daughter"]],
+  ]),
+  groupedQuestion("nativity-person", "Name a person connected with the birth narratives of Jesus.", "Gospels", [
+    ["Mary", "ink", "Luke 1:27"], ["Joseph", "ink", "Matthew 1:18–20"],
+    ["Elizabeth", "bronze", "Luke 1:5–7"], ["Zechariah", "bronze", "Luke 1:5"],
+    ["Simeon", "silver", "Luke 2:25"], ["Anna", "gold", "Luke 2:36"],
+    ["Herod", "gold", "Matthew 2:1"], ["Quirinius", "pearl", "Luke 2:2"],
+  ]),
+  groupedQuestion("acts-convert", "Name someone whose conversion or baptism is described in Acts.", "Early Church", [
+    ["Paul", "ink", "Acts 9:17–18", ["Saul"]], ["The Ethiopian eunuch", "ink", "Acts 8:36–38", ["Ethiopian"]],
+    ["Cornelius", "bronze", "Acts 10:44–48"], ["Lydia", "bronze", "Acts 16:14–15"],
+    ["The Philippian jailer", "silver", "Acts 16:30–34", ["jailer"]], ["Crispus", "gold", "Acts 18:8"],
+    ["Sergius Paulus", "pearl", "Acts 13:12"], ["Dionysius the Areopagite", "pearl", "Acts 17:34", ["Dionysius"]],
+  ]),
+  groupedQuestion("nt-ruler", "Name a ruler or governing official in the New Testament.", "History", [
+    ["Pontius Pilate", "ink", "Matthew 27:2", ["Pilate"]], ["Herod the Great", "ink", "Matthew 2:1", ["Herod"]],
+    ["Felix", "bronze", "Acts 24:24"], ["Festus", "bronze", "Acts 25:1"],
+    ["Herod Agrippa I", "silver", "Acts 12:1", ["Agrippa I"]], ["Herod Agrippa II", "gold", "Acts 25:13", ["Agrippa II"]],
+    ["Gallio", "pearl", "Acts 18:12"], ["Lysanias", "pearl", "Luke 3:1"],
+  ]),
+  groupedQuestion("resurrection-witness", "Name someone who saw the risen Jesus.", "Resurrection", [
+    ["Mary Magdalene", "ink", "John 20:16–18"], ["Peter", "ink", "1 Corinthians 15:5", ["Cephas"]],
+    ["Thomas", "bronze", "John 20:26–29"], ["The eleven disciples", "bronze", "Matthew 28:16–17", ["the eleven"]],
+    ["James", "silver", "1 Corinthians 15:7"], ["Paul", "gold", "1 Corinthians 15:8"],
+    ["Cleopas", "pearl", "Luke 24:18–31"], ["Joanna", "pearl", "Luke 24:10"],
+  ]),
+  groupedQuestion("revelation-image", "Name an image or figure that appears in Revelation.", "Visions", [
+    ["The Lamb", "ink", "Revelation 5:6"], ["The dragon", "ink", "Revelation 12:3"],
+    ["Four horsemen", "bronze", "Revelation 6:1–8", ["horsemen"]], ["The beast", "bronze", "Revelation 13:1"],
+    ["New Jerusalem", "silver", "Revelation 21:2"], ["Tree of life", "silver", "Revelation 22:2"],
+    ["Woman clothed with the sun", "gold", "Revelation 12:1", ["woman and sun"]],
+    ["Sea of glass", "gold", "Revelation 4:6"], ["Seven thunders", "pearl", "Revelation 10:3–4"],
+    ["Wormwood", "pearl", "Revelation 8:11"],
+  ]),
+  groupedQuestion("mary-nt", "Name a Mary mentioned in the New Testament.", "People", [
+    ["Mary the mother of Jesus", "ink", "Luke 1:27", ["Virgin Mary"]], ["Mary Magdalene", "ink", "Luke 8:2"],
+    ["Mary of Bethany", "bronze", "John 11:1"], ["Mary the mother of James", "silver", "Mark 16:1"],
+    ["Mary the mother of John Mark", "gold", "Acts 12:12"], ["Mary of Rome", "pearl", "Romans 16:6"],
+  ]),
+  groupedQuestion("one-chapter-book", "Name a book of the Bible with only one chapter.", "Books", [
+    ["Philemon", "ink", "Philemon 1"], ["Jude", "bronze", "Jude 1"],
+    ["Obadiah", "silver", "Obadiah 1"], ["2 John", "gold", "2 John 1", ["Second John"]],
+    ["3 John", "pearl", "3 John 1", ["Third John"]],
+  ]),
+  groupedQuestion("renamed-person", "Name someone in the Bible whose name was changed or expanded.", "People", [
+    ["Abraham", "ink", "Genesis 17:5", ["Abram"]], ["Sarah", "ink", "Genesis 17:15", ["Sarai"]],
+    ["Israel", "bronze", "Genesis 32:28", ["Jacob"]], ["Peter", "bronze", "John 1:42", ["Simon", "Cephas"]],
+    ["Paul", "silver", "Acts 13:9", ["Saul"]], ["Joshua", "gold", "Numbers 13:16", ["Hoshea"]],
+    ["Belteshazzar", "pearl", "Daniel 1:7", ["Daniel"]], ["Zaphenath-paneah", "pearl", "Genesis 41:45", ["Joseph's Egyptian name"]],
+  ]),
+  groupedQuestion("raised-from-dead", "Name someone raised from the dead in the Bible.", "Miracles", [
+    ["Lazarus", "ink", "John 11:43–44"], ["Jairus’s daughter", "ink", "Mark 5:41–42"],
+    ["Tabitha", "bronze", "Acts 9:40", ["Dorcas"]], ["Eutychus", "silver", "Acts 20:9–12"],
+    ["The widow of Zarephath’s son", "gold", "1 Kings 17:21–22", ["Zarephath widow's son"]],
+    ["The Shunammite woman’s son", "gold", "2 Kings 4:32–35", ["Shunammite boy"]],
+    ["The widow of Nain’s son", "pearl", "Luke 7:14–15", ["Nain widow's son"]],
+    ["The man touched by Elisha’s bones", "pearl", "2 Kings 13:21", ["man in Elisha's grave"]],
+  ]),
+  groupedQuestion("biblical-food", "Name a food or prepared dish mentioned in the Bible.", "Daily Life", [
+    ["Bread", "ink", "Matthew 4:4"], ["Fish", "ink", "John 21:9"], ["Honey", "bronze", "1 Samuel 14:25"],
+    ["Lentil stew", "bronze", "Genesis 25:34", ["stew", "lentils"]], ["Figs", "silver", "1 Samuel 25:18"],
+    ["Raisins", "silver", "1 Samuel 25:18"], ["Quail", "gold", "Numbers 11:31–32"],
+    ["Locusts", "gold", "Matthew 3:4"], ["Roasted grain", "pearl", "Ruth 2:14"], ["Mandrakes", "pearl", "Genesis 30:14"],
+  ]),
+  groupedQuestion("breastpiece-stone", "Name a precious stone on the high priest’s breastpiece.", "Objects", [
+    ["Sapphire", "ink", "Exodus 28:18"], ["Emerald", "ink", "Exodus 28:18"], ["Amethyst", "bronze", "Exodus 28:19"],
+    ["Jasper", "bronze", "Exodus 28:20"], ["Topaz", "silver", "Exodus 28:17"], ["Agate", "silver", "Exodus 28:19"],
+    ["Beryl", "gold", "Exodus 28:20"], ["Jacinth", "gold", "Exodus 28:19", ["hyacinth"]],
+    ["Carbuncle", "pearl", "Exodus 28:17", ["garnet"]], ["Chrysolite", "pearl", "Exodus 28:20"],
+  ]),
+  groupedQuestion("romans-16-person", "Name someone greeted or commended in Romans 16.", "Early Church", [
+    ["Priscilla", "ink", "Romans 16:3", ["Prisca"]], ["Aquila", "ink", "Romans 16:3"], ["Phoebe", "bronze", "Romans 16:1"],
+    ["Andronicus", "silver", "Romans 16:7"], ["Junia", "silver", "Romans 16:7"], ["Urbanus", "gold", "Romans 16:9"],
+    ["Tryphena", "gold", "Romans 16:12"], ["Persis", "pearl", "Romans 16:12"], ["Philologus", "pearl", "Romans 16:15"],
+  ]),
+  groupedQuestion("psalm-author", "Name a person or group credited in a Psalm heading.", "Worship", [
+    ["David", "ink", "Psalm 3 title"], ["Asaph", "ink", "Psalm 50 title"], ["Sons of Korah", "bronze", "Psalm 42 title", ["Korahites"]],
+    ["Solomon", "silver", "Psalm 72 title"], ["Moses", "silver", "Psalm 90 title"],
+    ["Heman", "gold", "Psalm 88 title"], ["Ethan", "pearl", "Psalm 89 title"],
+  ]),
+  groupedQuestion("major-prophet-book", "Name a book commonly grouped among the Major Prophets.", "Books", [
+    ["Isaiah", "ink", "Isaiah 1:1"], ["Jeremiah", "bronze", "Jeremiah 1:1"],
+    ["Daniel", "silver", "Daniel 1:1"], ["Ezekiel", "gold", "Ezekiel 1:1"],
+    ["Lamentations", "pearl", "Lamentations 1:1"],
+  ]),
+  groupedQuestion("ezra-nehemiah-person", "Name a person in Ezra or Nehemiah.", "People", [
+    ["Nehemiah", "ink", "Nehemiah 1:1"], ["Ezra", "ink", "Ezra 7:1"], ["Artaxerxes", "bronze", "Nehemiah 2:1"],
+    ["Sanballat", "silver", "Nehemiah 2:10"], ["Zerubbabel", "silver", "Ezra 2:2"],
+    ["Jeshua", "gold", "Ezra 2:2", ["Joshua the high priest"]], ["Tobiah", "gold", "Nehemiah 2:10"],
+    ["Geshem", "pearl", "Nehemiah 2:19"], ["Shecaniah", "pearl", "Ezra 10:2"],
+  ]),
+  groupedQuestion("ot-nation", "Name a nation or people that interacted with Israel in the Old Testament.", "Nations", [
+    ["Egypt", "ink", "Exodus 1:8–11"], ["Philistines", "ink", "1 Samuel 4:1"], ["Moab", "bronze", "Numbers 22:3"],
+    ["Assyria", "bronze", "2 Kings 17:6"], ["Babylon", "silver", "2 Kings 25:8–11"], ["Edom", "silver", "Numbers 20:14"],
+    ["Ammon", "gold", "Judges 11:4"], ["Midian", "gold", "Judges 6:1"],
+    ["Aram", "pearl", "2 Kings 5:1", ["Syria"]], ["Amalek", "pearl", "Exodus 17:8"],
+  ]),
+  groupedQuestion("ot-instrument", "Name a musical instrument mentioned in the Old Testament.", "Worship", [
+    ["Harp", "ink", "Psalm 33:2", ["lyre"]], ["Trumpet", "ink", "Psalm 150:3"], ["Cymbals", "bronze", "Psalm 150:5"],
+    ["Tambourine", "bronze", "Exodus 15:20", ["timbrel"]], ["Flute", "silver", "1 Samuel 10:5", ["pipe"]],
+    ["Horn", "gold", "Joshua 6:5", ["ram's horn", "shofar"]], ["Ten-stringed instrument", "pearl", "Psalm 33:2", ["ten stringed lyre"]],
+  ]),
+  groupedQuestion("sanctuary-material", "Name a material used in constructing the tabernacle or its furnishings.", "Objects", [
+    ["Gold", "ink", "Exodus 25:3"], ["Silver", "ink", "Exodus 25:3"], ["Bronze", "bronze", "Exodus 25:3"],
+    ["Acacia wood", "bronze", "Exodus 25:5"], ["Blue yarn", "silver", "Exodus 25:4"], ["Purple yarn", "silver", "Exodus 25:4"],
+    ["Fine linen", "gold", "Exodus 25:4"], ["Goats’ hair", "gold", "Exodus 25:4"],
+    ["Tanned rams’ skins", "pearl", "Exodus 25:5", ["ram skins"]], ["Onyx stones", "pearl", "Exodus 25:7", ["onyx"]],
+  ]),
+  groupedQuestion("i-am-saying", "Name one of Jesus’ ‘I am’ images in John’s Gospel.", "Teachings", [
+    ["Bread of life", "ink", "John 6:35"], ["Light of the world", "ink", "John 8:12"],
+    ["Good shepherd", "bronze", "John 10:11"], ["The way, the truth, and the life", "silver", "John 14:6", ["way truth life"]],
+    ["True vine", "gold", "John 15:1"], ["Resurrection and the life", "gold", "John 11:25"],
+    ["The door", "pearl", "John 10:7", ["gate for the sheep"]],
+  ]),
+  groupedQuestion("spiritual-gift", "Name a spiritual gift listed in Romans 12 or 1 Corinthians 12.", "Teachings", [
+    ["Teaching", "ink", "Romans 12:7"], ["Serving", "ink", "Romans 12:7", ["service"]], ["Faith", "bronze", "1 Corinthians 12:9"],
+    ["Healing", "bronze", "1 Corinthians 12:9"], ["Prophecy", "silver", "Romans 12:6"], ["Wisdom", "silver", "1 Corinthians 12:8"],
+    ["Discernment of spirits", "gold", "1 Corinthians 12:10", ["discernment"]], ["Tongues", "gold", "1 Corinthians 12:10"],
+    ["Interpretation of tongues", "pearl", "1 Corinthians 12:10", ["interpretation"]],
+  ]),
+  groupedQuestion("beatitude", "Name a group Jesus calls blessed in the Beatitudes.", "Teachings", [
+    ["The poor in spirit", "ink", "Matthew 5:3", ["poor in spirit"]], ["Those who mourn", "ink", "Matthew 5:4", ["mourning"]],
+    ["The meek", "bronze", "Matthew 5:5", ["meek"]], ["The merciful", "bronze", "Matthew 5:7", ["merciful"]],
+    ["The peacemakers", "silver", "Matthew 5:9", ["peacemakers"]], ["The pure in heart", "gold", "Matthew 5:8", ["pure in heart"]],
+    ["Those hungry for righteousness", "gold", "Matthew 5:6", ["hunger and thirst for righteousness"]],
+    ["Those persecuted for righteousness", "pearl", "Matthew 5:10", ["persecuted"]],
+  ]),
+  groupedQuestion("gospel-woman", "Name a woman who appears in the four Gospels.", "People", [
+    ["Mary Magdalene", "ink", "Luke 8:2"], ["Mary the mother of Jesus", "ink", "John 2:1"],
+    ["Martha", "bronze", "Luke 10:38"], ["Mary of Bethany", "bronze", "John 12:3"],
+    ["Joanna", "silver", "Luke 8:3"], ["Salome", "gold", "Mark 16:1"],
+    ["Susanna", "pearl", "Luke 8:3"], ["Herodias", "pearl", "Mark 6:17"],
+  ]),
+  groupedQuestion("acts-woman", "Name a woman in the book of Acts.", "Early Church", [
+    ["Lydia", "ink", "Acts 16:14"], ["Priscilla", "ink", "Acts 18:2", ["Prisca"]], ["Tabitha", "bronze", "Acts 9:36", ["Dorcas"]],
+    ["Sapphira", "silver", "Acts 5:1"], ["Rhoda", "silver", "Acts 12:13"], ["Damaris", "gold", "Acts 17:34"],
+    ["Drusilla", "pearl", "Acts 24:24"], ["Bernice", "pearl", "Acts 25:13"],
+  ]),
+  groupedQuestion("nt-prisoner", "Name someone imprisoned or held in custody in the New Testament.", "History", [
+    ["Paul", "ink", "Acts 16:23–24"], ["Peter", "ink", "Acts 12:5"], ["John the Baptist", "bronze", "Matthew 14:3"],
+    ["Silas", "bronze", "Acts 16:23–24"], ["Jesus", "silver", "Luke 22:54"], ["Barabbas", "gold", "Mark 15:7"],
+    ["John", "pearl", "Revelation 1:9", ["John on Patmos"]], ["Aristarchus", "pearl", "Colossians 4:10"],
+  ]),
+  groupedQuestion("biblical-couple", "Name a married couple in the Bible.", "People", [
+    ["Adam and Eve", "ink", "Genesis 2:22–25"], ["Abraham and Sarah", "ink", "Genesis 17:15–17", ["Abram and Sarai"]],
+    ["Isaac and Rebekah", "bronze", "Genesis 24:67"], ["Jacob and Rachel", "bronze", "Genesis 29:28"],
+    ["Boaz and Ruth", "silver", "Ruth 4:13"], ["Aquila and Priscilla", "silver", "Acts 18:2", ["Priscilla and Aquila"]],
+    ["Elkanah and Hannah", "gold", "1 Samuel 1:1–2"], ["Zechariah and Elizabeth", "gold", "Luke 1:5"],
+    ["Ananias and Sapphira", "pearl", "Acts 5:1"], ["Felix and Drusilla", "pearl", "Acts 24:24"],
+  ]),
+  groupedQuestion("biblical-sibling", "Name a pair of siblings in the Bible.", "People", [
+    ["Cain and Abel", "ink", "Genesis 4:1–2"], ["Jacob and Esau", "ink", "Genesis 25:24–26"],
+    ["Moses and Aaron", "bronze", "Exodus 4:14"], ["Mary and Martha", "bronze", "John 11:1"],
+    ["Peter and Andrew", "silver", "Matthew 4:18"], ["James and John", "silver", "Matthew 4:21"],
+    ["Rachel and Leah", "gold", "Genesis 29:16"], ["Miriam and Moses", "gold", "Numbers 26:59"],
+    ["Nahor and Abraham", "pearl", "Genesis 11:27", ["Abram and Nahor"]], ["Jubal and Jabal", "pearl", "Genesis 4:20–21"],
+  ]),
+  groupedQuestion("biblical-plant", "Name a plant, tree, or crop mentioned in the Bible.", "Creation", [
+    ["Fig tree", "ink", "Mark 11:13"], ["Olive tree", "ink", "Romans 11:17"], ["Grapevine", "bronze", "John 15:1", ["vine"]],
+    ["Mustard", "bronze", "Matthew 13:31"], ["Cedar", "silver", "1 Kings 5:6"], ["Palm tree", "silver", "Psalm 92:12"],
+    ["Hyssop", "gold", "Exodus 12:22"], ["Almond tree", "gold", "Jeremiah 1:11"],
+    ["Broom tree", "pearl", "1 Kings 19:4"], ["Sycamore fig", "pearl", "Luke 19:4", ["sycamore"]],
+  ]),
+  groupedQuestion("biblical-weapon", "Name a weapon mentioned in the Bible.", "Objects", [
+    ["Sword", "ink", "1 Samuel 17:51"], ["Sling", "ink", "1 Samuel 17:40"], ["Spear", "bronze", "1 Samuel 18:10"],
+    ["Bow", "bronze", "1 Samuel 20:20"], ["Arrow", "silver", "2 Kings 13:17"], ["Javelin", "silver", "Joshua 8:18"],
+    ["Dagger", "gold", "Judges 3:16"], ["Club", "gold", "Matthew 26:47"],
+    ["Sickle", "pearl", "Joel 3:13"], ["Battle-axe", "pearl", "Jeremiah 51:20", ["war club"]],
+  ]),
+  groupedQuestion("biblical-clothing", "Name an article of clothing mentioned in the Bible.", "Daily Life", [
+    ["Robe", "ink", "Genesis 37:3"], ["Sandals", "ink", "Exodus 3:5"], ["Cloak", "bronze", "2 Timothy 4:13"],
+    ["Tunic", "bronze", "John 19:23"], ["Veil", "silver", "Genesis 24:65"], ["Belt", "silver", "Acts 21:11"],
+    ["Sackcloth", "gold", "Jonah 3:5"], ["Turban", "gold", "Exodus 28:39"],
+    ["Ephod", "pearl", "1 Samuel 2:18"], ["Phylactery", "pearl", "Matthew 23:5"],
+  ]),
+  groupedQuestion("biblical-currency", "Name a coin, currency, or unit of money mentioned in the Bible.", "Daily Life", [
+    ["Denarius", "ink", "Matthew 20:2", ["denarii"]], ["Shekel", "ink", "Exodus 30:13"], ["Talent", "bronze", "Matthew 25:15"],
+    ["Drachma", "silver", "Luke 15:8"], ["Mina", "silver", "Luke 19:13"], ["Lepton", "gold", "Mark 12:42", ["widow's mite", "mite"]],
+    ["Daric", "pearl", "Ezra 2:69"], ["Bekah", "pearl", "Exodus 38:26"],
+  ]),
+  groupedQuestion("acts-seven", "Name one of the seven men appointed in Acts 6.", "Early Church", [
+    ["Stephen", "ink", "Acts 6:5"], ["Philip", "ink", "Acts 6:5"], ["Prochorus", "bronze", "Acts 6:5"],
+    ["Nicanor", "silver", "Acts 6:5"], ["Timon", "gold", "Acts 6:5"], ["Parmenas", "pearl", "Acts 6:5"],
+    ["Nicolaus", "pearl", "Acts 6:5", ["Nicolas"]],
+  ]),
+  groupedQuestion("david-mighty-man", "Name one of David’s mighty men.", "People", [
+    ["Benaiah", "ink", "2 Samuel 23:20"], ["Uriah the Hittite", "bronze", "2 Samuel 23:39", ["Uriah"]],
+    ["Asahel", "silver", "2 Samuel 23:24"], ["Abishai", "silver", "2 Samuel 23:18"],
+    ["Eleazar son of Dodo", "gold", "2 Samuel 23:9", ["Eleazar"]], ["Shammah", "gold", "2 Samuel 23:11"],
+    ["Ira the Ithrite", "pearl", "2 Samuel 23:38", ["Ira"]], ["Naharai", "pearl", "2 Samuel 23:37"],
+  ]),
+  groupedQuestion("second-timothy-greeting", "Name someone mentioned near the end of 2 Timothy.", "Letters", [
+    ["Timothy", "ink", "2 Timothy 4:21"], ["Luke", "ink", "2 Timothy 4:11"], ["Mark", "bronze", "2 Timothy 4:11"],
+    ["Priscilla", "silver", "2 Timothy 4:19", ["Prisca"]], ["Aquila", "silver", "2 Timothy 4:19"],
+    ["Onesiphorus", "gold", "2 Timothy 4:19"], ["Eubulus", "pearl", "2 Timothy 4:21"],
+    ["Pudens", "pearl", "2 Timothy 4:21"], ["Claudia", "pearl", "2 Timothy 4:21"],
+  ]),
+  groupedQuestion("solomon-official", "Name an official serving in Solomon’s administration.", "Kings", [
+    ["Benaiah", "ink", "1 Kings 4:4"], ["Zadok", "bronze", "1 Kings 4:4"], ["Abiathar", "silver", "1 Kings 4:4"],
+    ["Adoniram", "gold", "1 Kings 4:6"], ["Azariah son of Zadok", "gold", "1 Kings 4:2", ["Azariah"]],
+    ["Elihoreph", "pearl", "1 Kings 4:3"], ["Ahijah son of Shisha", "pearl", "1 Kings 4:3", ["Ahijah"]],
+  ]),
+  groupedQuestion("biblical-water-site", "Name a sea, pool, or other body of water mentioned in the Bible.", "Places", [
+    ["Sea of Galilee", "ink", "Matthew 4:18", ["Galilee"]], ["Red Sea", "ink", "Exodus 14:21"],
+    ["Dead Sea", "bronze", "Numbers 34:12", ["Salt Sea"]], ["Mediterranean Sea", "bronze", "Numbers 34:6", ["Great Sea"]],
+    ["Pool of Bethesda", "silver", "John 5:2", ["Bethesda"]], ["Pool of Siloam", "gold", "John 9:7", ["Siloam"]],
+    ["Sea of Jazer", "pearl", "Jeremiah 48:32", ["Jazer"]], ["Pool of Gibeon", "pearl", "2 Samuel 2:13", ["Gibeon pool"]],
+  ]),
+  groupedQuestion("wilderness-place", "Name a wilderness or desert region mentioned in the Bible.", "Places", [
+    ["Wilderness of Sinai", "ink", "Exodus 19:1", ["Sinai"]], ["Wilderness of Judea", "ink", "Matthew 3:1", ["Judean wilderness"]],
+    ["Wilderness of Paran", "bronze", "Numbers 10:12", ["Paran"]], ["Wilderness of Zin", "silver", "Numbers 20:1", ["Zin"]],
+    ["Wilderness of Shur", "silver", "Exodus 15:22", ["Shur"]], ["Wilderness of Beersheba", "gold", "Genesis 21:14", ["Beersheba wilderness"]],
+    ["Wilderness of Tekoa", "pearl", "2 Chronicles 20:20", ["Tekoa"]], ["Wilderness of Ziph", "pearl", "1 Samuel 23:14", ["Ziph"]],
+  ]),
+  groupedQuestion("biblical-metal", "Name a metal mentioned in the Bible.", "Objects", [
+    ["Gold", "ink", "Genesis 2:11–12"], ["Silver", "ink", "Genesis 13:2"], ["Bronze", "bronze", "Exodus 27:2"],
+    ["Iron", "bronze", "Deuteronomy 8:9"], ["Copper", "silver", "Ezra 8:27"], ["Tin", "gold", "Numbers 31:22"],
+    ["Lead", "pearl", "Exodus 15:10"], ["Antimony", "pearl", "Isaiah 54:11"],
+  ]),
+  groupedQuestion("biblical-color", "Name a color explicitly mentioned in the Bible.", "Images", [
+    ["White", "ink", "Revelation 7:9"], ["Red", "ink", "Genesis 25:30"], ["Purple", "bronze", "Acts 16:14"],
+    ["Blue", "bronze", "Exodus 26:1"], ["Scarlet", "silver", "Joshua 2:18"], ["Crimson", "silver", "Isaiah 1:18"],
+    ["Black", "gold", "Song of Solomon 1:5"], ["Green", "gold", "Psalm 23:2"], ["Vermilion", "pearl", "Jeremiah 22:14"],
+  ]),
+  groupedQuestion("biblical-structure", "Name a building or major structure mentioned in the Bible.", "Places", [
+    ["Temple", "ink", "1 Kings 6:1"], ["Tabernacle", "ink", "Exodus 26:1"], ["Noah’s ark", "bronze", "Genesis 6:14", ["ark"]],
+    ["Tower of Babel", "bronze", "Genesis 11:4", ["Babel"]], ["Synagogue", "silver", "Luke 4:16"],
+    ["Solomon’s palace", "silver", "1 Kings 7:1", ["palace"]], ["Jerusalem wall", "gold", "Nehemiah 2:17", ["wall"]],
+    ["Praetorium", "pearl", "John 18:28"], ["Millo", "pearl", "1 Kings 9:15"],
+  ]),
+  groupedQuestion("person-who-fasted", "Name someone in the Bible who fasted.", "Faith", [
+    ["Jesus", "ink", "Matthew 4:2"], ["Moses", "ink", "Exodus 34:28"], ["Esther", "bronze", "Esther 4:16"],
+    ["David", "bronze", "2 Samuel 12:16"], ["Daniel", "silver", "Daniel 10:2–3"], ["Paul", "silver", "Acts 9:9"],
+    ["Anna", "gold", "Luke 2:37"], ["Ezra", "gold", "Ezra 8:21–23"], ["Nehemiah", "pearl", "Nehemiah 1:4"],
+  ]),
+  groupedQuestion("angel-visited", "Name someone who received a visit or message from an angel.", "Messengers", [
+    ["Mary", "ink", "Luke 1:26–28"], ["Joseph", "ink", "Matthew 1:20"], ["Zechariah", "bronze", "Luke 1:11–13"],
+    ["Gideon", "bronze", "Judges 6:11–12"], ["Abraham", "silver", "Genesis 18:1–2"], ["Cornelius", "silver", "Acts 10:3–6"],
+    ["Manoah", "gold", "Judges 13:8–11"], ["Hagar", "gold", "Genesis 16:7–11"],
+    ["Balaam", "pearl", "Numbers 22:31–35"], ["Philip", "pearl", "Acts 8:26"],
+  ]),
+  groupedQuestion("promised-birth", "Name someone whose birth was announced or enabled by God in a special way.", "People", [
+    ["Isaac", "ink", "Genesis 18:10"], ["Jesus", "ink", "Luke 1:31"], ["John the Baptist", "bronze", "Luke 1:13"],
+    ["Samuel", "bronze", "1 Samuel 1:19–20"], ["Samson", "silver", "Judges 13:3"], ["Jacob", "gold", "Genesis 25:23–26"],
+    ["Esau", "gold", "Genesis 25:23–26"], ["Obed", "pearl", "Ruth 4:13–17"],
+  ]),
+  groupedQuestion("biblical-father-son", "Name a father-and-son pair in the Bible.", "People", [
+    ["Abraham and Isaac", "ink", "Genesis 21:3"], ["David and Solomon", "ink", "1 Kings 1:32–35"],
+    ["Isaac and Jacob", "bronze", "Genesis 25:26"], ["Zechariah and John", "bronze", "Luke 1:13", ["Zechariah and John the Baptist"]],
+    ["Saul and Jonathan", "silver", "1 Samuel 14:49"], ["Zebedee and John", "silver", "Matthew 4:21"],
+    ["Boaz and Obed", "gold", "Ruth 4:17"], ["Kish and Saul", "gold", "1 Samuel 9:1–2"],
+    ["Hilkiah and Jeremiah", "pearl", "Jeremiah 1:1"], ["Shaphan and Ahikam", "pearl", "2 Kings 22:12"],
+  ]),
+  groupedQuestion("biblical-song", "Name a person associated with a song or canticle recorded in Scripture.", "Worship", [
+    ["Moses", "ink", "Exodus 15:1"], ["Mary", "ink", "Luke 1:46–55", ["Magnificat"]], ["David", "bronze", "2 Samuel 22:1"],
+    ["Miriam", "bronze", "Exodus 15:20–21"], ["Hannah", "silver", "1 Samuel 2:1–10"], ["Deborah", "silver", "Judges 5:1"],
+    ["Zechariah", "gold", "Luke 1:67–79", ["Benedictus"]], ["Simeon", "pearl", "Luke 2:28–32", ["Nunc Dimittis"]],
+  ]),
+  groupedQuestion("person-named-book", "Name a person who has a biblical book bearing that person’s name.", "Books", [
+    ["Joshua", "ink", "Joshua 1:1"], ["Ruth", "ink", "Ruth 1:4"], ["Esther", "bronze", "Esther 2:7"],
+    ["Daniel", "bronze", "Daniel 1:6"], ["Ezra", "silver", "Ezra 7:1"], ["Nehemiah", "silver", "Nehemiah 1:1"],
+    ["Jonah", "gold", "Jonah 1:1"], ["Philemon", "gold", "Philemon 1"],
+    ["Habakkuk", "pearl", "Habakkuk 1:1"], ["Zephaniah", "pearl", "Zephaniah 1:1"],
+  ]),
+  groupedQuestion("person-who-prayed", "Name someone whose prayer is recorded or described in the Bible.", "Faith", [
+    ["Jesus", "ink", "John 17:1"], ["David", "ink", "Psalm 5:1–2"], ["Hannah", "bronze", "1 Samuel 1:10–11"],
+    ["Daniel", "bronze", "Daniel 6:10"], ["Solomon", "silver", "1 Kings 8:22–53"], ["Paul", "silver", "Ephesians 3:14–19"],
+    ["Jabez", "gold", "1 Chronicles 4:10"], ["Hezekiah", "gold", "2 Kings 20:2–3"],
+    ["Habakkuk", "pearl", "Habakkuk 3:1"], ["Manasseh", "pearl", "2 Chronicles 33:13"],
+  ]),
+  groupedQuestion("revelation-foundation-stone", "Name a foundation stone of the New Jerusalem in Revelation 21.", "Visions", [
+    ["Jasper", "ink", "Revelation 21:19"], ["Sapphire", "ink", "Revelation 21:19"], ["Emerald", "bronze", "Revelation 21:19"],
+    ["Amethyst", "bronze", "Revelation 21:20"], ["Topaz", "silver", "Revelation 21:20"], ["Beryl", "silver", "Revelation 21:20"],
+    ["Chalcedony", "gold", "Revelation 21:19"], ["Chrysoprase", "gold", "Revelation 21:20"],
+    ["Jacinth", "pearl", "Revelation 21:20", ["hyacinth"]], ["Chrysolite", "pearl", "Revelation 21:20"],
+  ]),
+  groupedQuestion("philemon-person", "Name someone mentioned in the letter to Philemon.", "Letters", [
+    ["Paul", "ink", "Philemon 1"], ["Philemon", "ink", "Philemon 1"], ["Onesimus", "bronze", "Philemon 10"],
+    ["Timothy", "bronze", "Philemon 1"], ["Apphia", "silver", "Philemon 2"], ["Archippus", "gold", "Philemon 2"],
+    ["Epaphras", "gold", "Philemon 23"], ["Demas", "pearl", "Philemon 24"], ["Aristarchus", "pearl", "Philemon 24"],
+  ]),
+  groupedQuestion("nehemiah-builder", "Name someone identified with repairing Jerusalem’s wall in Nehemiah 3.", "People", [
+    ["Eliashib", "ink", "Nehemiah 3:1"], ["Shallum", "bronze", "Nehemiah 3:15"], ["Meremoth", "silver", "Nehemiah 3:4"],
+    ["Meshullam", "silver", "Nehemiah 3:4"], ["Malchijah", "gold", "Nehemiah 3:14"], ["Hanun", "gold", "Nehemiah 3:13"],
+    ["Joiada", "pearl", "Nehemiah 3:6"], ["Melatiah", "pearl", "Nehemiah 3:7"],
+  ]),
+  groupedQuestion("david-wife", "Name a wife of David.", "People", [
+    ["Bathsheba", "ink", "2 Samuel 11:27"], ["Michal", "ink", "1 Samuel 18:27"], ["Abigail", "bronze", "1 Samuel 25:42"],
+    ["Ahinoam", "silver", "1 Samuel 25:43"], ["Maacah", "gold", "2 Samuel 3:3"], ["Haggith", "gold", "2 Samuel 3:4"],
+    ["Abital", "pearl", "2 Samuel 3:4"], ["Eglah", "pearl", "2 Samuel 3:5"],
+  ]),
+  groupedQuestion("aaron-family", "Name a member of Aaron’s priestly family named in the Pentateuch.", "Worship", [
+    ["Aaron", "ink", "Exodus 28:1"], ["Eleazar", "ink", "Exodus 28:1"], ["Ithamar", "bronze", "Exodus 28:1"],
+    ["Nadab", "silver", "Exodus 28:1"], ["Abihu", "silver", "Exodus 28:1"], ["Phinehas", "gold", "Numbers 25:11"],
+    ["Elisheba", "pearl", "Exodus 6:23"], ["Putiel", "pearl", "Exodus 6:25"],
+  ]),
+];
+
+export const YEAR_QUESTION_POOLS = {
+  oldTestament: [
+    "egypt-plague", "minor-prophet-book", "northern-king", "elijah-elisha-miracle", "israel-festival",
+    "city-of-refuge", "canaan-people", "david-son", "ot-priest", "genesis-woman", "esther-person", "ruth-person",
+    "psalm-author", "major-prophet-book", "ezra-nehemiah-person", "ot-nation", "ot-instrument", "sanctuary-material",
+  ],
+  newTestament: [
+    "fruit-of-spirit", "armor-of-god", "pauline-letter", "general-epistle", "jesus-city", "jesus-healed-person",
+    "nativity-person", "acts-convert", "nt-ruler", "resurrection-witness", "revelation-image", "mary-nt",
+    "i-am-saying", "spiritual-gift", "beatitude", "gospel-woman", "acts-woman", "nt-prisoner",
+  ],
+  wholeBible: [
+    "one-chapter-book", "renamed-person", "raised-from-dead", "biblical-food", "biblical-couple", "biblical-sibling",
+    "biblical-plant", "biblical-weapon", "biblical-clothing", "biblical-currency",
+    "biblical-water-site", "wilderness-place", "biblical-metal", "biblical-color", "biblical-structure",
+    "person-who-fasted", "angel-visited", "promised-birth", "biblical-father-son", "biblical-song", "person-named-book", "person-who-prayed",
+  ],
+  niche: [
+    "breastpiece-stone", "romans-16-person", "acts-seven", "david-mighty-man", "second-timothy-greeting", "solomon-official",
+    "revelation-foundation-stone", "philemon-person", "nehemiah-builder", "david-wife", "aaron-family",
+  ],
+} as const;

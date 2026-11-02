@@ -26,7 +26,7 @@ export function Scriptorium() {
     }
     const payload = await response.json() as { scrolls: AdminScroll[] };
     setScrolls(payload.scrolls);
-    setMessage(`${payload.scrolls.length} sample Scrolls ready for review.`);
+    setMessage(`${payload.scrolls.length} dated Scrolls ready for review.`);
   }
 
   async function setStatus(scrollId: string, status: string) {
@@ -74,7 +74,7 @@ export function Scriptorium() {
           </label>
         </article>
       ))}
-      <aside className="year-reminder"><strong>Next milestone</strong><span>Generate, review, and schedule all 365 Scrolls for 2027 after the MVP is approved.</span></aside>
+      <aside className="year-reminder"><strong>2027 calendar</strong><span>Review each dated Scroll, its ranked answers, aliases, notes, and ESV references before scheduling.</span></aside>
     </div>
   );
 }

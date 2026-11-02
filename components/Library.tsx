@@ -18,10 +18,10 @@ export function Library() {
         const completed = saved?.scrollId === scroll.id;
         return (
           <article className={completed ? "library-scroll completed-scroll" : "library-scroll"} key={scroll.id}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
+            <span>{scroll.dateKey}</span>
             <h2>{scroll.title}</h2>
             <p>{scroll.subtitle}</p>
-            <footer>{completed ? `${saved?.total?.toLocaleString()} illumination` : "Sample calendar"}</footer>
+            <footer>{completed ? `${saved?.total?.toLocaleString()} illumination` : "2027 daily calendar"}</footer>
           </article>
         );
       })}
