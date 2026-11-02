@@ -44,6 +44,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
   const [results, setResults] = useState<RoundResult[]>([]);
   const [nickname, setNickname] = useState("Reader");
   const [rankMessage, setRankMessage] = useState("Your result will join today’s register.");
+  const [restoredToday, setRestoredToday] = useState(false);
   const startedAt = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -57,7 +58,38 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
   useEffect(() => {
     const savedName = localStorage.getItem("scribe:nickname");
     if (savedName) window.setTimeout(() => setNickname(savedName), 0);
-  }, []);
+
+    const resultKey = `scribe:result:${getPacificDateKey()}`;
+    const savedResult = localStorage.getItem(resultKey);
+    if (!savedResult) return;
+
+    try {
+      const parsed = JSON.parse(savedResult) as {
+        scrollId?: string;
+        nickname?: string;
+        results?: RoundResult[];
+      };
+      const isComplete = parsed.scrollId === scroll.id
+        && Array.isArray(parsed.results)
+        && parsed.results.length === questions.length
+        && parsed.results.every((result) =>
+          typeof result?.questionId === "string"
+          && typeof result?.typedAnswer === "string"
+          && typeof result?.elapsedMs === "number"
+          && (result.answer === null || (result.answer && result.answer.tier in TIERS)),
+        );
+
+      if (!isComplete) return;
+      setResults(parsed.results!);
+      setQuestionIndex(questions.length - 1);
+      setNickname(parsed.nickname?.trim().slice(0, 24) || savedName || "Reader");
+      setRankMessage("Today’s score was restored from this browser.");
+      setRestoredToday(true);
+      setStage("results");
+    } catch {
+      localStorage.removeItem(resultKey);
+    }
+  }, [questions.length, scroll.id]);
 
   useEffect(() => {
     if (stage !== "playing") return;
@@ -139,6 +171,11 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
       localStorage.setItem("scribe:player-id", playerId);
     }
 
+    localStorage.setItem(
+      `scribe:result:${getPacificDateKey()}`,
+      JSON.stringify({ scrollId: scroll.id, nickname, total, results }),
+    );
+
     try {
       const response = await fetch(apiUrl("/api/leaderboard"), {
         method: "POST",
@@ -166,10 +203,6 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
       setRankMessage("Saved on this device; the global register is unavailable in preview.");
     }
 
-    localStorage.setItem(
-      `scribe:result:${getPacificDateKey()}`,
-      JSON.stringify({ scrollId: scroll.id, nickname, total, results }),
-    );
   }
 
   async function shareResult() {
@@ -336,10 +369,14 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
   return (
     <main className="game-shell results-shell">
       <section className="results-card">
-        <div className="eyebrow">Scroll completed</div>
+        <div className="eyebrow">{restoredToday ? "Today’s scroll restored" : "Scroll completed"}</div>
         <div className="illuminated-initial" aria-hidden="true">S</div>
         <h1>Your page is illuminated.</h1>
-        <p className="results-intro">Seven moments of memory, gathered from across Scripture.</p>
+        <p className="results-intro">
+          {restoredToday
+            ? "You have already completed today’s challenge on this browser. Return after midnight Pacific for a new scroll."
+            : "Seven moments of memory, gathered from across Scripture."}
+        </p>
         <div className="result-marks" aria-label="Your seven answer tiers">
           {results.map((result, index) => (
             <span className={result.answer ? `mark-${result.answer.tier}` : "mark-missed"} key={`${result.questionId}-${index}`}>
