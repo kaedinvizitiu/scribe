@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 :root {
+  --font-display: "Cormorant Garamond";
+  --font-letterpress: "IM Fell English SC";
+  --font-sans: "Inter";
   --ink: #171b24;
   --ink-soft: #343746;
   --parchment: #f3ead4;
@@ -76,6 +79,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   display: grid;
   place-items: center;
   position: relative;
+  isolation: isolate;
   overflow: hidden;
 }
 
@@ -259,22 +263,34 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .welcome-content h1 em { color: #f0c967; }
 .welcome-content .welcome-copy { margin: 26px 0 18px; color: rgba(255,247,231,.78); line-height: 1.65; }
-.tier-legend { display: flex; gap: 8px; margin: 18px 0 22px; }
+.tier-legend { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; max-width: 370px; margin: 18px 0 22px; }
 .tier-legend > span {
-  width: 46px;
-  height: 46px;
+  width: auto;
+  height: 74px;
   display: grid;
+  grid-template-rows: 46px 1fr;
   place-items: center;
   position: relative;
-  border: 1px solid color-mix(in srgb, var(--legend-color) 70%, transparent);
+  border: 0;
   color: var(--legend-color);
-  background: rgba(7,11,19,.42);
+  background: transparent;
   font-size: 16px;
-  transform: rotate(45deg);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--legend-color) 12%, transparent);
+  transform: none;
+  box-shadow: none;
 }
-.tier-legend small { position: absolute; top: 51px; left: 50%; color: rgba(255,247,231,.62); font-size: 7px; letter-spacing: .08em; text-transform: uppercase; transform: translateX(-50%) rotate(-45deg); }
-.tier-legend > span::first-line { transform: rotate(-45deg); }
+.tier-legend > span::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 3px;
+  width: 39px;
+  height: 39px;
+  border: 1px solid color-mix(in srgb, var(--legend-color) 70%, transparent);
+  background: rgba(7,11,19,.5);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--legend-color) 12%, transparent);
+  transform: rotate(45deg);
+}
+.tier-legend small { position: static; width: 100%; color: rgba(255,247,231,.62); font-size: 7px; line-height: 1.15; letter-spacing: .06em; text-align: center; text-transform: uppercase; transform: none; overflow-wrap: anywhere; }
 .legend-ink { --legend-color: #b5bdc8; } .legend-bronze { --legend-color: #c78c50; } .legend-silver { --legend-color: #d8e0e8; } .legend-gold { --legend-color: #f0c65a; } .legend-pearl { --legend-color: #a7d3ee; }
 .welcome-content .daily-meta { margin: 32px 0 20px; border-color: rgba(255,255,255,.16); }
 .welcome-content .daily-meta div { padding: 13px 10px; }
@@ -444,6 +460,93 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .year-reminder strong { text-transform: uppercase; letter-spacing: .12em; font-size: 9px; }
 .year-reminder span { font: 500 19px/1.4 var(--font-display); }
 
+/* Gameplay uses the same torch-lit adventure world as the title screen. */
+.play-shell::after, .reveal-shell::after {
+  content: "";
+  position: absolute;
+  inset: 76px 0 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(10,15,26,.94), rgba(17,23,36,.78) 50%, rgba(10,15,26,.9)),
+    linear-gradient(0deg, rgba(8,12,20,.94), transparent 54%, rgba(8,12,20,.74)),
+    url("/home-hero-bible-adventure.png") center / cover;
+  opacity: .76;
+}
+.question-card, .reveal-card {
+  color: #fff7e7;
+  border: 1px solid rgba(226,191,112,.62);
+  background:
+    radial-gradient(circle at 88% 12%, rgba(201,150,53,.13), transparent 25%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 31px),
+    linear-gradient(145deg, rgba(18,25,40,.98), rgba(9,14,24,.99));
+  box-shadow: 0 26px 70px rgba(0,0,0,.44), inset 0 0 0 1px rgba(255,235,185,.06);
+  filter: none;
+}
+.question-card::before, .reveal-card::before {
+  top: -9px;
+  left: 18px;
+  right: 18px;
+  height: 8px;
+  border: 1px solid rgba(226,191,112,.58);
+  border-radius: 50%;
+  background: linear-gradient(90deg, #6f4c22, #e0bd69 32%, #7e5525 68%, #d0a94e);
+  box-shadow: 0 4px 16px rgba(0,0,0,.36);
+}
+.question-card::after, .reveal-card::after {
+  left: 18px;
+  right: 18px;
+  bottom: -7px;
+  height: 8px;
+  border-color: rgba(226,191,112,.55);
+  border-radius: 50%;
+  background: linear-gradient(90deg, #6f4c22, #d8b45f 48%, #795122);
+  box-shadow: 0 5px 14px rgba(0,0,0,.32);
+}
+.question-header { border-color: rgba(255,255,255,.13); background: rgba(4,8,15,.28); }
+.question-header .eyebrow, .reveal-card .eyebrow { color: #d5af58; }
+.category-label, .reveal-category { color: rgba(255,247,231,.68); }
+.timer { color: #f2cf77; border-color: rgba(226,191,112,.5); background: rgba(5,9,16,.42); box-shadow: inset 0 0 18px rgba(201,150,53,.08); }
+.timer-urgent { color: #ff9a7a; border-color: #b95a45; }
+.timer-track { background: rgba(255,255,255,.08); }
+.timer-track span { background: linear-gradient(90deg, #8d5e2a, #edc96f); }
+.question-number { color: rgba(231,190,92,.1); text-shadow: 0 0 34px rgba(224,177,70,.12); }
+.question-body h1 { color: #fff8e9; text-shadow: 0 3px 20px rgba(0,0,0,.38); }
+.question-body > p { color: rgba(255,247,231,.58); }
+.answer-form { border-color: rgba(236,203,126,.72); }
+.answer-form input { color: #fff8e9; }
+.answer-form input::placeholder { color: rgba(255,247,231,.32); }
+.answer-form input:focus { border-color: #edc96f; box-shadow: none; }
+.answer-form button { color: #171b24; background: linear-gradient(180deg, #f0d17d, #b9822b); border: 1px solid #f4dc9a; }
+.feedback { color: #ffad91; }
+.question-progress { border-color: rgba(255,255,255,.12); background: rgba(4,8,15,.34); }
+.question-progress span { color: rgba(255,247,231,.38); border-color: rgba(255,255,255,.1); }
+.question-progress .current { color: #171b24; background: linear-gradient(180deg, #efd17e, #b9852d); box-shadow: inset 0 0 0 2px rgba(255,240,194,.26); }
+.reveal-card { border-top-color: var(--tier-color, #d3ae56); }
+.reveal-card h1 { color: #fff8e9; text-shadow: 0 3px 24px rgba(0,0,0,.4); }
+.your-answer, .running-score { color: rgba(255,247,231,.5); }
+.running-score strong { color: #fff8e9; }
+.answer-note { color: rgba(255,247,231,.7); }
+.reference { color: #f0cd79; }
+.reference span { color: rgba(255,247,231,.42); }
+.answer-scale { border-color: rgba(255,255,255,.14); background: rgba(3,7,13,.27); }
+.scale-title { border-color: rgba(255,255,255,.13); color: rgba(255,247,231,.72); }
+.scale-title small { color: rgba(255,247,231,.4); }
+.tier-example { border-color: rgba(255,255,255,.12); }
+.tier-example strong { color: #fff8e9; }
+
+/* GPU-friendly motion: transforms and opacity only, with no animated blur. */
+.welcome-shell::after, .welcome-scene { animation: none; }
+.reveal-card { animation: smoothReveal .42s cubic-bezier(.2,.75,.25,1) both; will-change: transform, opacity; }
+.tier-medallion { animation: smoothSeal .46s .08s cubic-bezier(.2,.8,.25,1.12) both; box-shadow: 0 8px 20px rgba(0,0,0,.28); will-change: transform, opacity; }
+.accepted-flourish span { animation: acceptedRise .34s .1s ease-out both; }
+.score-ribbon { animation: smoothRibbon .35s .24s ease-out both; }
+.score-ribbon::after, .burst, .spark { display: none; }
+.running-score { animation: acceptedRise .3s .4s ease-out forwards; }
+
+@keyframes smoothReveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes smoothSeal { from { opacity: 0; transform: translateY(-16px) scale(.82); } to { opacity: 1; transform: none; } }
+@keyframes smoothRibbon { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
 @keyframes titleArrival { from { opacity: 0; transform: translateY(22px) scale(.985); } to { opacity: 1; transform: none; } }
 @keyframes sceneDrift { from { transform: scale(1.015) translate3d(0,0,0); } to { transform: scale(1.045) translate3d(-7px,-3px,0); } }
 @keyframes lampGlow { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
@@ -466,9 +569,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .welcome-content { grid-column: 1; align-self: end; padding: 260px 22px 30px; }
   .welcome-content h1 { font-size: clamp(48px, 14vw, 68px); }
   .quest-kicker { font-size: 10px; }
-  .tier-legend { margin-bottom: 28px; }
-  .tier-legend > span { width: 39px; height: 39px; }
-  .tier-legend small { top: 45px; }
+  .tier-legend { gap: 2px; margin-bottom: 18px; }
+  .tier-legend > span { height: 70px; }
+  .tier-legend > span::before { width: 35px; height: 35px; }
   .scene-caption { display: none; }
   .daily-meta { grid-template-columns: 1fr; }
   .daily-meta div + div { border-left: 0; border-top: 1px solid var(--line); }

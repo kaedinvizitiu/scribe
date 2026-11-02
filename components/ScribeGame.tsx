@@ -10,6 +10,7 @@ import {
   matchAnswer,
   questionsForScroll,
 } from "../data/game";
+import { apiUrl, siteHref } from "../lib/browser-paths";
 
 type RoundResult = {
   questionId: string;
@@ -139,7 +140,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     }
 
     try {
-      const response = await fetch("/api/leaderboard", {
+      const response = await fetch(apiUrl("/api/leaderboard"), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
@@ -345,7 +346,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
         <p className="rank-message">{rankMessage}</p>
         <div className="result-actions">
           <button className="primary-button" onClick={() => void shareResult()}>Share result <span>↗</span></button>
-          <a className="secondary-button" href="/leaderboard">Hall of Scribes</a>
+          <a className="secondary-button" href={siteHref("/leaderboard")}>Hall of Scribes</a>
         </div>
         <div className="results-list">
           {results.map((result, index) => {

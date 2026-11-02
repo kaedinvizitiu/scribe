@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { apiUrl } from "../lib/browser-paths";
 
 type AdminScroll = {
   id: string;
@@ -18,7 +19,7 @@ export function Scriptorium() {
 
   async function unlock(event: FormEvent) {
     event.preventDefault();
-    const response = await fetch("/api/admin", { headers: { "x-scriptorium-key": key } });
+    const response = await fetch(apiUrl("/api/admin"), { headers: { "x-scriptorium-key": key } });
     if (!response.ok) {
       setMessage("That passphrase did not open the Scriptorium.");
       return;
@@ -29,7 +30,7 @@ export function Scriptorium() {
   }
 
   async function setStatus(scrollId: string, status: string) {
-    const response = await fetch("/api/admin", {
+    const response = await fetch(apiUrl("/api/admin"), {
       method: "POST",
       headers: { "content-type": "application/json", "x-scriptorium-key": key },
       body: JSON.stringify({ scrollId, status }),

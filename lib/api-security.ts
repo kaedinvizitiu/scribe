@@ -3,7 +3,12 @@ import { env } from "cloudflare:workers";
 type SecurityEnv = { PUBLIC_APP_ORIGIN?: string };
 
 function allowedOrigins() {
-  const origins = new Set(["http://localhost:3000", "http://127.0.0.1:3000"]);
+  const origins = new Set([
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:4173",
+    "http://127.0.0.1:4173",
+  ]);
   const configured = (env as unknown as SecurityEnv).PUBLIC_APP_ORIGIN;
   if (configured) {
     try {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getPacificDateKey } from "../data/game";
+import { apiUrl } from "../lib/browser-paths";
 
 type Entry = { nickname: string; score: number; correctCount: number; elapsedMs: number };
 
@@ -10,7 +11,7 @@ export function Leaderboard() {
   const [message, setMessage] = useState("Opening today’s register…");
 
   useEffect(() => {
-    fetch(`/api/leaderboard?date=${encodeURIComponent(getPacificDateKey())}`)
+    fetch(apiUrl(`/api/leaderboard?date=${encodeURIComponent(getPacificDateKey())}`))
       .then((response) => response.ok ? response.json() : Promise.reject())
       .then((payload: { entries?: Entry[] }) => {
         setEntries(payload.entries ?? []);
