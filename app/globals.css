@@ -339,8 +339,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   z-index: 12;
   top: 88px;
   right: clamp(16px, 3vw, 46px);
-  min-width: 132px;
-  padding: 9px 14px 8px;
+  min-width: 162px;
+  padding: 11px 16px 10px;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: end;
@@ -352,8 +352,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 .live-score-hud::before { content: "✦"; position: absolute; left: -10px; top: 50%; translate: 0 -50%; color: #e6c267; font-size: 16px; text-shadow: 0 0 12px rgba(230,194,103,.55); }
 .live-score-hud span { grid-column: 1 / -1; color: rgba(255,247,231,.53); font-size: 7px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-.live-score-hud strong { color: #f1ce74; font: 600 25px/1 var(--font-display); animation: scorePop .28s ease-out both; }
-.live-score-hud small { padding-bottom: 2px; color: rgba(255,247,231,.45); font-size: 7px; letter-spacing: .1em; text-transform: uppercase; }
+.live-score-hud strong { color: #f1ce74; font: 700 34px/.9 var(--font-display); animation: scorePop .28s ease-out both; }
+.live-score-hud small { padding-bottom: 3px; color: rgba(255,247,231,.7); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .question-header { padding: 26px 34px 22px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .question-header > div:first-child { display: grid; gap: 8px; }
 .category-label, .reveal-category { color: #68635b; font: 500 18px/1 var(--font-display); }
@@ -415,6 +415,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .reveal-card h1 { margin: 6px 0 12px; font-family: var(--font-letterpress), var(--font-display), serif; font-size: clamp(44px, 7vw, 68px); font-weight: 400; }
 .score-ribbon { display: inline-flex; gap: 16px; align-items: center; padding: 10px 16px; color: white; background: var(--tier-color); text-transform: uppercase; letter-spacing: .11em; font-size: 10px; }
 .score-ribbon strong { font-size: 11px; }
+.score-ribbon span { font-size: 14px; font-weight: 800; }
 .score-ribbon { position: relative; overflow: hidden; animation: ribbonSweep .65s .52s cubic-bezier(.2,.8,.2,1) both; }
 .score-ribbon::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.48) 48%, transparent 68%); transform: translateX(-130%); animation: ribbonShine .8s 1.05s ease-out both; }
 .running-score { margin: 12px 0 0; color: #8b8378; font-size: 9px; letter-spacing: .13em; text-transform: uppercase; opacity: 0; animation: acceptedRise .45s .9s ease-out forwards; }
@@ -598,8 +599,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .site-header nav { display: none; }
   .header-mark { display: none; }
   .game-shell { padding: 84px 12px 16px; align-items: start; }
-  .live-score-hud { top: 71px; right: 12px; min-width: 108px; padding: 7px 10px 6px; }
-  .live-score-hud strong { font-size: 21px; }
+  .live-score-hud { top: 71px; right: 12px; min-width: 132px; padding: 8px 11px 7px; }
+  .live-score-hud strong { font-size: 28px; }
+  .live-score-hud small { font-size: 9px; }
+  .score-ribbon span { font-size: 12px; }
   .welcome-card { min-height: 740px; display: grid; grid-template-columns: 1fr; }
   .reveal-card, .results-card { padding: 38px 22px; }
   .welcome-scene { min-height: 740px; background-image: linear-gradient(0deg, rgba(11,16,27,.99) 0%, rgba(11,16,27,.94) 42%, rgba(11,16,27,.2) 78%), url("/home-hero-bible-adventure.png"); background-position: 64% center; }
