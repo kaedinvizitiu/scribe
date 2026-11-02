@@ -47,6 +47,12 @@ export async function ensureScribeTables() {
       status TEXT NOT NULL DEFAULT 'pending',
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )`),
+    db.prepare(`CREATE TABLE IF NOT EXISTS request_limits (
+      identifier TEXT NOT NULL,
+      window_id INTEGER NOT NULL,
+      request_count INTEGER NOT NULL DEFAULT 1,
+      PRIMARY KEY (identifier, window_id)
+    )`),
   ]);
   return db;
 }

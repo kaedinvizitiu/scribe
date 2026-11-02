@@ -12,7 +12,8 @@ test("ships the Scribe daily game instead of starter content", async () => {
     readFile(new URL("app/globals.css", root), "utf8"),
   ]);
   assert.match(page, /ScribeGame/);
-  assert.match(game, /Seven questions/);
+  assert.match(game, /Seven open-answer challenges/);
+  assert.match(styles, /home-hero-bible-adventure/);
   assert.match(game, /30/);
   assert.match(game, /Not accepted for this question/);
   assert.match(layout, /Scribe — Daily Bible Knowledge/);

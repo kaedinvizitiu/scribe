@@ -1,13 +1,16 @@
 import { DAILY_SCROLLS, questionsForScroll } from "../../../data/game";
 import { ensureScribeTables, getScriptoriumKey } from "../../../lib/d1";
+import { apiJson, constantTimeEqual, preflight, readLimitedJson, requestOriginAllowed } from "../../../lib/api-security";
 
-function authorized(request: Request) {
+async function authorized(request: Request) {
   const key = getScriptoriumKey(request);
-  return Boolean(key && request.headers.get("x-scriptorium-key") === key);
+  const submitted = request.headers.get("x-scriptorium-key");
+  return Boolean(key && submitted && await constantTimeEqual(submitted, key));
 }
 
 export async function GET(request: Request) {
-  if (!authorized(request)) return Response.json({ error: "Passphrase required" }, { status: 401 });
+  if (!requestOriginAllowed(request)) return apiJson(request, { error: "Origin not allowed" }, 403);
+  if (!await authorized(request)) return apiJson(request, { error: "Passphrase required" }, 401);
   const db = await ensureScribeTables();
   const saved = await db.prepare("SELECT scroll_id AS scrollId, status, note, updated_at AS updatedAt FROM scroll_approvals").all();
   const statusMap = new Map(saved.results.map((row) => [String(row.scrollId), row]));
@@ -18,14 +21,20 @@ export async function GET(request: Request) {
     status: String(statusMap.get(scroll.id)?.status ?? "draft"),
     note: String(statusMap.get(scroll.id)?.note ?? ""),
   }));
-  return Response.json({ scrolls });
+  return apiJson(request, { scrolls });
 }
 
 export async function POST(request: Request) {
-  if (!authorized(request)) return Response.json({ error: "Passphrase required" }, { status: 401 });
-  const payload = await request.json() as { scrollId?: string; status?: string; note?: string };
+  if (!requestOriginAllowed(request)) return apiJson(request, { error: "Origin not allowed" }, 403);
+  if (!await authorized(request)) return apiJson(request, { error: "Passphrase required" }, 401);
+  let payload: { scrollId?: string; status?: string; note?: string };
+  try {
+    payload = await readLimitedJson(request, 2_048);
+  } catch {
+    return apiJson(request, { error: "Invalid request body" }, 400);
+  }
   if (!payload.scrollId || !DAILY_SCROLLS.some((item) => item.id === payload.scrollId)) {
-    return Response.json({ error: "Unknown scroll" }, { status: 400 });
+    return apiJson(request, { error: "Unknown scroll" }, 400);
   }
   const status = ["draft", "review", "approved", "scheduled"].includes(payload.status ?? "") ? payload.status! : "draft";
   const db = await ensureScribeTables();
@@ -34,5 +43,9 @@ export async function POST(request: Request) {
      VALUES (?, ?, ?, CURRENT_TIMESTAMP)
      ON CONFLICT(scroll_id) DO UPDATE SET status = excluded.status, note = excluded.note, updated_at = CURRENT_TIMESTAMP`,
   ).bind(payload.scrollId, status, String(payload.note ?? "").slice(0, 500)).run();
-  return Response.json({ ok: true, scrollId: payload.scrollId, status });
+  return apiJson(request, { ok: true, scrollId: payload.scrollId, status });
+}
+
+export function OPTIONS(request: Request) {
+  return preflight(request);
 }

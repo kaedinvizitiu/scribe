@@ -190,28 +190,40 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
         <div className="ambient-mark ambient-mark-one" aria-hidden="true">S</div>
         <div className="ambient-mark ambient-mark-two" aria-hidden="true">✦</div>
         <section className="welcome-card" aria-labelledby="welcome-title">
-          <div className="eyebrow">Today’s Scroll</div>
-          <div className="manuscript-rule" aria-hidden="true"><span>✦</span></div>
-          <h1 id="welcome-title">Seven questions.<br /><em>One daily scroll.</em></h1>
-          <p className="welcome-copy">
-            Search your memory across all 66 books. Less familiar answers illuminate the page more brightly.
-          </p>
-          <div className="daily-meta">
-            <div><span>Today</span><strong>{getPacificDateKey().replaceAll("-", ".")}</strong></div>
-            <div><span>Questions</span><strong>7</strong></div>
-            <div><span>Time</span><strong>30 sec each</strong></div>
+          <div className="welcome-scene" aria-hidden="true">
+            <div className="scene-caption"><span>Tonight’s passage awaits</span><strong>{scroll.title}</strong></div>
           </div>
-          <label className="nickname-field">
-            <span>Leaderboard nickname</span>
-            <input
-              value={nickname}
-              onChange={(event) => setNickname(event.target.value)}
-              maxLength={24}
-              autoComplete="nickname"
-            />
-          </label>
-          <button className="primary-button" onClick={begin}>Begin today’s scroll <span>→</span></button>
-          <p className="welcome-note">One ranked reading per device · New Scroll at midnight Pacific</p>
+          <div className="welcome-content">
+            <div className="quest-kicker"><span>✦</span> Daily Scripture Quest <span>✦</span></div>
+            <div className="eyebrow">Today’s Scroll</div>
+            <h1 id="welcome-title">Enter the<br /><em>Scriptorium.</em></h1>
+            <p className="welcome-copy">
+              Seven open-answer challenges from all 66 books. Common answers earn ink; rare answers uncover pearl.
+            </p>
+            <div className="tier-legend" aria-label="Answer ranks from Ink to Pearl">
+              {tierOrder.map((tier) => <span className={`legend-${tier}`} key={tier}>{TIERS[tier].symbol}<small>{TIERS[tier].label}</small></span>)}
+            </div>
+            <div className="daily-meta">
+              <div><span>Today</span><strong>{getPacificDateKey().replaceAll("-", ".")}</strong></div>
+              <div><span>Trials</span><strong>7</strong></div>
+              <div><span>Clock</span><strong>30 sec</strong></div>
+            </div>
+            <label className="nickname-field">
+              <span>Your name in the register</span>
+              <input
+                value={nickname}
+                onChange={(event) => setNickname(event.target.value)}
+                maxLength={24}
+                autoComplete="nickname"
+              />
+            </label>
+            <button className="primary-button quest-button" onClick={begin}>
+              <span className="button-seal" aria-hidden="true">S</span>
+              Unroll today’s quest
+              <span aria-hidden="true">→</span>
+            </button>
+            <p className="welcome-note">One ranked journey per device · New quest at midnight Pacific</p>
+          </div>
         </section>
       </main>
     );
@@ -260,20 +272,26 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     const accepted = currentResult.answer;
     return (
       <main className="game-shell reveal-shell">
-        <section className={`reveal-card ${accepted ? `tier-${accepted.tier}` : "tier-missed"}`}>
+        <section key={`${question.id}-${accepted?.id ?? "missed"}`} className={`reveal-card ${accepted ? `tier-${accepted.tier}` : "tier-missed"}`}>
           <header>
             <span className="eyebrow">Question {questionIndex + 1} complete</span>
             <span className="reveal-category">{question.category}</span>
           </header>
           {accepted ? (
             <>
-              <div className="tier-medallion" aria-hidden="true">{TIERS[accepted.tier].symbol}</div>
+              <div className="accepted-flourish" aria-hidden="true"><span>Answer accepted</span></div>
+              <div className="tier-celebration" aria-hidden="true">
+                <i className="burst burst-1" /><i className="burst burst-2" /><i className="burst burst-3" /><i className="burst burst-4" />
+                <b className="spark spark-1">✦</b><b className="spark spark-2">•</b><b className="spark spark-3">✦</b><b className="spark spark-4">•</b>
+                <div className="tier-medallion">{TIERS[accepted.tier].symbol}</div>
+              </div>
               <p className="your-answer">Your answer</p>
               <h1>{accepted.label}</h1>
               <div className="score-ribbon">
                 <strong>{TIERS[accepted.tier].label}</strong>
                 <span>+{TIERS[accepted.tier].points.toLocaleString()} points</span>
               </div>
+              <p className="running-score">Scroll total <strong>{total.toLocaleString()}</strong></p>
               <p className="answer-note">{accepted.note}</p>
               <p className="reference">{accepted.reference} <span>ESV reference</span></p>
             </>

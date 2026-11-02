@@ -188,6 +188,131 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .primary-button:hover { background: #1b2943; transform: translateY(-1px); }
 .welcome-card .primary-button { width: min(100%, 420px); }
 .welcome-note { font-size: 11px; color: #837c71; margin: 16px 0 0; }
+
+/* The entry screen is staged like an adventure-game title card. */
+.welcome-shell { padding-inline: clamp(14px, 3vw, 48px); }
+.welcome-shell::after {
+  content: "";
+  position: absolute;
+  inset: 76px 0 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 72% 42%, rgba(218, 160, 63, .14), transparent 25%);
+  animation: lampGlow 4.5s ease-in-out infinite;
+}
+.welcome-card {
+  width: min(100%, 1180px);
+  max-width: 1180px;
+  min-height: 680px;
+  padding: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(390px, .88fr) 1.12fr;
+  text-align: left;
+  border: 1px solid rgba(226, 191, 112, .72);
+  background: #101727;
+  box-shadow: 0 38px 110px rgba(0,0,0,.5), 0 0 0 1px rgba(255,235,180,.08) inset;
+  isolation: isolate;
+  animation: titleArrival .9s cubic-bezier(.16,.8,.24,1) both;
+}
+.welcome-card::before { left: -10px; right: -10px; }
+.welcome-card::after { display: none; }
+.welcome-scene {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  min-height: 680px;
+  background-image:
+    linear-gradient(90deg, rgba(12,18,31,.98) 0%, rgba(12,18,31,.93) 27%, rgba(12,18,31,.55) 49%, rgba(12,18,31,.02) 78%),
+    linear-gradient(0deg, rgba(8,12,21,.78), transparent 36%),
+    url("/home-hero-bible-adventure.png");
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.015);
+  animation: sceneDrift 14s ease-in-out infinite alternate;
+}
+.welcome-content {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  position: relative;
+  z-index: 2;
+  padding: 58px 0 44px 58px;
+  color: #fff7e7;
+  text-shadow: 0 2px 16px rgba(0,0,0,.35);
+}
+.quest-kicker {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #e7c673;
+  font: 400 13px/1 var(--font-letterpress), serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.welcome-content .eyebrow { color: #d1ae5d; }
+.welcome-content h1 {
+  margin-top: 11px;
+  color: #fff8e9;
+  font-size: clamp(54px, 6vw, 82px);
+  line-height: .86;
+  text-shadow: 0 4px 24px rgba(0,0,0,.52);
+}
+.welcome-content h1 em { color: #f0c967; }
+.welcome-content .welcome-copy { margin: 26px 0 18px; color: rgba(255,247,231,.78); line-height: 1.65; }
+.tier-legend { display: flex; gap: 8px; margin: 18px 0 22px; }
+.tier-legend > span {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--legend-color) 70%, transparent);
+  color: var(--legend-color);
+  background: rgba(7,11,19,.42);
+  font-size: 16px;
+  transform: rotate(45deg);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--legend-color) 12%, transparent);
+}
+.tier-legend small { position: absolute; top: 51px; left: 50%; color: rgba(255,247,231,.62); font-size: 7px; letter-spacing: .08em; text-transform: uppercase; transform: translateX(-50%) rotate(-45deg); }
+.tier-legend > span::first-line { transform: rotate(-45deg); }
+.legend-ink { --legend-color: #b5bdc8; } .legend-bronze { --legend-color: #c78c50; } .legend-silver { --legend-color: #d8e0e8; } .legend-gold { --legend-color: #f0c65a; } .legend-pearl { --legend-color: #a7d3ee; }
+.welcome-content .daily-meta { margin: 32px 0 20px; border-color: rgba(255,255,255,.16); }
+.welcome-content .daily-meta div { padding: 13px 10px; }
+.welcome-content .daily-meta div:first-child { padding-left: 0; }
+.welcome-content .daily-meta div + div { border-color: rgba(255,255,255,.16); }
+.welcome-content .daily-meta span, .welcome-content .nickname-field span { color: rgba(255,247,231,.5); }
+.welcome-content .nickname-field { max-width: none; margin: 0 0 12px; }
+.welcome-content .nickname-field input { color: white; border-color: rgba(255,255,255,.24); background: rgba(7,11,19,.55); }
+.welcome-content .nickname-field input:focus { border-color: #e5bd5e; box-shadow: 0 0 0 3px rgba(229,189,94,.14); }
+.welcome-content .primary-button { width: 100%; }
+.quest-button {
+  min-height: 60px;
+  justify-content: space-between;
+  padding-left: 10px;
+  color: #181a22;
+  background: linear-gradient(180deg, #efd17e, #b9852d);
+  border: 1px solid #f8e2a5;
+  box-shadow: 0 12px 34px rgba(225,172,61,.24), inset 0 1px rgba(255,255,255,.55);
+}
+.quest-button:hover { color: #11131a; background: linear-gradient(180deg, #f8df96, #c38f35); }
+.button-seal { width: 40px; height: 40px; display: grid; place-items: center; color: #f2d989; background: var(--oxblood); border: 3px double #d9b858; border-radius: 50%; font: 400 25px/1 var(--font-letterpress); }
+.welcome-content .welcome-note { color: rgba(255,247,231,.48); text-align: center; }
+.scene-caption {
+  position: absolute;
+  right: 30px;
+  bottom: 26px;
+  display: grid;
+  gap: 4px;
+  padding: 12px 16px;
+  color: #fff7e7;
+  border: 1px solid rgba(238,205,125,.48);
+  background: rgba(13,18,29,.72);
+  backdrop-filter: blur(8px);
+  text-align: right;
+  box-shadow: 0 8px 30px rgba(0,0,0,.3);
+}
+.scene-caption span { color: #d0aa57; font-size: 8px; letter-spacing: .15em; text-transform: uppercase; }
+.scene-caption strong { font: 500 18px/1.2 var(--font-display); }
 .ambient-mark { position: absolute; color: rgba(230,194,103,.06); font: 500 390px/1 var(--font-display); pointer-events: none; }
 .ambient-mark-one { left: 2vw; bottom: -100px; }
 .ambient-mark-two { right: 4vw; top: 90px; }
@@ -221,7 +346,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .question-progress .complete-gold { color: white; background: var(--gold); }
 .question-progress .complete-pearl { color: white; background: var(--pearl); }
 
-.reveal-card { max-width: 780px; padding: clamp(38px, 7vw, 66px); text-align: center; border-top: 6px solid var(--tier-color, var(--ink-soft)); }
+.reveal-card { max-width: 780px; padding: clamp(38px, 7vw, 66px); text-align: center; border-top: 6px solid var(--tier-color, var(--ink-soft)); animation: scrollUnfurl .72s cubic-bezier(.16,.85,.2,1) both; }
 .reveal-card header { display: flex; align-items: center; justify-content: space-between; text-align: left; }
 .tier-ink { --tier-color: var(--ink-soft); }
 .tier-bronze { --tier-color: var(--bronze); }
@@ -229,11 +354,22 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .tier-gold { --tier-color: var(--gold); }
 .tier-pearl { --tier-color: var(--pearl); }
 .tier-missed { --tier-color: #a39b8e; }
-.tier-medallion { width: 70px; height: 70px; margin: 34px auto 20px; display: grid; place-items: center; color: white; background: var(--tier-color); border-radius: 50%; border: 6px double rgba(255,255,255,.6); font-size: 24px; }
+.accepted-flourish { height: 26px; margin-top: 18px; overflow: hidden; color: var(--tier-color); text-transform: uppercase; letter-spacing: .26em; font-size: 9px; font-weight: 800; }
+.accepted-flourish span { display: inline-block; animation: acceptedRise .55s .18s cubic-bezier(.15,.8,.25,1) both; }
+.tier-celebration { width: 146px; height: 146px; margin: 2px auto -7px; display: grid; place-items: center; position: relative; }
+.tier-medallion { width: 80px; height: 80px; margin: 0; display: grid; place-items: center; position: relative; z-index: 2; color: white; background: radial-gradient(circle at 35% 25%, color-mix(in srgb, var(--tier-color) 68%, white), var(--tier-color) 58%, color-mix(in srgb, var(--tier-color) 76%, black)); border-radius: 50%; border: 7px double rgba(255,255,255,.66); font-size: 27px; box-shadow: 0 10px 24px color-mix(in srgb, var(--tier-color) 35%, transparent), 0 0 0 9px color-mix(in srgb, var(--tier-color) 10%, transparent); animation: sealStrike .72s .14s cubic-bezier(.17,.89,.23,1.42) both; }
+.burst { position: absolute; width: 2px; height: 132px; background: linear-gradient(transparent, color-mix(in srgb, var(--tier-color) 62%, transparent), transparent); opacity: 0; animation: burstOut .8s .34s ease-out both; }
+.burst-2 { transform: rotate(45deg); }.burst-3 { transform: rotate(90deg); }.burst-4 { transform: rotate(135deg); }
+.spark { position: absolute; color: var(--tier-color); font-size: 16px; opacity: 0; animation: sparkFly 1.3s .44s ease-out both; }
+.spark-1 { left: 6px; top: 34px; }.spark-2 { right: 3px; top: 53px; animation-delay: .54s; }.spark-3 { right: 28px; bottom: 5px; animation-delay: .64s; }.spark-4 { left: 18px; bottom: 23px; animation-delay: .74s; }
 .your-answer { margin: 0; color: #7d766b; text-transform: uppercase; letter-spacing: .18em; font-size: 10px; }
 .reveal-card h1 { margin: 6px 0 12px; font-family: var(--font-letterpress), var(--font-display), serif; font-size: clamp(44px, 7vw, 68px); font-weight: 400; }
 .score-ribbon { display: inline-flex; gap: 16px; align-items: center; padding: 10px 16px; color: white; background: var(--tier-color); text-transform: uppercase; letter-spacing: .11em; font-size: 10px; }
 .score-ribbon strong { font-size: 11px; }
+.score-ribbon { position: relative; overflow: hidden; animation: ribbonSweep .65s .52s cubic-bezier(.2,.8,.2,1) both; }
+.score-ribbon::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.48) 48%, transparent 68%); transform: translateX(-130%); animation: ribbonShine .8s 1.05s ease-out both; }
+.running-score { margin: 12px 0 0; color: #8b8378; font-size: 9px; letter-spacing: .13em; text-transform: uppercase; opacity: 0; animation: acceptedRise .45s .9s ease-out forwards; }
+.running-score strong { margin-left: 5px; color: var(--ink); font: 700 16px/1 var(--font-display); }
 .answer-note { max-width: 570px; margin: 24px auto 10px; color: #57534d; line-height: 1.65; }
 .reference { margin: 0; color: var(--indigo); font: 600 15px/1.4 var(--font-display); }
 .reference span { display: inline-block; margin-left: 8px; color: #928a7d; font: 500 8px/1 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; }
@@ -308,12 +444,32 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .year-reminder strong { text-transform: uppercase; letter-spacing: .12em; font-size: 9px; }
 .year-reminder span { font: 500 19px/1.4 var(--font-display); }
 
+@keyframes titleArrival { from { opacity: 0; transform: translateY(22px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes sceneDrift { from { transform: scale(1.015) translate3d(0,0,0); } to { transform: scale(1.045) translate3d(-7px,-3px,0); } }
+@keyframes lampGlow { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
+@keyframes scrollUnfurl { from { opacity: 0; transform: translateY(-18px) scaleY(.82); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes acceptedRise { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
+@keyframes sealStrike { 0% { opacity: 0; transform: translateY(-48px) scale(1.55) rotate(-9deg); } 68% { opacity: 1; transform: translateY(4px) scale(.93) rotate(2deg); } 100% { opacity: 1; transform: none; } }
+@keyframes burstOut { 0% { opacity: 0; transform: scale(.15); } 40% { opacity: .72; } 100% { opacity: 0; transform: scale(1.2); } }
+@keyframes sparkFly { 0% { opacity: 0; transform: translate(18px,12px) scale(.3) rotate(0); } 35% { opacity: 1; } 100% { opacity: 0; transform: translate(-7px,-18px) scale(1.2) rotate(70deg); } }
+@keyframes ribbonSweep { from { opacity: 0; transform: scaleX(.35); } to { opacity: 1; transform: scaleX(1); } }
+@keyframes ribbonShine { to { transform: translateX(130%); } }
+
 @media (max-width: 760px) {
   .site-header { height: 64px; padding: 0 18px; grid-template-columns: 1fr auto; }
   .site-header nav { display: none; }
   .header-mark { display: none; }
   .game-shell { padding: 84px 12px 16px; align-items: start; }
-  .welcome-card, .reveal-card, .results-card { padding: 38px 22px; }
+  .welcome-card { min-height: 740px; display: grid; grid-template-columns: 1fr; }
+  .reveal-card, .results-card { padding: 38px 22px; }
+  .welcome-scene { min-height: 740px; background-image: linear-gradient(0deg, rgba(11,16,27,.99) 0%, rgba(11,16,27,.94) 42%, rgba(11,16,27,.2) 78%), url("/home-hero-bible-adventure.png"); background-position: 64% center; }
+  .welcome-content { grid-column: 1; align-self: end; padding: 260px 22px 30px; }
+  .welcome-content h1 { font-size: clamp(48px, 14vw, 68px); }
+  .quest-kicker { font-size: 10px; }
+  .tier-legend { margin-bottom: 28px; }
+  .tier-legend > span { width: 39px; height: 39px; }
+  .tier-legend small { top: 45px; }
+  .scene-caption { display: none; }
   .daily-meta { grid-template-columns: 1fr; }
   .daily-meta div + div { border-left: 0; border-top: 1px solid var(--line); }
   .question-card { min-height: calc(100vh - 100px); }

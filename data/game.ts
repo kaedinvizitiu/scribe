@@ -142,7 +142,7 @@ export const QUESTIONS: Question[] = [
   q("jesus-miracle", "Name a miracle performed by Jesus.", "Signs", [
     answer("Feeding the five thousand", "ink", "Matthew 14:13–21", "Jesus fed five thousand men with five loaves and two fish.", ["fed 5000", "feeding 5000"]),
     answer("Walking on water", "ink", "Matthew 14:22–33", "Jesus walked to the disciples on the sea."),
-    answer("Water into wine", "bronze", "John 2:1–11", "Jesus turned water into wine at Cana."),
+    answer("Water into wine", "bronze", "John 2:1–11", "Jesus turned water into wine at Cana.", ["water", "turned water into wine", "turning water into wine", "wine at Cana", "Cana"]),
     answer("Calming the storm", "bronze", "Mark 4:35–41", "Jesus rebuked the wind and calmed the sea."),
     answer("Raising Lazarus", "silver", "John 11:38–44", "Jesus called Lazarus out of the tomb."),
     answer("Healing the paralytic", "silver", "Mark 2:1–12", "Jesus healed a paralytic lowered through a roof."),
@@ -154,7 +154,7 @@ export const QUESTIONS: Question[] = [
   q("parable", "Name a parable told by Jesus.", "Teachings", [
     answer("The Good Samaritan", "ink", "Luke 10:25–37", "Jesus told of a Samaritan who showed mercy."),
     answer("The Prodigal Son", "ink", "Luke 15:11–32", "A father welcomed home his lost son.", ["lost son"]),
-    answer("The Sower", "bronze", "Matthew 13:1–23", "Seed fell on four kinds of ground."),
+    answer("The Sower", "bronze", "Matthew 13:1–23", "Seed fell on four kinds of ground.", ["sower", "parable of the sower", "seed and soil", "four soils"]),
     answer("The Lost Sheep", "bronze", "Luke 15:3–7", "A shepherd sought one lost sheep."),
     answer("The Talents", "silver", "Matthew 25:14–30", "Servants were entrusted with differing amounts."),
     answer("The Ten Virgins", "silver", "Matthew 25:1–13", "Ten virgins waited for the bridegroom."),
@@ -328,17 +328,73 @@ export function normalizeAnswer(value: string) {
     .trim();
 }
 
+const removableLeadWords = new Set([
+  "a", "an", "the", "parable", "of", "story", "about", "saint", "st",
+]);
+
+function meaningfulAnswer(value: string) {
+  const words = normalizeAnswer(value).split(" ").filter(Boolean);
+  while (words.length > 1 && removableLeadWords.has(words[0])) words.shift();
+  return words.join(" ");
+}
+
+function editDistance(left: string, right: string) {
+  const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+  for (let leftIndex = 1; leftIndex <= left.length; leftIndex += 1) {
+    let diagonal = previous[0];
+    previous[0] = leftIndex;
+    for (let rightIndex = 1; rightIndex <= right.length; rightIndex += 1) {
+      const above = previous[rightIndex];
+      previous[rightIndex] = Math.min(
+        previous[rightIndex] + 1,
+        previous[rightIndex - 1] + 1,
+        diagonal + (left[leftIndex - 1] === right[rightIndex - 1] ? 0 : 1),
+      );
+      diagonal = above;
+    }
+  }
+  return previous[right.length];
+}
+
 export function findQuestion(id: string) {
   return QUESTIONS.find((question) => question.id === id);
 }
 
 export function matchAnswer(question: Question, value: string) {
   const normalized = normalizeAnswer(value);
-  return question.answers.find((candidate) =>
-    [candidate.label, ...(candidate.aliases ?? [])]
-      .map(normalizeAnswer)
-      .includes(normalized),
+  if (!normalized) return undefined;
+
+  const candidates = question.answers.map((candidate) => ({
+    candidate,
+    forms: [candidate.label, ...(candidate.aliases ?? [])]
+      .flatMap((form) => [normalizeAnswer(form), meaningfulAnswer(form)])
+      .filter(Boolean),
+  }));
+
+  // Curated aliases win first. This lets a natural shorthand such as “water”
+  // resolve intentionally even when that word appears in another answer.
+  const exact = candidates.find(({ forms }) => forms.includes(normalized) || forms.includes(meaningfulAnswer(value)));
+  if (exact) return exact.candidate;
+
+  const query = meaningfulAnswer(value);
+  if (query.length < 4) return undefined;
+
+  // Accept a distinctive phrase or keyword only when it points to one answer.
+  const partial = candidates.filter(({ forms }) =>
+    forms.some((form) => form.includes(query) || (query.length >= 6 && query.includes(form))),
   );
+  if (partial.length === 1) return partial[0].candidate;
+
+  // Forgive ordinary spelling mistakes, but never guess between two answers.
+  const typoLimit = query.length >= 8 ? 2 : query.length >= 5 ? 1 : 0;
+  if (typoLimit) {
+    const fuzzy = candidates.filter(({ forms }) =>
+      forms.some((form) => Math.abs(form.length - query.length) <= typoLimit && editDistance(form, query) <= typoLimit),
+    );
+    if (fuzzy.length === 1) return fuzzy[0].candidate;
+  }
+
+  return undefined;
 }
 
 export function getPacificDateKey(date = new Date()) {
