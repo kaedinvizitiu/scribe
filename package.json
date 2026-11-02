@@ -10,7 +10,8 @@
     "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
     "build:pages": "vite build --config vite.pages.config.ts",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "pnpm run validate:year && pnpm run build && pnpm run build:pages && tsx --test tests/*.test.mjs",
+    "test": "pnpm run validate:year && pnpm run audit:answers && pnpm run build && pnpm run build:pages && tsx --test tests/*.test.mjs",
+    "audit:answers": "tsx scripts/audit-answer-catalog.ts",
     "validate:year": "tsx scripts/validate-year.ts",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern pages-dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
@@ -34,6 +35,7 @@
     "eslint-config-next": "16.2.6",
     "react-server-dom-webpack": "19.2.6",
     "tailwindcss": "4.2.1",
+    "tsx": "^4.23.15",
     "typescript": "5.9.3",
     "vinext": "0.0.50",
     "vite": "8.0.13",

@@ -66,6 +66,7 @@ const CORE_QUESTIONS: Question[] = [
     answer("Bartholomew", "gold", "Matthew 10:3", "Bartholomew is listed with the twelve.", ["Nathanael"]),
     answer("Thaddaeus", "pearl", "Matthew 10:3", "Thaddaeus is named among the twelve.", ["Judas son of James", "Jude"]),
     answer("Simon the Zealot", "pearl", "Matthew 10:4", "Simon the Zealot is distinguished from Simon Peter.", ["Simon the Cananaean"]),
+    answer("Judas Iscariot", "pearl", "Matthew 10:4", "Judas Iscariot is included in Matthew’s list of the twelve.", ["Iscariot"]),
   ]),
   q("jacob-son", "Name one of Jacob’s sons.", "People", [
     answer("Joseph", "ink", "Genesis 30:24", "Rachel named Jacob’s son Joseph."),
@@ -94,6 +95,7 @@ const CORE_QUESTIONS: Question[] = [
     answer("Ibzan", "pearl", "Judges 12:8–10", "Ibzan of Bethlehem judged Israel for seven years."),
     answer("Elon", "pearl", "Judges 12:11–12", "Elon the Zebulunite judged Israel for ten years."),
     answer("Abdon", "pearl", "Judges 12:13–15", "Abdon son of Hillel judged Israel for eight years."),
+    answer("Jair", "pearl", "Judges 10:3–5", "Jair judged Israel for twenty-two years."),
   ]),
   q("judah-king", "Name a king of Judah.", "Kings", [
     answer("David", "ink", "2 Samuel 5:5", "David ruled Judah and then all Israel."),
@@ -106,6 +108,17 @@ const CORE_QUESTIONS: Question[] = [
     answer("Manasseh", "gold", "2 Kings 21:1", "Manasseh reigned fifty-five years in Jerusalem."),
     answer("Jotham", "pearl", "2 Kings 15:32–33", "Jotham reigned sixteen years in Jerusalem."),
     answer("Jehoahaz", "pearl", "2 Kings 23:31", "Jehoahaz reigned three months in Jerusalem."),
+    answer("Abijah", "bronze", "1 Kings 15:1", "Abijah reigned over Judah after Rehoboam.", ["Abijam"]),
+    answer("Asa", "bronze", "1 Kings 15:9", "Asa reigned over Judah for forty-one years."),
+    answer("Jehoram", "silver", "2 Kings 8:16", "Jehoram son of Jehoshaphat reigned over Judah.", ["Joram of Judah"]),
+    answer("Ahaziah", "silver", "2 Kings 8:25", "Ahaziah son of Jehoram reigned over Judah."),
+    answer("Joash", "gold", "2 Kings 12:1", "Joash began to reign over Judah at seven years old.", ["Jehoash of Judah"]),
+    answer("Amaziah", "gold", "2 Kings 14:1", "Amaziah son of Joash reigned over Judah."),
+    answer("Ahaz", "gold", "2 Kings 16:1", "Ahaz son of Jotham reigned over Judah."),
+    answer("Amon", "pearl", "2 Kings 21:19", "Amon son of Manasseh reigned over Judah."),
+    answer("Jehoiakim", "pearl", "2 Kings 23:36", "Jehoiakim reigned eleven years in Jerusalem."),
+    answer("Jehoiachin", "pearl", "2 Kings 24:8", "Jehoiachin reigned three months in Jerusalem.", ["Jeconiah", "Coniah"]),
+    answer("Zedekiah", "pearl", "2 Kings 24:18", "Zedekiah was Judah’s final king before Jerusalem fell."),
   ]),
   q("paul-city", "Name a city Paul visited.", "Places", [
     answer("Rome", "ink", "Acts 28:16", "Paul reached Rome under guard."),
@@ -146,14 +159,24 @@ const CORE_QUESTIONS: Question[] = [
   q("jesus-miracle", "Name a miracle performed by Jesus.", "Signs", [
     answer("Feeding the five thousand", "ink", "Matthew 14:13–21", "Jesus fed five thousand men with five loaves and two fish.", ["fed 5000", "feeding 5000"]),
     answer("Walking on water", "ink", "Matthew 14:22–33", "Jesus walked to the disciples on the sea."),
+    answer("Giving sight to the blind", "ink", "Matthew 9:27–31", "Jesus restored sight on more than one occasion.", ["healing the blind", "healed the blind", "healing a blind man", "healed a blind man", "restoring sight", "made the blind see"]),
+    answer("Healing a leper", "ink", "Mark 1:40–45", "Jesus touched and cleansed a man with leprosy.", ["cleansing a leper", "healed leper"]),
     answer("Water into wine", "bronze", "John 2:1–11", "Jesus turned water into wine at Cana.", ["water", "turned water into wine", "turning water into wine", "wine at Cana", "Cana"]),
     answer("Calming the storm", "bronze", "Mark 4:35–41", "Jesus rebuked the wind and calmed the sea."),
+    answer("Miraculous catch of fish", "bronze", "Luke 5:1–11", "At Jesus’ word, the fishermen enclosed a great number of fish.", ["catch of fish", "catching fish", "boat full of fish"]),
+    answer("Raising Jairus’s daughter", "bronze", "Mark 5:21–43", "Jesus took Jairus’s daughter by the hand and raised her.", ["Jairus daughter", "raised Jairus daughter"]),
     answer("Raising Lazarus", "silver", "John 11:38–44", "Jesus called Lazarus out of the tomb."),
     answer("Healing the paralytic", "silver", "Mark 2:1–12", "Jesus healed a paralytic lowered through a roof."),
+    answer("Healing the man born blind", "silver", "John 9:1–41", "Jesus gave sight to a man who had been blind from birth.", ["man born blind", "blind man at Siloam", "mud on blind man eyes"]),
+    answer("Cleansing ten lepers", "silver", "Luke 17:11–19", "Jesus cleansed ten men with leprosy; one returned to give thanks.", ["ten lepers", "healed 10 lepers"]),
     answer("Healing Bartimaeus", "gold", "Mark 10:46–52", "Jesus restored Bartimaeus’s sight."),
     answer("Healing the centurion’s servant", "gold", "Matthew 8:5–13", "Jesus healed the servant from a distance."),
+    answer("Healing Peter’s mother-in-law", "gold", "Mark 1:29–31", "Jesus took her by the hand and the fever left her.", ["Peter mother in law", "healed Peters mother"]),
+    answer("Withering the fig tree", "gold", "Mark 11:12–21", "The fig tree Jesus addressed withered from its roots.", ["cursing the fig tree", "fig tree withered"]),
     answer("Healing Malchus’s ear", "pearl", "Luke 22:50–51", "Jesus healed the servant’s ear at his arrest."),
     answer("Coin in the fish’s mouth", "pearl", "Matthew 17:24–27", "Jesus directed Peter to find a coin in a fish."),
+    answer("Raising the widow’s son at Nain", "pearl", "Luke 7:11–17", "Jesus raised a widow’s only son outside the town of Nain.", ["widow son at Nain", "raised widow son"]),
+    answer("Healing a deaf man", "pearl", "Mark 7:31–37", "Jesus opened the ears of a man who was deaf and had a speech impediment.", ["deaf and mute man", "healing the deaf", "Ephphatha"]),
   ]),
   q("parable", "Name a parable told by Jesus.", "Teachings", [
     answer("The Good Samaritan", "ink", "Luke 10:25–37", "Jesus told of a Samaritan who showed mercy."),
@@ -223,6 +246,9 @@ const CORE_QUESTIONS: Question[] = [
     answer("Chebar", "gold", "Ezekiel 1:1", "Ezekiel received visions by the Chebar canal.", ["Kebar", "Chebar canal"]),
     answer("Abana", "pearl", "2 Kings 5:12", "Naaman named the Abana among the rivers of Damascus."),
     answer("Pharpar", "pearl", "2 Kings 5:12", "Naaman named the Pharpar among the rivers of Damascus."),
+    answer("Kishon", "gold", "Judges 5:21", "The torrent Kishon swept away Sisera’s forces."),
+    answer("Jabbok", "gold", "Genesis 32:22", "Jacob crossed the ford of the Jabbok before wrestling through the night."),
+    answer("Arnon", "pearl", "Numbers 21:13", "The Arnon marked a boundary in Israel’s wilderness journey."),
   ]),
   q("revelation-church", "Name one of the seven churches addressed in Revelation.", "Books", [
     answer("Ephesus", "ink", "Revelation 2:1", "The first message is addressed to Ephesus."),
@@ -256,6 +282,9 @@ const CORE_QUESTIONS: Question[] = [
     answer("Asher", "gold", "Numbers 1:40–41", "Asher is counted among the tribes."),
     answer("Naphtali", "pearl", "Numbers 1:42–43", "Naphtali is counted among the tribes."),
     answer("Zebulun", "pearl", "Numbers 1:30–31", "Zebulun is counted among the tribes."),
+    answer("Simeon", "bronze", "Numbers 1:22–23", "Simeon is counted among the tribes."),
+    answer("Issachar", "gold", "Numbers 1:28–29", "Issachar is counted among the tribes."),
+    answer("Gad", "pearl", "Numbers 1:24–25", "Gad is counted among the tribes."),
   ]),
   q("bible-occupation", "Name an occupation held by someone in the Bible.", "Daily Life", [
     answer("Fisherman", "ink", "Matthew 4:18", "Peter and Andrew were fishermen."),
@@ -267,6 +296,11 @@ const CORE_QUESTIONS: Question[] = [
     answer("Purple-goods seller", "gold", "Acts 16:14", "Lydia was a seller of purple goods.", ["merchant"]),
     answer("Tanner", "pearl", "Acts 9:43", "Peter stayed with Simon, a tanner."),
     answer("Silversmith", "pearl", "Acts 19:24", "Demetrius made silver shrines of Artemis."),
+    answer("Tax collector", "bronze", "Matthew 9:9", "Matthew worked as a tax collector."),
+    answer("Scribe", "silver", "Ezra 7:6", "Ezra was a scribe skilled in the Law of Moses."),
+    answer("Farmer", "gold", "2 Timothy 2:6", "Paul uses the hardworking farmer as a familiar occupation.", ["husbandman"]),
+    answer("Potter", "gold", "Jeremiah 18:3", "Jeremiah visited a potter working at his wheel."),
+    answer("Weaver", "pearl", "Exodus 35:35", "Skilled craftspeople in Israel worked as weavers."),
   ]),
   q("biblical-island", "Name an island mentioned in the Bible.", "Places", [
     answer("Crete", "ink", "Acts 27:7", "Paul’s ship sailed under the lee of Crete."),
@@ -275,6 +309,10 @@ const CORE_QUESTIONS: Question[] = [
     answer("Patmos", "gold", "Revelation 1:9", "John was on Patmos because of the word of God."),
     answer("Rhodes", "pearl", "Acts 21:1", "Paul’s company sailed from Cos to Rhodes."),
     answer("Cos", "pearl", "Acts 21:1", "Paul’s company sailed directly to Cos.", ["Kos"]),
+    answer("Chios", "gold", "Acts 20:15", "Paul’s ship came opposite the island of Chios."),
+    answer("Samos", "gold", "Acts 20:15", "Paul’s company sailed from Chios to Samos."),
+    answer("Lesbos", "pearl", "Acts 20:14", "Paul’s companions sailed to Mitylene on Lesbos."),
+    answer("Cauda", "pearl", "Acts 27:16", "Paul’s storm-driven ship ran under the lee of Cauda.", ["Clauda"]),
   ]),
   q("named-well", "Name a well mentioned in the Bible.", "Places", [
     answer("Jacob’s well", "ink", "John 4:6", "Jesus rested at Jacob’s well near Sychar."),
@@ -294,6 +332,8 @@ const CORE_QUESTIONS: Question[] = [
     answer("Fountain Gate", "gold", "Nehemiah 3:15", "Shallum repaired the Fountain Gate."),
     answer("Water Gate", "pearl", "Nehemiah 3:26", "The temple servants lived near the Water Gate."),
     answer("Horse Gate", "pearl", "Nehemiah 3:28", "The priests repaired above the Horse Gate."),
+    answer("East Gate", "gold", "Nehemiah 3:29", "Shemaiah repaired opposite the East Gate."),
+    answer("Inspection Gate", "pearl", "Nehemiah 3:31", "The goldsmiths repaired as far as the Inspection Gate.", ["Muster Gate", "Miphkad Gate"]),
   ]),
 ];
 
@@ -343,10 +383,18 @@ const removableLeadWords = new Set([
   "a", "an", "the", "parable", "of", "story", "about", "saint", "st",
 ]);
 
+const matchingStopWords = new Set([
+  "a", "an", "and", "at", "by", "for", "from", "his", "her", "in", "of", "on", "the", "to", "with",
+]);
+
 function meaningfulAnswer(value: string) {
   const words = normalizeAnswer(value).split(" ").filter(Boolean);
   while (words.length > 1 && removableLeadWords.has(words[0])) words.shift();
   return words.join(" ");
+}
+
+function answerTokens(value: string) {
+  return normalizeAnswer(value).split(" ").filter((word) => word.length > 1 && !matchingStopWords.has(word));
 }
 
 function editDistance(left: string, right: string) {
@@ -396,6 +444,20 @@ export function matchAnswer(question: Question, value: string) {
   );
   if (partial.length === 1) return partial[0].candidate;
 
+  // Natural answers often omit a connecting word or reverse a phrase. Accept
+  // the wording only when its meaningful tokens identify exactly one answer.
+  const queryTokens = answerTokens(value);
+  if (queryTokens.length >= 2) {
+    const tokenMatches = candidates.filter(({ forms }) => forms.some((form) => {
+      const formTokens = answerTokens(form);
+      return queryTokens.every((queryToken) => formTokens.some((formToken) =>
+        formToken === queryToken
+        || (queryToken.length >= 6 && formToken.length >= 6 && editDistance(formToken, queryToken) <= 1)
+      ));
+    }));
+    if (tokenMatches.length === 1) return tokenMatches[0].candidate;
+  }
+
   // Forgive ordinary spelling mistakes, but never guess between two answers.
   const typoLimit = query.length >= 8 ? 2 : query.length >= 5 ? 1 : 0;
   if (typoLimit) {
@@ -406,6 +468,48 @@ export function matchAnswer(question: Question, value: string) {
   }
 
   return undefined;
+}
+
+export function getAnswerSuggestions(question: Question, value: string, limit = 5) {
+  const query = meaningfulAnswer(value);
+  if (query.length < 5) return [];
+  const queryWords = query.split(" ").filter((word) => word.length > 1);
+
+  const matches = question.answers
+    .map((candidate, index) => {
+      const forms = [candidate.label, ...(candidate.aliases ?? [])]
+        .flatMap((form) => [normalizeAnswer(form), meaningfulAnswer(form)])
+        .filter(Boolean);
+      let score = Number.POSITIVE_INFINITY;
+      for (const form of forms) {
+        if (form === query) score = Math.min(score, 0);
+        else if (form.startsWith(query)) score = Math.min(score, 1);
+        else if (form.split(" ").some((word) => word.startsWith(query))) score = Math.min(score, 2);
+        else if (form.includes(query)) score = Math.min(score, 3);
+        else if (queryWords.length > 1 && queryWords.every((word) => form.includes(word))) score = Math.min(score, 4);
+        else {
+          const typoLimit = query.length >= 8 ? 2 : query.length >= 5 ? 1 : 0;
+          if (typoLimit && Math.abs(form.length - query.length) <= typoLimit && editDistance(form, query) <= typoLimit) {
+            score = Math.min(score, 5);
+          }
+        }
+      }
+      return { candidate, score, index };
+    })
+    .filter(({ score }) => Number.isFinite(score))
+    .sort((left, right) => left.score - right.score || left.index - right.index)
+    .slice(0, limit);
+
+  // Autocomplete only when the player's wording identifies one answer. This
+  // completes a thought without turning the menu into a list of free clues.
+  if (matches.length !== 1) return [];
+  return matches.map(({ candidate }) => candidate);
+}
+
+export function rejectedAnswerMessage(question: Question, value: string) {
+  const query = meaningfulAnswer(value);
+  if (query.length < 3) return "Add a little more detail so the answer can be identified.";
+  return "Not accepted for this question. Try another biblical example.";
 }
 
 export function getPacificDateKey(date = new Date()) {

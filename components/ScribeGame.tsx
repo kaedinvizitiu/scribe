@@ -6,9 +6,11 @@ import {
   DailyScroll,
   TIERS,
   Tier,
+  getAnswerSuggestions,
   getPacificDateKey,
   matchAnswer,
   questionsForScroll,
+  rejectedAnswerMessage,
 } from "../data/game";
 import { apiUrl, siteHref } from "../lib/browser-paths";
 
@@ -22,6 +24,20 @@ type RoundResult = {
 type Stage = "welcome" | "playing" | "reveal" | "results";
 
 const tierOrder: Tier[] = ["ink", "bronze", "silver", "gold", "pearl"];
+
+const scoreRoles = [
+  { ceiling: 500, name: "Took a Wrong Turn at Nineveh", note: "The scroll was found. The answers were… elsewhere." },
+  { ceiling: 1000, name: "Did Not Reach Heaven", note: "A valiant attempt, but the gate remains just ahead." },
+  { ceiling: 1400, name: "Knocking at the Gate", note: "Close enough to hear the choir warming up." },
+  { ceiling: 1800, name: "Purgatory", note: "Not lost, not finished—decidedly in the waiting room." },
+  { ceiling: 2800, name: "Reached Heaven", note: "The trumpets sound. Today’s scroll has been conquered." },
+  { ceiling: 4500, name: "Keeper of the Scrolls", note: "The Scriptorium would like its answer key back." },
+  { ceiling: Number.POSITIVE_INFINITY, name: "Seventh-Seal Scholar", note: "An alarmingly complete knowledge of obscure Scripture." },
+] as const;
+
+function scoreRole(total: number) {
+  return scoreRoles.find((role) => total < role.ceiling) ?? scoreRoles[scoreRoles.length - 1];
+}
 
 function createPlayerId() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -41,6 +57,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
   const [value, setValue] = useState("");
   const [feedback, setFeedback] = useState("");
   const [cooldown, setCooldown] = useState(false);
+  const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [nickname, setNickname] = useState("Reader");
   const [rankMessage, setRankMessage] = useState("Your result will join today’s register.");
@@ -54,6 +71,11 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     (sum, result) => sum + (result.answer ? TIERS[result.answer.tier].points : 0),
     0,
   );
+  const suggestions = useMemo(
+    () => question && stage === "playing" ? getAnswerSuggestions(question, value) : [],
+    [question, stage, value],
+  );
+  const role = scoreRole(total);
 
   useEffect(() => {
     const savedName = localStorage.getItem("scribe:nickname");
@@ -80,12 +102,14 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
         );
 
       if (!isComplete) return;
-      setResults(parsed.results!);
-      setQuestionIndex(questions.length - 1);
-      setNickname(parsed.nickname?.trim().slice(0, 24) || savedName || "Reader");
-      setRankMessage("Today’s score was restored from this browser.");
-      setRestoredToday(true);
-      setStage("results");
+      window.setTimeout(() => {
+        setResults(parsed.results!);
+        setQuestionIndex(questions.length - 1);
+        setNickname(parsed.nickname?.trim().slice(0, 24) || savedName || "Reader");
+        setRankMessage("Today’s score was restored from this browser.");
+        setRestoredToday(true);
+        setStage("results");
+      }, 0);
     } catch {
       localStorage.removeItem(resultKey);
     }
@@ -122,6 +146,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     setSeconds(30);
     setValue("");
     setFeedback("");
+    setSuggestionIndex(-1);
     startedAt.current = clockNow();
     setStage("playing");
   }
@@ -131,7 +156,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     if (!question || cooldown || !value.trim()) return;
     const accepted = matchAnswer(question, value);
     if (!accepted) {
-      setFeedback("Not accepted for this question — try again.");
+      setFeedback(rejectedAnswerMessage(question, value));
       setCooldown(true);
       window.setTimeout(() => setCooldown(false), 550);
       inputRef.current?.select();
@@ -160,6 +185,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     setSeconds(30);
     setValue("");
     setFeedback("");
+    setSuggestionIndex(-1);
     startedAt.current = clockNow();
     setStage("playing");
   }
@@ -209,7 +235,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     const marks = results
       .map((result) => (result.answer ? TIERS[result.answer.tier].symbol : "○"))
       .join(" ");
-    const text = `SCRIBE · ${scroll.title}\n${marks}\n${total.toLocaleString()} illumination · ${results.filter((r) => r.answer).length}/7 answered`;
+    const text = `SCRIBE · ${scroll.title}\n${marks}\n${total.toLocaleString()} points · ${results.filter((r) => r.answer).length}/7 answered\nRole: ${role.name}`;
     if (navigator.share) {
       await navigator.share({ title: "My Scribe result", text });
     } else {
@@ -283,16 +309,63 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
             <h1>{question.prompt}</h1>
             <p>Enter any answer that fits. You may keep trying until time expires.</p>
             <form onSubmit={submit} className="answer-form">
-              <input
-                ref={inputRef}
-                value={value}
-                onChange={(event) => { setValue(event.target.value); setFeedback(""); }}
-                placeholder="Type your answer…"
-                aria-label="Your answer"
-                disabled={cooldown}
-                autoComplete="off"
-                spellCheck="false"
-              />
+              <div className="answer-combobox">
+                <input
+                  ref={inputRef}
+                  value={value}
+                  onChange={(event) => { setValue(event.target.value); setFeedback(""); setSuggestionIndex(-1); }}
+                  onKeyDown={(event) => {
+                    if (!suggestions.length) return;
+                    if (event.key === "ArrowDown") {
+                      event.preventDefault();
+                      setSuggestionIndex((index) => (index + 1) % suggestions.length);
+                    } else if (event.key === "ArrowUp") {
+                      event.preventDefault();
+                      setSuggestionIndex((index) => index <= 0 ? suggestions.length - 1 : index - 1);
+                    } else if ((event.key === "Enter" || event.key === "Tab") && suggestionIndex >= 0) {
+                      event.preventDefault();
+                      setValue(suggestions[suggestionIndex].label);
+                      setSuggestionIndex(-1);
+                      setFeedback("Suggestion filled in — submit when ready.");
+                    } else if (event.key === "Escape") {
+                      setSuggestionIndex(-1);
+                    }
+                  }}
+                  placeholder="Type your answer…"
+                  aria-label="Your answer"
+                  aria-autocomplete="list"
+                  aria-controls="answer-suggestions"
+                  aria-expanded={suggestions.length > 0}
+                  aria-activedescendant={suggestionIndex >= 0 ? `answer-suggestion-${suggestionIndex}` : undefined}
+                  role="combobox"
+                  disabled={cooldown}
+                  autoComplete="off"
+                  spellCheck="false"
+                />
+                {suggestions.length > 0 && (
+                  <div className="answer-suggestions" id="answer-suggestions" role="listbox">
+                    {suggestions.map((suggestion, index) => (
+                      <button
+                        type="button"
+                        id={`answer-suggestion-${index}`}
+                        role="option"
+                        aria-selected={suggestionIndex === index}
+                        className={suggestionIndex === index ? "active" : ""}
+                        key={suggestion.id}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => {
+                          setValue(suggestion.label);
+                          setSuggestionIndex(-1);
+                          setFeedback("Suggestion filled in — submit when ready.");
+                          inputRef.current?.focus();
+                        }}
+                      >
+                        <span>{suggestion.label}</span><small>complete answer</small>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <button type="submit" disabled={cooldown || !value.trim()}>Submit</button>
             </form>
             <div className="feedback" role="status">{feedback}</div>
@@ -345,7 +418,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
           )}
 
           <div className="answer-scale">
-            <div className="scale-title"><span>Answer scale</span><small>Examples, not the full list</small></div>
+            <div className="scale-title"><span>Answer scale</span><small>Examples from {question.answers.length} accepted answers</small></div>
             <div className="tier-grid">
               {tierOrder.map((tier) => {
                 const examples = question.answers.filter((item) => item.tier === tier).slice(0, 2);
@@ -358,6 +431,12 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
               })}
             </div>
           </div>
+          <details className="accepted-catalog">
+            <summary>View all {question.answers.length} accepted answers</summary>
+            <div>{tierOrder.map((tier) => (
+              <p key={tier}><strong>{TIERS[tier].label}</strong><span>{question.answers.filter((item) => item.tier === tier).map((item) => item.label).join(" · ") || "—"}</span></p>
+            ))}</div>
+          </details>
           <button className="primary-button" onClick={nextQuestion}>
             {questionIndex === questions.length - 1 ? "Complete the scroll" : "Next question"} <span>→</span>
           </button>
@@ -370,12 +449,13 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     <main className="game-shell results-shell">
       <section className="results-card">
         <div className="eyebrow">{restoredToday ? "Today’s scroll restored" : "Scroll completed"}</div>
-        <div className="illuminated-initial" aria-hidden="true">S</div>
-        <h1>Your page is illuminated.</h1>
+        <h1>Today’s final score</h1>
+        <div className="final-score" aria-label={`${total.toLocaleString()} points`}><strong>{total.toLocaleString()}</strong><span>points</span></div>
+        <div className="score-role"><span>Your role</span><strong>{role.name}</strong><p>{role.note}</p></div>
         <p className="results-intro">
           {restoredToday
-            ? "You have already completed today’s challenge on this browser. Return after midnight Pacific for a new scroll."
-            : "Seven moments of memory, gathered from across Scripture."}
+            ? "Your completed score and answers were restored. A new scroll arrives at midnight Pacific."
+            : "Your score and all seven answers are recorded below."}
         </p>
         <div className="result-marks" aria-label="Your seven answer tiers">
           {results.map((result, index) => (
@@ -384,7 +464,6 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
             </span>
           ))}
         </div>
-        <div className="total-score"><span>Total illumination</span><strong>{total.toLocaleString()}</strong></div>
         <p className="rank-message">{rankMessage}</p>
         <div className="result-actions">
           <button className="primary-button" onClick={() => void shareResult()}>Share result <span>↗</span></button>

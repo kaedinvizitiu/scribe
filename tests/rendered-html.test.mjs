@@ -13,9 +13,11 @@ test("ships the Scribe daily game instead of starter content", async () => {
   ]);
   assert.match(page, /ScribeGame/);
   assert.match(game, /Seven open-answer challenges/);
-  assert.match(styles, /home-hero-bible-adventure/);
+  assert.match(styles, /home-hero-retro-v2/);
   assert.match(game, /30/);
-  assert.match(game, /Not accepted for this question/);
+  assert.match(game, /rejectedAnswerMessage/);
+  assert.match(game, /Today’s final score/);
+  assert.doesNotMatch(game, /Your page is illuminated/);
   assert.match(layout, /Scribe — Daily Bible Knowledge/);
   assert.match(styles, /font-letterpress/);
   assert.doesNotMatch(`${page}${game}${layout}`, /codex-preview|SkeletonPreview/i);
