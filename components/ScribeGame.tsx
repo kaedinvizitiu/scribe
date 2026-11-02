@@ -199,9 +199,9 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
             <div className="eyebrow">Today’s Scroll</div>
             <h1 id="welcome-title">Enter the<br /><em>Scriptorium.</em></h1>
             <p className="welcome-copy">
-              Seven open-answer challenges from all 66 books. Common answers earn ink; rare answers uncover pearl.
+              Seven open-answer challenges from all 66 books. Familiar answers begin as mustard seeds; the rarest unlock the seventh seal.
             </p>
-            <div className="tier-legend" aria-label="Answer ranks from Ink to Pearl">
+            <div className="tier-legend" aria-label="Answer ranks from Mustard Seed to Seventh Seal">
               {tierOrder.map((tier) => <span className={`legend-${tier}`} key={tier}>{TIERS[tier].symbol}<small>{TIERS[tier].label}</small></span>)}
             </div>
             <div className="daily-meta">

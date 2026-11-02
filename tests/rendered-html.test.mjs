@@ -30,7 +30,7 @@ test("includes the product pages, database, and fourteen-day content calendar", 
     readFile(new URL("app/scriptorium/page.tsx", root), "utf8"),
   ]);
   assert.match(data, /sample-\$\{String\(index \+ 1\)/);
-  assert.match(data, /pearl: \{ label: "Pearl", points: 1000/);
+  assert.match(data, /pearl: \{ label: "Seventh Seal", points: 1000/);
   assert.match(schema, /dailyScores/);
   assert.match(leaderboard, /Hall of Scribes/);
   assert.match(library, /The Library/);

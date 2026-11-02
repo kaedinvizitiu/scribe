@@ -1,9 +1,9 @@
 export const TIERS = {
-  ink: { label: "Ink", points: 100, symbol: "●" },
-  bronze: { label: "Bronze", points: 250, symbol: "◆" },
-  silver: { label: "Silver", points: 450, symbol: "✦" },
-  gold: { label: "Gold", points: 700, symbol: "✹" },
-  pearl: { label: "Pearl", points: 1000, symbol: "◉" },
+  ink: { label: "Mustard Seed", points: 100, symbol: "●" },
+  bronze: { label: "Manna", points: 250, symbol: "◆" },
+  silver: { label: "Miracle", points: 450, symbol: "✦" },
+  gold: { label: "Transfiguration", points: 700, symbol: "✹" },
+  pearl: { label: "Seventh Seal", points: 1000, symbol: "◉" },
 } as const;
 
 export type Tier = keyof typeof TIERS;
