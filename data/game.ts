@@ -302,7 +302,7 @@ const BASE_QUESTIONS: Question[] = [...CORE_QUESTIONS, ...YEAR_QUESTIONS];
 function alternatePrompt(prompt: string, style: "identify" | "example") {
   const remainder = prompt.replace(/^Name\s+/i, "").replace(/^one\s+/i, "one ");
   if (style === "identify") return `Identify ${remainder.charAt(0).toLowerCase()}${remainder.slice(1)}`;
-  return `Give one biblical example: ${remainder.charAt(0).toLowerCase()}${remainder.slice(1)}`;
+  return `From Scripture, name ${remainder.charAt(0).toLowerCase()}${remainder.slice(1)}`;
 }
 
 function promptVariants(question: Question): Question[] {

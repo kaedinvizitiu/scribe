@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Leaderboard } from "../components/Leaderboard";
-import { Library } from "../components/Library";
 import { ScribeGame } from "../components/ScribeGame";
 import { Scriptorium } from "../components/Scriptorium";
 import { getDailyScroll } from "../data/game";
@@ -25,7 +24,6 @@ function StaticApp() {
       <a className="brand" href={`${base}/#/`} aria-label="Scribe home"><span>S</span><strong>SCRIBE</strong></a>
       <nav aria-label="Primary navigation">
         <a href={`${base}/#/`}>Today</a>
-        <a href={`${base}/#/library`}>Library</a>
         <a href={`${base}/#/leaderboard`}>Hall of Scribes</a>
       </nav>
       <a className="header-mark" href={`${base}/#/scriptorium`} aria-label="Open the Scriptorium">✦</a>
@@ -34,9 +32,8 @@ function StaticApp() {
 
   if (route === "/") return <>{navigation}<ScribeGame scroll={getDailyScroll()} /></>;
   if (route === "/leaderboard") return <>{navigation}<Page title="Hall of Scribes" copy="Today’s worldwide register, ordered by illumination and then time."><Leaderboard /></Page></>;
-  if (route === "/library") return <>{navigation}<Page title="The Library" copy="Your completed Scrolls and the complete 2027 content calendar."><Library /></Page></>;
   if (route === "/scriptorium") return <>{navigation}<Page title="The Scriptorium" copy="Private review and approval for upcoming daily Scrolls."><Scriptorium /></Page></>;
-  return <>{navigation}<Page title="Scroll not found" copy="This passage is not in the Library."><a className="primary-button" href={`${base}/#/`}>Return to today’s quest</a></Page></>;
+  return <>{navigation}<Page title="Scroll not found" copy="This page could not be found."><a className="primary-button" href={`${base}/#/`}>Return to today’s quest</a></Page></>;
 }
 
 function Page({ title, copy, children }: { title: string; copy: string; children: React.ReactNode }) {

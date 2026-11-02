@@ -49,7 +49,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Link className="brand" href="/" aria-label="Scribe home"><span>S</span><strong>SCRIBE</strong></Link>
           <nav aria-label="Primary navigation">
             <Link href="/">Today</Link>
-            <Link href="/library">Library</Link>
             <Link href="/leaderboard">Hall of Scribes</Link>
           </nav>
           <Link className="header-mark" href="/scriptorium" aria-label="Open the Scriptorium">✦</Link>

@@ -22,12 +22,11 @@ test("ships the Scribe daily game instead of starter content", async () => {
 });
 
 test("includes the product pages, database, and full 2027 content calendar", async () => {
-  const [data, calendar, schema, leaderboard, library, scriptorium] = await Promise.all([
+  const [data, calendar, schema, leaderboard, scriptorium] = await Promise.all([
     readFile(new URL("data/game.ts", root), "utf8"),
     readFile(new URL("data/calendar-2027.ts", root), "utf8"),
     readFile(new URL("db/schema.ts", root), "utf8"),
     readFile(new URL("app/leaderboard/page.tsx", root), "utf8"),
-    readFile(new URL("app/library/page.tsx", root), "utf8"),
     readFile(new URL("app/scriptorium/page.tsx", root), "utf8"),
   ]);
   assert.match(calendar, /length: 365/);
@@ -35,6 +34,6 @@ test("includes the product pages, database, and full 2027 content calendar", asy
   assert.match(data, /pearl: \{ label: "Seventh Seal", points: 1000/);
   assert.match(schema, /dailyScores/);
   assert.match(leaderboard, /Hall of Scribes/);
-  assert.match(library, /The Library/);
   assert.match(scriptorium, /The Scriptorium/);
+  assert.doesNotMatch(data, /Give one biblical example/i);
 });
