@@ -233,6 +233,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
   if (stage === "playing" && question) {
     return (
       <main className="game-shell play-shell">
+        <LiveScore total={total} />
         <section className="question-card" aria-live="polite">
           <header className="question-header">
             <div>
@@ -273,6 +274,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     const accepted = currentResult.answer;
     return (
       <main className="game-shell reveal-shell">
+        <LiveScore total={total} />
         <section key={`${question.id}-${accepted?.id ?? "missed"}`} className={`reveal-card ${accepted ? `tier-${accepted.tier}` : "tier-missed"}`}>
           <header>
             <span className="eyebrow">Question {questionIndex + 1} complete</span>
@@ -286,13 +288,16 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
                 <b className="spark spark-1">✦</b><b className="spark spark-2">•</b><b className="spark spark-3">✦</b><b className="spark spark-4">•</b>
                 <div className="tier-medallion">{TIERS[accepted.tier].symbol}</div>
               </div>
-              <p className="your-answer">Your answer</p>
-              <h1>{accepted.label}</h1>
+              <p className="earned-tier-kicker">You earned</p>
+              <h1 className="earned-tier-name">{TIERS[accepted.tier].label}</h1>
               <div className="score-ribbon">
-                <strong>{TIERS[accepted.tier].label}</strong>
+                <strong>Tier unlocked</strong>
                 <span>+{TIERS[accepted.tier].points.toLocaleString()} points</span>
               </div>
-              <p className="running-score">Scroll total <strong>{total.toLocaleString()}</strong></p>
+              <div className="accepted-answer-card">
+                <span>Your accepted answer</span>
+                <strong>{accepted.label}</strong>
+              </div>
               <p className="answer-note">{accepted.note}</p>
               <p className="reference">{accepted.reference} <span>ESV reference</span></p>
             </>
@@ -362,6 +367,16 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
         </div>
       </section>
     </main>
+  );
+}
+
+function LiveScore({ total }: { total: number }) {
+  return (
+    <aside className="live-score-hud" aria-live="polite" aria-label={`Current score ${total.toLocaleString()} points`}>
+      <span>Scroll score</span>
+      <strong key={total}>{total.toLocaleString()}</strong>
+      <small>points</small>
+    </aside>
   );
 }
 
