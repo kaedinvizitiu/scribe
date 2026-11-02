@@ -1,13 +1,23 @@
-const allowedOrigins = new Set([
-  "https://kaedinvizitiu.github.io",
-  "https://scribe-daily-scroll.kaedinvizitiu.chatgpt.site",
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-]);
+import { env } from "cloudflare:workers";
+
+type SecurityEnv = { PUBLIC_APP_ORIGIN?: string };
+
+function allowedOrigins() {
+  const origins = new Set(["http://localhost:3000", "http://127.0.0.1:3000"]);
+  const configured = (env as unknown as SecurityEnv).PUBLIC_APP_ORIGIN;
+  if (configured) {
+    try {
+      origins.add(new URL(configured).origin);
+    } catch {
+      console.error("PUBLIC_APP_ORIGIN is not a valid URL");
+    }
+  }
+  return origins;
+}
 
 export function requestOriginAllowed(request: Request) {
   const origin = request.headers.get("origin");
-  return !origin || allowedOrigins.has(origin);
+  return !origin || allowedOrigins().has(origin);
 }
 
 export function apiHeaders(request: Request, methods = "GET, POST, OPTIONS") {
@@ -21,7 +31,7 @@ export function apiHeaders(request: Request, methods = "GET, POST, OPTIONS") {
     "permissions-policy": "camera=(), microphone=(), geolocation=()",
     vary: "Origin",
   });
-  if (origin && allowedOrigins.has(origin)) {
+  if (origin && allowedOrigins().has(origin)) {
     headers.set("access-control-allow-origin", origin);
     headers.set("access-control-allow-methods", methods);
     headers.set("access-control-allow-headers", "content-type, x-scriptorium-key");

@@ -22,7 +22,7 @@ const letterpress = IM_Fell_English_SC({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://scribe-daily-scroll.kaedinvizitiu.chatgpt.site"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: { default: "Scribe — Daily Bible Knowledge", template: "%s · Scribe" },
   description: "Seven questions from across Scripture. One daily illuminated scroll.",
   applicationName: "Scribe",
