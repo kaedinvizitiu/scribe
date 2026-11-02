@@ -34,7 +34,7 @@ function StaticApp() {
 
   if (route === "/") return <>{navigation}<ScribeGame scroll={getDailyScroll()} /></>;
   if (route === "/leaderboard") return <>{navigation}<Page title="Hall of Scribes" copy="Today’s worldwide register, ordered by illumination and then time."><Leaderboard /></Page></>;
-  if (route === "/library") return <>{navigation}<Page title="The Library" copy="Your completed Scrolls and the sample content calendar."><Library /></Page></>;
+  if (route === "/library") return <>{navigation}<Page title="The Library" copy="Your completed Scrolls and the complete 2027 content calendar."><Library /></Page></>;
   if (route === "/scriptorium") return <>{navigation}<Page title="The Scriptorium" copy="Private review and approval for upcoming daily Scrolls."><Scriptorium /></Page></>;
   return <>{navigation}<Page title="Scroll not found" copy="This passage is not in the Library."><a className="primary-button" href={`${base}/#/`}>Return to today’s quest</a></Page></>;
 }
