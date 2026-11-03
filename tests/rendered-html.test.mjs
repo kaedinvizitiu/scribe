@@ -14,6 +14,8 @@ test("ships the Scribe daily game instead of starter content", async () => {
   assert.match(page, /ScribeGame/);
   assert.match(game, /Seven open-answer challenges/);
   assert.match(styles, /home-hero-retro-v3\.jpg/);
+  assert.match(styles, /background-size: 100% 100%, 100% auto/);
+  assert.match(styles, /animation: none/);
   assert.match(game, /30/);
   assert.match(game, /rejectedAnswerMessage/);
   assert.match(game, /Today’s final score/);
@@ -24,18 +26,18 @@ test("ships the Scribe daily game instead of starter content", async () => {
 });
 
 test("includes the product pages, database, and full 2027 content calendar", async () => {
-  const [data, calendar, schema, leaderboard, scriptorium] = await Promise.all([
+  const [data, calendar, schema, leaderboard, layout] = await Promise.all([
     readFile(new URL("data/game.ts", root), "utf8"),
     readFile(new URL("data/calendar-2027.ts", root), "utf8"),
     readFile(new URL("db/schema.ts", root), "utf8"),
     readFile(new URL("app/leaderboard/page.tsx", root), "utf8"),
-    readFile(new URL("app/scriptorium/page.tsx", root), "utf8"),
+    readFile(new URL("app/layout.tsx", root), "utf8"),
   ]);
   assert.match(calendar, /length: 365/);
   assert.match(calendar, /Date\.UTC\(2027/);
   assert.match(data, /pearl: \{ label: "Seventh Seal", points: 1000/);
   assert.match(schema, /dailyScores/);
   assert.match(leaderboard, /Hall of Scribes/);
-  assert.match(scriptorium, /The Scriptorium/);
+  assert.doesNotMatch(layout, /scriptorium/i);
   assert.doesNotMatch(data, /Give one biblical example/i);
 });

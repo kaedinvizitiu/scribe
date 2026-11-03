@@ -107,7 +107,7 @@ export const YEAR_QUESTIONS: Question[] = [
   ]),
   groupedQuestion("fruit-of-spirit", "Name a fruit of the Spirit listed in Galatians 5.", "Teachings", [
     ["Love", "ink", "Galatians 5:22"], ["Joy", "ink", "Galatians 5:22"], ["Peace", "bronze", "Galatians 5:22"],
-    ["Patience", "bronze", "Galatians 5:22"], ["Kindness", "silver", "Galatians 5:22"],
+    ["Patience", "bronze", "Galatians 5:22", ["forbearance", "longsuffering", "long suffering"]], ["Kindness", "silver", "Galatians 5:22"],
     ["Goodness", "silver", "Galatians 5:22"], ["Faithfulness", "gold", "Galatians 5:22"],
     ["Gentleness", "gold", "Galatians 5:23"], ["Self-control", "pearl", "Galatians 5:23", ["self control"]],
   ]),
@@ -357,7 +357,7 @@ export const YEAR_QUESTIONS: Question[] = [
     ["Elihoreph", "pearl", "1 Kings 4:3"], ["Ahijah son of Shisha", "pearl", "1 Kings 4:3", ["Ahijah"]],
   ]),
   groupedQuestion("biblical-water-site", "Name a sea, pool, or other body of water mentioned in the Bible.", "Places", [
-    ["Sea of Galilee", "ink", "Matthew 4:18", ["Galilee"]], ["Red Sea", "ink", "Exodus 14:21"],
+    ["Sea of Galilee", "ink", "Matthew 4:18", ["Galilee", "Lake Gennesaret", "Sea of Tiberias"]], ["Red Sea", "ink", "Exodus 14:21"],
     ["Dead Sea", "bronze", "Numbers 34:12", ["Salt Sea"]], ["Mediterranean Sea", "bronze", "Numbers 34:6", ["Great Sea"]],
     ["Pool of Bethesda", "silver", "John 5:2", ["Bethesda"]], ["Pool of Siloam", "gold", "John 9:7", ["Siloam"]],
     ["Sea of Jazer", "pearl", "Jeremiah 48:32", ["Jazer"]], ["Pool of Gibeon", "pearl", "2 Samuel 2:13", ["Gibeon pool"]],

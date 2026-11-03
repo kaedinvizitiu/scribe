@@ -1,4 +1,5 @@
 import { QUESTIONS, TIERS, matchAnswer, normalizeAnswer } from "../data/game";
+import { CATALOG_FLOORS } from "../data/catalog-expansions";
 
 const baseQuestions = QUESTIONS.filter((question) =>
   !question.id.endsWith("-identify") && !question.id.endsWith("-example")
@@ -46,6 +47,14 @@ for (const question of baseQuestions) {
     else if (variant.answers.map((answer) => answer.id).join("|") !== question.answers.map((answer) => answer.id).join("|")) {
       failures.push(`${question.id}: ${suffix.slice(1)} variant has a different answer catalog`);
     }
+  }
+}
+
+for (const [questionId, minimum] of Object.entries(CATALOG_FLOORS)) {
+  const question = baseQuestions.find((candidate) => candidate.id === questionId);
+  if (!question) failures.push(`${questionId}: expanded catalog question is missing`);
+  else if (question.answers.length < minimum) {
+    failures.push(`${questionId}: catalog shrank below its reviewed floor of ${minimum}`);
   }
 }
 

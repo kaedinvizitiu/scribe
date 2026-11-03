@@ -487,22 +487,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .leaderboard-row strong { color: var(--gold); font: 600 20px/1 var(--font-display); }
 .leaderboard-row b { text-align: right; color: var(--indigo); font: 600 20px/1 var(--font-display); }
 .empty-message { padding: 44px 12px; text-align: center; color: #756e63; }
-.scriptorium-login { max-width: 460px; margin: 30px auto; display: grid; gap: 16px; text-align: center; }
-.scriptorium-seal { width: 76px; height: 76px; margin: 0 auto; display: grid; place-items: center; color: #f7e8bc; background: var(--oxblood); border-radius: 50%; border: 5px double #d4ad51; font: 600 46px/1 var(--font-display); }
-.scriptorium-login h2 { margin: 4px 0 0; font: 600 32px/1 var(--font-display); }
-.scriptorium-login p, .scriptorium-login small { color: #777065; }
-.scriptorium-login input { padding: 15px; border: 1px solid var(--line); background: white; }
-.scriptorium-board { display: grid; gap: 10px; }
-.admin-summary, .admin-scroll { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 18px; border: 1px solid var(--line); }
-.admin-summary { color: white; background: var(--indigo); }
-.admin-scroll > div span, .admin-scroll label span { color: #8b8378; text-transform: uppercase; letter-spacing: .12em; font-size: 8px; }
-.admin-scroll h2 { margin: 4px 0 0; font: 600 22px/1 var(--font-display); }
-.admin-scroll p { color: #766f65; font-size: 12px; }
-.admin-scroll label { display: grid; gap: 5px; }
-.admin-scroll select { min-width: 140px; padding: 9px; border: 1px solid var(--line); background: white; }
-.year-reminder { padding: 20px; display: grid; gap: 5px; color: #fff7e7; background: var(--oxblood); }
-.year-reminder strong { text-transform: uppercase; letter-spacing: .12em; font-size: 9px; }
-.year-reminder span { font: 500 19px/1.4 var(--font-display); }
 
 /* Gameplay uses the same torch-lit adventure world as the title screen. */
 .play-shell::after, .reveal-shell::after {
@@ -617,8 +601,19 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .score-ribbon span { font-size: 12px; }
   .welcome-card { min-height: 740px; display: grid; grid-template-columns: 1fr; }
   .reveal-card, .results-card { padding: 38px 22px; }
-  .welcome-scene { min-height: 740px; background-image: linear-gradient(0deg, rgba(11,16,27,.99) 0%, rgba(11,16,27,.94) 42%, rgba(11,16,27,.2) 78%), url("/home-hero-retro-v3.jpg"); background-position: 64% center; }
-  .welcome-content { grid-column: 1; align-self: end; padding: 260px 22px 30px; }
+  .welcome-scene {
+    min-height: 740px;
+    background-color: #0b101b;
+    background-image:
+      linear-gradient(180deg, transparent 0, rgba(11,16,27,.08) 22vw, #0b101b 58vw, #0b101b 100%),
+      url("/home-hero-retro-v3.jpg");
+    background-size: 100% 100%, 100% auto;
+    background-position: center top;
+    background-repeat: no-repeat;
+    transform: none;
+    animation: none;
+  }
+  .welcome-content { grid-column: 1; align-self: end; padding: clamp(230px, 58vw, 380px) 22px 30px; padding-bottom: 30px; }
   .welcome-content h1 { font-size: clamp(48px, 14vw, 68px); }
   .quest-kicker { font-size: 10px; }
   .tier-legend { gap: 2px; margin-bottom: 18px; }
@@ -642,7 +637,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .site-header + .page-shell { padding-top: 94px; }
   .leaderboard-head, .leaderboard-row { grid-template-columns: 48px 1fr 80px; }
   .leaderboard-head span:nth-child(3), .leaderboard-row span:nth-child(3) { display: none; }
-  .admin-scroll { grid-template-columns: 1fr; }
 }
 
 /* Keep the complete reveal and its next action visible on laptop-height screens. */

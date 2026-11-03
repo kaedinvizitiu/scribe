@@ -14,19 +14,3 @@ export const dailyScores = sqliteTable("daily_scores", {
 }, (table) => [
   uniqueIndex("daily_scores_date_player_unique").on(table.dateKey, table.playerId),
 ]);
-
-export const scrollApprovals = sqliteTable("scroll_approvals", {
-  scrollId: text("scroll_id").primaryKey(),
-  status: text("status").notNull().default("draft"),
-  note: text("note").notNull().default(""),
-  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const answerSuggestions = sqliteTable("answer_suggestions", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  questionId: text("question_id").notNull(),
-  suggestedAnswer: text("suggested_answer").notNull(),
-  playerId: text("player_id").notNull(),
-  status: text("status").notNull().default("pending"),
-  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
-});

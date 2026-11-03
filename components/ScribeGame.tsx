@@ -55,7 +55,6 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
   const [seconds, setSeconds] = useState(30);
   const [value, setValue] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [cooldown, setCooldown] = useState(false);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [nickname, setNickname] = useState("Reader");
   const [rankMessage, setRankMessage] = useState("Your result will join today’s register.");
@@ -146,16 +145,14 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    if (!question || cooldown || !value.trim()) return;
+    if (!question || !value.trim()) return;
     const accepted = matchAnswer(question, value);
     if (!accepted) {
       const correction = findCorrectionSuggestion(question, value);
       setFeedback(correction
         ? `Almost — did you mean “${correction.label}”? Type the corrected answer and submit again.`
         : rejectedAnswerMessage(question, value));
-      setCooldown(true);
-      window.setTimeout(() => setCooldown(false), 550);
-      window.setTimeout(() => inputRef.current?.focus(), 560);
+      window.setTimeout(() => inputRef.current?.focus(), 0);
       return;
     }
 
@@ -303,18 +300,23 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
             <div className="question-number" aria-hidden="true">{String(questionIndex + 1).padStart(2, "0")}</div>
             <h1>{question.prompt}</h1>
             <p>Enter any answer that fits. You may keep trying until time expires.</p>
-            <form onSubmit={submit} className="answer-form">
+            <form onSubmit={submit} className="answer-form" autoComplete="off">
               <input
                 ref={inputRef}
                 value={value}
                 onChange={(event) => { setValue(event.target.value); setFeedback(""); }}
                 placeholder="Type your answer…"
                 aria-label="Your answer"
-                disabled={cooldown}
-                autoComplete="off"
-                spellCheck="false"
+                name={`scribe-answer-${scroll.id}-${question.id}`}
+                autoComplete="new-password"
+                autoCorrect="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                data-form-type="other"
+                data-lpignore="true"
+                data-1p-ignore="true"
               />
-              <button type="submit" disabled={cooldown || !value.trim()}>Submit</button>
+              <button type="submit" disabled={!value.trim()}>Submit</button>
             </form>
             <div className="feedback" role="status">{feedback}</div>
           </div>

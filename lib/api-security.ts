@@ -39,7 +39,7 @@ export function apiHeaders(request: Request, methods = "GET, POST, OPTIONS") {
   if (origin && allowedOrigins().has(origin)) {
     headers.set("access-control-allow-origin", origin);
     headers.set("access-control-allow-methods", methods);
-    headers.set("access-control-allow-headers", "content-type, x-scriptorium-key");
+    headers.set("access-control-allow-headers", "content-type");
     headers.set("access-control-max-age", "86400");
   }
   return headers;
@@ -58,21 +58,6 @@ export async function readLimitedJson<T>(request: Request, limit = 16_384): Prom
   const text = await request.text();
   if (text.length > limit) throw new Error("BODY_TOO_LARGE");
   return JSON.parse(text) as T;
-}
-
-export async function constantTimeEqual(left: string, right: string) {
-  const encoder = new TextEncoder();
-  const [leftHash, rightHash] = await Promise.all([
-    crypto.subtle.digest("SHA-256", encoder.encode(left)),
-    crypto.subtle.digest("SHA-256", encoder.encode(right)),
-  ]);
-  const a = new Uint8Array(leftHash);
-  const b = new Uint8Array(rightHash);
-  let difference = a.length ^ b.length;
-  for (let index = 0; index < Math.max(a.length, b.length); index += 1) {
-    difference |= (a[index] ?? 0) ^ (b[index] ?? 0);
-  }
-  return difference === 0;
 }
 
 export function preflight(request: Request) {

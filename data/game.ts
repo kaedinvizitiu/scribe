@@ -1,4 +1,5 @@
 import { build2027Calendar } from "./calendar-2027";
+import { CATALOG_EXPANSIONS } from "./catalog-expansions";
 import { YEAR_QUESTIONS, YEAR_QUESTION_POOLS } from "./year-questions";
 
 export const TIERS = {
@@ -357,7 +358,15 @@ const CORE_QUESTIONS: Question[] = [
   ]),
 ];
 
-const BASE_QUESTIONS: Question[] = [...CORE_QUESTIONS, ...YEAR_QUESTIONS];
+const BASE_QUESTIONS: Question[] = [...CORE_QUESTIONS, ...YEAR_QUESTIONS].map((question) => {
+  const existingIds = new Set(question.answers.map((item) => item.id));
+  const additions = (CATALOG_EXPANSIONS[question.id] ?? [])
+    .map(([label, tier, reference, aliases = []]) =>
+      answer(label, tier, reference, `${label} fits this biblical category; see ${reference}.`, aliases),
+    )
+    .filter((item) => !existingIds.has(item.id));
+  return additions.length ? { ...question, answers: [...question.answers, ...additions] } : question;
+});
 
 function alternatePrompt(prompt: string, style: "identify" | "example") {
   const remainder = prompt.replace(/^Name\s+/i, "").replace(/^one\s+/i, "one ");
