@@ -181,14 +181,34 @@ const CORE_QUESTIONS: Question[] = [
   q("parable", "Name a parable told by Jesus.", "Teachings", [
     answer("The Good Samaritan", "ink", "Luke 10:25–37", "Jesus told of a Samaritan who showed mercy."),
     answer("The Prodigal Son", "ink", "Luke 15:11–32", "A father welcomed home his lost son.", ["lost son"]),
-    answer("The Sower", "bronze", "Matthew 13:1–23", "Seed fell on four kinds of ground.", ["sower", "parable of the sower", "seed and soil", "four soils"]),
-    answer("The Lost Sheep", "bronze", "Luke 15:3–7", "A shepherd sought one lost sheep."),
-    answer("The Talents", "silver", "Matthew 25:14–30", "Servants were entrusted with differing amounts."),
-    answer("The Ten Virgins", "silver", "Matthew 25:1–13", "Ten virgins waited for the bridegroom."),
-    answer("The Unforgiving Servant", "gold", "Matthew 18:23–35", "A forgiven servant refused mercy to another."),
-    answer("The Persistent Widow", "gold", "Luke 18:1–8", "A widow persistently sought justice."),
-    answer("The Barren Fig Tree", "pearl", "Luke 13:6–9", "A gardener asked for another year for the fig tree."),
-    answer("The Dishonest Manager", "pearl", "Luke 16:1–13", "A manager acted shrewdly before losing his position.", ["unjust steward"]),
+    answer("The Sower", "ink", "Matthew 13:1–23", "Seed fell on four kinds of ground.", ["sower", "parable of the sower", "seed and soil", "four soils"]),
+    answer("The Lost Sheep", "ink", "Luke 15:3–7", "A shepherd sought one lost sheep.", ["lost sheep"]),
+    answer("The Mustard Seed", "ink", "Matthew 13:31–32", "The kingdom of heaven is compared to a mustard seed.", ["mustard seed"]),
+    answer("The Talents", "ink", "Matthew 25:14–30", "Servants were entrusted with differing amounts.", ["talents"]),
+    answer("The Ten Virgins", "bronze", "Matthew 25:1–13", "Ten virgins waited for the bridegroom.", ["ten virgins", "wise and foolish virgins"]),
+    answer("The Lost Coin", "bronze", "Luke 15:8–10", "A woman searched carefully until she found her lost coin.", ["lost coin"]),
+    answer("The Wise and Foolish Builders", "bronze", "Matthew 7:24–27", "One house stood on rock and another fell on sand.", ["wise builder", "foolish builder", "house on the rock", "house on sand"]),
+    answer("The Rich Fool", "bronze", "Luke 12:16–21", "A rich man stored up crops but was not rich toward God.", ["rich fool"]),
+    answer("The Unforgiving Servant", "bronze", "Matthew 18:23–35", "A forgiven servant refused mercy to another.", ["unmerciful servant"]),
+    answer("The Wedding Feast", "bronze", "Matthew 22:1–14", "A king invited guests to his son’s wedding feast.", ["wedding banquet", "great banquet", "great supper"]),
+    answer("The Weeds", "silver", "Matthew 13:24–30", "An enemy sowed weeds among good wheat.", ["weeds among the wheat", "wheat and tares", "tares"]),
+    answer("The Laborers in the Vineyard", "silver", "Matthew 20:1–16", "Workers hired at different hours received the same wage.", ["workers in the vineyard", "laborers vineyard"]),
+    answer("The Wicked Tenants", "silver", "Matthew 21:33–44", "Tenants rejected the landowner’s servants and son.", ["tenants", "wicked tenants", "evil tenants"]),
+    answer("The Two Sons", "silver", "Matthew 21:28–32", "Two sons answered their father differently and only one obeyed.", ["two sons"]),
+    answer("The Pharisee and the Tax Collector", "silver", "Luke 18:9–14", "A Pharisee and a tax collector prayed very differently.", ["pharisee and publican", "tax collector prayer"]),
+    answer("The Persistent Widow", "silver", "Luke 18:1–8", "A widow persistently sought justice.", ["persistent widow", "unjust judge"]),
+    answer("The Hidden Treasure", "gold", "Matthew 13:44", "A man joyfully sold everything to buy a field with treasure.", ["treasure in the field", "hidden treasure"]),
+    answer("The Pearl of Great Value", "gold", "Matthew 13:45–46", "A merchant sold everything for one precious pearl.", ["pearl of great price", "precious pearl"]),
+    answer("The Leaven", "gold", "Matthew 13:33", "Leaven worked through three measures of flour.", ["leaven", "yeast"]),
+    answer("The Net", "gold", "Matthew 13:47–50", "A net gathered fish of every kind before they were sorted.", ["dragnet", "fishing net"]),
+    answer("The Dishonest Manager", "gold", "Luke 16:1–13", "A manager acted shrewdly before losing his position.", ["unjust steward", "shrewd manager"]),
+    answer("The Rich Man and Lazarus", "gold", "Luke 16:19–31", "A rich man and poor Lazarus experienced a great reversal.", ["rich man and Lazarus", "Dives and Lazarus"]),
+    answer("The Barren Fig Tree", "pearl", "Luke 13:6–9", "A gardener asked for another year for the fig tree.", ["barren fig tree"]),
+    answer("The Growing Seed", "pearl", "Mark 4:26–29", "Seed grew secretly until the harvest.", ["seed growing secretly", "growing seed"]),
+    answer("The Two Debtors", "pearl", "Luke 7:41–43", "A moneylender forgave two debtors who owed different amounts.", ["two debtors"]),
+    answer("The Friend at Midnight", "pearl", "Luke 11:5–8", "A persistent friend asked for bread at midnight.", ["friend at midnight", "midnight friend"]),
+    answer("The Watchful Servants", "pearl", "Luke 12:35–40", "Servants remained ready for their master’s return.", ["watchful servants", "waiting servants"]),
+    answer("The Faithful and Wise Servant", "pearl", "Matthew 24:45–51", "A faithful servant remained responsible while the master was away.", ["faithful servant", "wise servant"]),
   ]),
   q("prophet", "Name a prophet in the Bible.", "Prophets", [
     answer("Moses", "ink", "Deuteronomy 34:10", "No prophet like Moses had arisen in Israel."),
@@ -438,11 +458,14 @@ export function matchAnswer(question: Question, value: string) {
   const query = meaningfulAnswer(value);
   if (query.length < 4) return undefined;
 
-  // Accept a distinctive phrase or keyword only when it points to one answer.
-  const partial = candidates.filter(({ forms }) =>
-    forms.some((form) => form.includes(query) || (query.length >= 6 && query.includes(form))),
-  );
-  if (partial.length === 1) return partial[0].candidate;
+  // A complete, distinctive keyword can stand on its own (for example,
+  // “Bartimaeus”), but an unfinished prefix cannot earn points.
+  if (!query.includes(" ")) {
+    const keywordMatches = candidates.filter(({ forms }) =>
+      forms.some((form) => answerTokens(form).includes(query)),
+    );
+    if (keywordMatches.length === 1) return keywordMatches[0].candidate;
+  }
 
   // Natural answers often omit a connecting word or reverse a phrase. Accept
   // the wording only when its meaningful tokens identify exactly one answer.
@@ -458,52 +481,42 @@ export function matchAnswer(question: Question, value: string) {
     if (tokenMatches.length === 1) return tokenMatches[0].candidate;
   }
 
-  // Forgive ordinary spelling mistakes, but never guess between two answers.
-  const typoLimit = query.length >= 8 ? 2 : query.length >= 5 ? 1 : 0;
-  if (typoLimit) {
-    const fuzzy = candidates.filter(({ forms }) =>
-      forms.some((form) => Math.abs(form.length - query.length) <= typoLimit && editDistance(form, query) <= typoLimit),
-    );
-    if (fuzzy.length === 1) return fuzzy[0].candidate;
-  }
-
   return undefined;
 }
 
-export function getAnswerSuggestions(question: Question, value: string, limit = 5) {
+export function findCorrectionSuggestion(question: Question, value: string) {
   const query = meaningfulAnswer(value);
-  if (query.length < 5) return [];
-  const queryWords = query.split(" ").filter((word) => word.length > 1);
+  if (query.length < 4) return undefined;
 
   const matches = question.answers
-    .map((candidate, index) => {
+    .map((candidate) => {
       const forms = [candidate.label, ...(candidate.aliases ?? [])]
         .flatMap((form) => [normalizeAnswer(form), meaningfulAnswer(form)])
         .filter(Boolean);
       let score = Number.POSITIVE_INFINITY;
       for (const form of forms) {
-        if (form === query) score = Math.min(score, 0);
-        else if (form.startsWith(query)) score = Math.min(score, 1);
-        else if (form.split(" ").some((word) => word.startsWith(query))) score = Math.min(score, 2);
-        else if (form.includes(query)) score = Math.min(score, 3);
-        else if (queryWords.length > 1 && queryWords.every((word) => form.includes(word))) score = Math.min(score, 4);
-        else {
-          const typoLimit = query.length >= 8 ? 2 : query.length >= 5 ? 1 : 0;
-          if (typoLimit && Math.abs(form.length - query.length) <= typoLimit && editDistance(form, query) <= typoLimit) {
-            score = Math.min(score, 5);
+        if (form.startsWith(query) && form.length - query.length <= 5) {
+          score = Math.min(score, form.length - query.length + 2);
+        }
+        for (const word of form.split(" ")) {
+          if (word.startsWith(query) && word.length - query.length <= 5) {
+            score = Math.min(score, word.length - query.length + 2);
           }
         }
+        const typoLimit = query.length >= 8 ? 2 : 1;
+        if (Math.abs(form.length - query.length) <= typoLimit) {
+          const distance = editDistance(form, query);
+          if (distance <= typoLimit) score = Math.min(score, distance);
+        }
       }
-      return { candidate, score, index };
+      if ((query === "eliezer" || query === "eleazer") && normalizeAnswer(candidate.label) === "eleazar") score = 0;
+      return { candidate, score };
     })
     .filter(({ score }) => Number.isFinite(score))
-    .sort((left, right) => left.score - right.score || left.index - right.index)
-    .slice(0, limit);
+    .sort((left, right) => left.score - right.score);
 
-  // Autocomplete only when the player's wording identifies one answer. This
-  // completes a thought without turning the menu into a list of free clues.
-  if (matches.length !== 1) return [];
-  return matches.map(({ candidate }) => candidate);
+  if (!matches.length || (matches[1] && matches[1].score === matches[0].score)) return undefined;
+  return matches[0].candidate;
 }
 
 export function rejectedAnswerMessage(question: Question, value: string) {

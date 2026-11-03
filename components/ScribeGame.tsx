@@ -6,7 +6,7 @@ import {
   DailyScroll,
   TIERS,
   Tier,
-  getAnswerSuggestions,
+  findCorrectionSuggestion,
   getPacificDateKey,
   matchAnswer,
   questionsForScroll,
@@ -26,13 +26,12 @@ type Stage = "welcome" | "playing" | "reveal" | "results";
 const tierOrder: Tier[] = ["ink", "bronze", "silver", "gold", "pearl"];
 
 const scoreRoles = [
-  { ceiling: 500, name: "Took a Wrong Turn at Nineveh", note: "The scroll was found. The answers were… elsewhere." },
+  { ceiling: 500, name: "Became Mormon", note: "Somewhere along the journey, the scroll took an unexpected detour." },
   { ceiling: 1000, name: "Did Not Reach Heaven", note: "A valiant attempt, but the gate remains just ahead." },
   { ceiling: 1400, name: "Knocking at the Gate", note: "Close enough to hear the choir warming up." },
   { ceiling: 1800, name: "Purgatory", note: "Not lost, not finished—decidedly in the waiting room." },
-  { ceiling: 2800, name: "Reached Heaven", note: "The trumpets sound. Today’s scroll has been conquered." },
-  { ceiling: 4500, name: "Keeper of the Scrolls", note: "The Scriptorium would like its answer key back." },
-  { ceiling: Number.POSITIVE_INFINITY, name: "Seventh-Seal Scholar", note: "An alarmingly complete knowledge of obscure Scripture." },
+  { ceiling: 3000, name: "Reached Heaven", note: "The trumpets sound. Today’s scroll has been conquered." },
+  { ceiling: Number.POSITIVE_INFINITY, name: "Final Meeting with Charles Spurgeon", note: "An alarmingly complete knowledge of Scripture. Spurgeon is ready for the conversation." },
 ] as const;
 
 function scoreRole(total: number) {
@@ -57,7 +56,6 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
   const [value, setValue] = useState("");
   const [feedback, setFeedback] = useState("");
   const [cooldown, setCooldown] = useState(false);
-  const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [nickname, setNickname] = useState("Reader");
   const [rankMessage, setRankMessage] = useState("Your result will join today’s register.");
@@ -70,10 +68,6 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
   const total = results.reduce(
     (sum, result) => sum + (result.answer ? TIERS[result.answer.tier].points : 0),
     0,
-  );
-  const suggestions = useMemo(
-    () => question && stage === "playing" ? getAnswerSuggestions(question, value) : [],
-    [question, stage, value],
   );
   const role = scoreRole(total);
 
@@ -146,7 +140,6 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     setSeconds(30);
     setValue("");
     setFeedback("");
-    setSuggestionIndex(-1);
     startedAt.current = clockNow();
     setStage("playing");
   }
@@ -156,10 +149,13 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     if (!question || cooldown || !value.trim()) return;
     const accepted = matchAnswer(question, value);
     if (!accepted) {
-      setFeedback(rejectedAnswerMessage(question, value));
+      const correction = findCorrectionSuggestion(question, value);
+      setFeedback(correction
+        ? `Almost — did you mean “${correction.label}”? Type the corrected answer and submit again.`
+        : rejectedAnswerMessage(question, value));
       setCooldown(true);
       window.setTimeout(() => setCooldown(false), 550);
-      inputRef.current?.select();
+      window.setTimeout(() => inputRef.current?.focus(), 560);
       return;
     }
 
@@ -185,7 +181,6 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     setSeconds(30);
     setValue("");
     setFeedback("");
-    setSuggestionIndex(-1);
     startedAt.current = clockNow();
     setStage("playing");
   }
@@ -309,63 +304,16 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
             <h1>{question.prompt}</h1>
             <p>Enter any answer that fits. You may keep trying until time expires.</p>
             <form onSubmit={submit} className="answer-form">
-              <div className="answer-combobox">
-                <input
-                  ref={inputRef}
-                  value={value}
-                  onChange={(event) => { setValue(event.target.value); setFeedback(""); setSuggestionIndex(-1); }}
-                  onKeyDown={(event) => {
-                    if (!suggestions.length) return;
-                    if (event.key === "ArrowDown") {
-                      event.preventDefault();
-                      setSuggestionIndex((index) => (index + 1) % suggestions.length);
-                    } else if (event.key === "ArrowUp") {
-                      event.preventDefault();
-                      setSuggestionIndex((index) => index <= 0 ? suggestions.length - 1 : index - 1);
-                    } else if ((event.key === "Enter" || event.key === "Tab") && suggestionIndex >= 0) {
-                      event.preventDefault();
-                      setValue(suggestions[suggestionIndex].label);
-                      setSuggestionIndex(-1);
-                      setFeedback("Suggestion filled in — submit when ready.");
-                    } else if (event.key === "Escape") {
-                      setSuggestionIndex(-1);
-                    }
-                  }}
-                  placeholder="Type your answer…"
-                  aria-label="Your answer"
-                  aria-autocomplete="list"
-                  aria-controls="answer-suggestions"
-                  aria-expanded={suggestions.length > 0}
-                  aria-activedescendant={suggestionIndex >= 0 ? `answer-suggestion-${suggestionIndex}` : undefined}
-                  role="combobox"
-                  disabled={cooldown}
-                  autoComplete="off"
-                  spellCheck="false"
-                />
-                {suggestions.length > 0 && (
-                  <div className="answer-suggestions" id="answer-suggestions" role="listbox">
-                    {suggestions.map((suggestion, index) => (
-                      <button
-                        type="button"
-                        id={`answer-suggestion-${index}`}
-                        role="option"
-                        aria-selected={suggestionIndex === index}
-                        className={suggestionIndex === index ? "active" : ""}
-                        key={suggestion.id}
-                        onMouseDown={(event) => event.preventDefault()}
-                        onClick={() => {
-                          setValue(suggestion.label);
-                          setSuggestionIndex(-1);
-                          setFeedback("Suggestion filled in — submit when ready.");
-                          inputRef.current?.focus();
-                        }}
-                      >
-                        <span>{suggestion.label}</span><small>complete answer</small>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <input
+                ref={inputRef}
+                value={value}
+                onChange={(event) => { setValue(event.target.value); setFeedback(""); }}
+                placeholder="Type your answer…"
+                aria-label="Your answer"
+                disabled={cooldown}
+                autoComplete="off"
+                spellCheck="false"
+              />
               <button type="submit" disabled={cooldown || !value.trim()}>Submit</button>
             </form>
             <div className="feedback" role="status">{feedback}</div>
@@ -451,7 +399,12 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
         <div className="eyebrow">{restoredToday ? "Today’s scroll restored" : "Scroll completed"}</div>
         <h1>Today’s final score</h1>
         <div className="final-score" aria-label={`${total.toLocaleString()} points`}><strong>{total.toLocaleString()}</strong><span>points</span></div>
-        <div className="score-role"><span>Your role</span><strong>{role.name}</strong><p>{role.note}</p></div>
+        <div className="role-reveal" aria-live="polite">
+          <span>Your appointed role</span>
+          <div className="role-ornament" aria-hidden="true">✦</div>
+          <strong>{role.name}</strong>
+          <p>{role.note}</p>
+        </div>
         <p className="results-intro">
           {restoredToday
             ? "Your completed score and answers were restored. A new scroll arrives at midnight Pacific."

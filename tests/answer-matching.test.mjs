@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { findQuestion, getAnswerSuggestions, matchAnswer, rejectedAnswerMessage } from "../data/game.ts";
+import { findCorrectionSuggestion, findQuestion, matchAnswer, rejectedAnswerMessage } from "../data/game.ts";
 
 function answerFor(questionId, guess) {
   const question = findQuestion(questionId);
@@ -18,8 +18,8 @@ test("ignores articles and accepts distinctive partial phrases", () => {
   assert.equal(answerFor("jesus-miracle", "Bartimaeus"), "Healing Bartimaeus");
 });
 
-test("forgives a small spelling error without accepting noise", () => {
-  assert.equal(answerFor("prophet", "Jeremaih"), "Jeremiah");
+test("does not award points for a spelling error", () => {
+  assert.equal(answerFor("prophet", "Jeremaih"), undefined);
   assert.equal(answerFor("prophet", "random answer"), undefined);
 });
 
@@ -33,10 +33,13 @@ test("accepts broad and specific descriptions of Jesus restoring sight", () => {
   assert.equal(answerFor("jesus-miracle", "man born blind"), "Healing the man born blind");
 });
 
-test("suggests complete answers from partial or misspelled input", () => {
-  const question = findQuestion("jesus-miracle");
-  assert.ok(question);
-  assert.equal(getAnswerSuggestions(question, "bartim")[0]?.label, "Healing Bartimaeus");
-  assert.equal(getAnswerSuggestions(question, "heali").length, 0);
-  assert.match(rejectedAnswerMessage(question, "bartim"), /Not accepted for this question/);
+test("offers one post-submit correction without filling or accepting it", () => {
+  const miracle = findQuestion("jesus-miracle");
+  const priest = findQuestion("ot-priest");
+  assert.ok(miracle);
+  assert.ok(priest);
+  assert.equal(matchAnswer(priest, "Eliezer"), undefined);
+  assert.equal(findCorrectionSuggestion(priest, "Eliezer")?.label, "Eleazar");
+  assert.equal(findCorrectionSuggestion(miracle, "bartim")?.label, "Healing Bartimaeus");
+  assert.match(rejectedAnswerMessage(miracle, "random answer"), /Not accepted for this question/);
 });

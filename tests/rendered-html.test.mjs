@@ -13,7 +13,7 @@ test("ships the Scribe daily game instead of starter content", async () => {
   ]);
   assert.match(page, /ScribeGame/);
   assert.match(game, /Seven open-answer challenges/);
-  assert.match(styles, /home-hero-retro-v2/);
+  assert.match(styles, /home-hero-retro-v3\.jpg/);
   assert.match(game, /30/);
   assert.match(game, /rejectedAnswerMessage/);
   assert.match(game, /Today’s final score/);
