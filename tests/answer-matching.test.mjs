@@ -55,3 +55,12 @@ test("accepts answers added by the broad catalog review", () => {
   assert.equal(answerFor("romans-16-person", "Tertius"), "Tertius");
   assert.equal(answerFor("nehemiah-builder", "Baruch"), "Baruch");
 });
+
+test("accepts answers recovered by the family-by-family completeness audit", () => {
+  assert.equal(answerFor("person-named-book", "Nahum"), "Nahum");
+  assert.equal(answerFor("philemon-person", "Luke"), "Luke");
+  assert.equal(answerFor("romans-16-person", "Timothy"), "Timothy");
+  assert.equal(answerFor("solomon-official", "Ben-hur"), "Ben-hur");
+  assert.equal(answerFor("david-mighty-man", "Jashobeam"), "Jashobeam");
+  assert.equal(answerFor("jesus-miracle", "feeding 4000"), "Feeding the four thousand");
+});

@@ -1,4 +1,5 @@
 import { build2027Calendar } from "./calendar-2027";
+import { CATALOG_COMPLETIONS } from "./catalog-completions";
 import { CATALOG_EXPANSIONS } from "./catalog-expansions";
 import { YEAR_QUESTIONS, YEAR_QUESTION_POOLS } from "./year-questions";
 
@@ -229,7 +230,7 @@ const CORE_QUESTIONS: Question[] = [
     answer("Timothy", "bronze", "Acts 16:1–3", "Timothy joined Paul and Silas."),
     answer("Luke", "bronze", "Acts 16:10", "The first-person account indicates Luke joined the company."),
     answer("Titus", "silver", "Galatians 2:1", "Paul went to Jerusalem with Barnabas and Titus."),
-    answer("Priscilla", "silver", "Acts 18:18", "Priscilla and Aquila sailed with Paul."),
+    answer("Priscilla", "silver", "Acts 18:18", "Priscilla and Aquila sailed with Paul.", ["Prisca"]),
     answer("Aquila", "gold", "Acts 18:18", "Aquila accompanied Paul from Corinth."),
     answer("Epaphroditus", "gold", "Philippians 2:25", "Paul calls Epaphroditus his fellow worker and soldier."),
     answer("Trophimus", "pearl", "Acts 20:4", "Trophimus of Asia accompanied Paul."),
@@ -360,11 +361,18 @@ const CORE_QUESTIONS: Question[] = [
 
 const BASE_QUESTIONS: Question[] = [...CORE_QUESTIONS, ...YEAR_QUESTIONS].map((question) => {
   const existingIds = new Set(question.answers.map((item) => item.id));
-  const additions = (CATALOG_EXPANSIONS[question.id] ?? [])
+  const additions = [
+    ...(CATALOG_EXPANSIONS[question.id] ?? []),
+    ...(CATALOG_COMPLETIONS[question.id] ?? []),
+  ]
     .map(([label, tier, reference, aliases = []]) =>
       answer(label, tier, reference, `${label} fits this biblical category; see ${reference}.`, aliases),
     )
-    .filter((item) => !existingIds.has(item.id));
+    .filter((item) => {
+      if (existingIds.has(item.id)) return false;
+      existingIds.add(item.id);
+      return true;
+    });
   return additions.length ? { ...question, answers: [...question.answers, ...additions] } : question;
 });
 

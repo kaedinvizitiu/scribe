@@ -1,11 +1,31 @@
 import { QUESTIONS, TIERS, matchAnswer, normalizeAnswer } from "../data/game";
 import { CATALOG_FLOORS } from "../data/catalog-expansions";
+import { AUDITED_QUESTION_IDS, REVIEWED_FAMILY_FLOORS } from "../data/catalog-completions";
 
 const baseQuestions = QUESTIONS.filter((question) =>
   !question.id.endsWith("-identify") && !question.id.endsWith("-example")
 );
 const failures: string[] = [];
 let aliasCount = 0;
+const canonicalBooks = [
+  "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth",
+  "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther",
+  "Job", "Psalm", "Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations",
+  "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah",
+  "Haggai", "Zechariah", "Malachi", "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians",
+  "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
+  "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John",
+  "3 John", "Jude", "Revelation",
+];
+
+const baseQuestionIds = new Set(baseQuestions.map((question) => question.id));
+const auditedQuestionIds = new Set<string>(AUDITED_QUESTION_IDS);
+for (const questionId of baseQuestionIds) {
+  if (!auditedQuestionIds.has(questionId)) failures.push(`${questionId}: missing from the family-by-family audit checklist`);
+}
+for (const questionId of auditedQuestionIds) {
+  if (!baseQuestionIds.has(questionId)) failures.push(`${questionId}: audit checklist entry has no question family`);
+}
 
 for (const question of baseQuestions) {
   const ids = new Set<string>();
@@ -17,6 +37,9 @@ for (const question of baseQuestions) {
   for (const answer of question.answers) {
     if (!answer.id || !answer.label || !answer.reference || !answer.note) {
       failures.push(`${question.id}: incomplete answer record for ${answer.label || "unknown"}`);
+    }
+    if (!canonicalBooks.some((book) => answer.reference === book || answer.reference.startsWith(`${book} `))) {
+      failures.push(`${question.id}: non-canonical or malformed reference for ${answer.label}: ${answer.reference}`);
     }
     if (ids.has(answer.id)) failures.push(`${question.id}: duplicate answer id ${answer.id}`);
     ids.add(answer.id);
@@ -56,6 +79,12 @@ for (const [questionId, minimum] of Object.entries(CATALOG_FLOORS)) {
   else if (question.answers.length < minimum) {
     failures.push(`${questionId}: catalog shrank below its reviewed floor of ${minimum}`);
   }
+}
+
+for (const [questionId, minimum] of Object.entries(REVIEWED_FAMILY_FLOORS)) {
+  const question = baseQuestions.find((candidate) => candidate.id === questionId);
+  if (!question) failures.push(`${questionId}: reviewed family is missing`);
+  else if (question.answers.length < minimum) failures.push(`${questionId}: fell below its reviewed floor of ${minimum}`);
 }
 
 if (failures.length) {

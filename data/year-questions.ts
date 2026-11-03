@@ -357,9 +357,9 @@ export const YEAR_QUESTIONS: Question[] = [
     ["Elihoreph", "pearl", "1 Kings 4:3"], ["Ahijah son of Shisha", "pearl", "1 Kings 4:3", ["Ahijah"]],
   ]),
   groupedQuestion("biblical-water-site", "Name a sea, pool, or other body of water mentioned in the Bible.", "Places", [
-    ["Sea of Galilee", "ink", "Matthew 4:18", ["Galilee", "Lake Gennesaret", "Sea of Tiberias"]], ["Red Sea", "ink", "Exodus 14:21"],
+    ["Sea of Galilee", "ink", "Matthew 4:18", ["Galilee", "Lake Gennesaret", "Sea of Tiberias", "Sea of Chinnereth", "Chinnereth"]], ["Red Sea", "ink", "Exodus 14:21"],
     ["Dead Sea", "bronze", "Numbers 34:12", ["Salt Sea"]], ["Mediterranean Sea", "bronze", "Numbers 34:6", ["Great Sea"]],
-    ["Pool of Bethesda", "silver", "John 5:2", ["Bethesda"]], ["Pool of Siloam", "gold", "John 9:7", ["Siloam"]],
+    ["Pool of Bethesda", "silver", "John 5:2", ["Bethesda"]], ["Pool of Siloam", "gold", "John 9:7", ["Siloam", "Pool of Shelah"]],
     ["Sea of Jazer", "pearl", "Jeremiah 48:32", ["Jazer"]], ["Pool of Gibeon", "pearl", "2 Samuel 2:13", ["Gibeon pool"]],
   ]),
   groupedQuestion("wilderness-place", "Name a wilderness or desert region mentioned in the Bible.", "Places", [
