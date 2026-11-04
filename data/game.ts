@@ -334,7 +334,7 @@ const CORE_QUESTIONS: Question[] = [
     answer("Cos", "pearl", "Acts 21:1", "Paul’s company sailed directly to Cos.", ["Kos"]),
     answer("Chios", "gold", "Acts 20:15", "Paul’s ship came opposite the island of Chios."),
     answer("Samos", "gold", "Acts 20:15", "Paul’s company sailed from Chios to Samos."),
-    answer("Lesbos", "pearl", "Acts 20:14", "Paul’s companions sailed to Mitylene on Lesbos."),
+    answer("Samothrace", "pearl", "Acts 16:11", "Paul’s company sailed from Troas to Samothrace."),
     answer("Cauda", "pearl", "Acts 27:16", "Paul’s storm-driven ship ran under the lee of Cauda.", ["Clauda"]),
   ]),
   q("named-well", "Name a well mentioned in the Bible.", "Places", [

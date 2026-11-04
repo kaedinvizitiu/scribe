@@ -142,7 +142,7 @@ export const CATALOG_COMPLETIONS: Record<string, CompletionEntry[]> = {
     ["Sailor", "silver", "Jonah 1:5"], ["Centurion", "bronze", "Matthew 8:5"],
     ["Guard", "silver", "Acts 12:6"], ["Doorkeeper", "gold", "Psalm 84:10"],
     ["Musician", "bronze", "1 Chronicles 15:16"], ["Singer", "bronze", "1 Chronicles 15:16"],
-    ["Dancer", "gold", "Exodus 15:20"], ["Nurse", "silver", "Genesis 35:8"],
+    ["Steward", "gold", "Genesis 43:19"], ["Nurse", "silver", "Genesis 35:8"],
     ["Wet nurse", "gold", "Exodus 2:7"], ["Magistrate", "gold", "Acts 16:20"],
     ["Proconsul", "gold", "Acts 13:7"], ["Herald", "gold", "Daniel 3:4"],
     ["Astrologer", "gold", "Daniel 2:2"], ["Magician", "silver", "Acts 8:9"],
@@ -280,7 +280,7 @@ export const CATALOG_COMPLETIONS: Record<string, CompletionEntry[]> = {
     ["Spelt", "gold", "Ezekiel 4:9"], ["Almonds", "silver", "Genesis 43:11"],
     ["Pistachio nuts", "gold", "Genesis 43:11", ["pistachios"]], ["Apples", "bronze", "Song of Solomon 2:5"],
     ["Sycamore figs", "gold", "Amos 7:14"], ["Salt", "ink", "Job 6:6"], ["Oil", "ink", "1 Kings 17:12"],
-    ["Wine", "ink", "Genesis 14:18"], ["Poultry", "gold", "1 Kings 4:23"], ["Bitter herbs", "silver", "Exodus 12:8"],
+    ["Wine", "ink", "Genesis 14:18"], ["Fattened fowl", "gold", "1 Kings 4:23", ["poultry"]], ["Bitter herbs", "silver", "Exodus 12:8"],
     ["Fine flour", "bronze", "Genesis 18:6"],
   ],
   "romans-16-person": [
@@ -296,7 +296,7 @@ export const CATALOG_COMPLETIONS: Record<string, CompletionEntry[]> = {
     ["Hashabiah", "gold", "Ezra 8:19"], ["Hacaliah", "gold", "Nehemiah 1:1"], ["Hananiah", "silver", "Nehemiah 7:2"],
   ],
   "ot-nation": [
-    ["Canaan", "ink", "Genesis 12:5", ["Canaanites"]], ["Hittites", "bronze", "Deuteronomy 7:1"],
+    ["Canaanites", "ink", "Deuteronomy 7:1", ["Canaan"]], ["Hittites", "bronze", "Deuteronomy 7:1"],
     ["Hivites", "silver", "Deuteronomy 7:1"], ["Jebusites", "silver", "Deuteronomy 7:1"],
     ["Perizzites", "gold", "Deuteronomy 7:1"], ["Girgashites", "pearl", "Deuteronomy 7:1"],
     ["Phoenicia", "silver", "Isaiah 23", ["Tyre and Sidon"]], ["Cush", "silver", "Isaiah 18:1", ["Ethiopia"]],
@@ -304,7 +304,7 @@ export const CATALOG_COMPLETIONS: Record<string, CompletionEntry[]> = {
     ["Chaldeans", "bronze", "2 Kings 24:2"], ["Sabeans", "gold", "Job 1:15"], ["Kenites", "silver", "Judges 1:16"],
   ],
   "ot-instrument": [
-    ["Lute", "silver", "Psalm 33:2"],
+    ["Lyre", "silver", "Psalm 33:2", ["lute"]],
     ["Castanets", "gold", "2 Samuel 6:5"], ["Bells", "gold", "Exodus 28:33–35"],
   ],
   "sanctuary-material": [
@@ -417,16 +417,15 @@ export const CATALOG_COMPLETIONS: Record<string, CompletionEntry[]> = {
     ["En-rogel", "gold", "Joshua 15:7"],
   ],
   "biblical-structure": [
-    ["Abraham’s tent", "bronze", "Genesis 18:1"], ["Jacob’s pillar", "silver", "Genesis 28:18"],
+    ["Abraham’s tent", "bronze", "Genesis 18:1"], ["Temple of Artemis", "silver", "Acts 19:27"],
     ["Joseph’s tomb", "silver", "Joshua 24:32"], ["Rahab’s house", "bronze", "Joshua 2:1"],
-    ["Dagon’s temple", "silver", "Judges 16:23"], ["Hall of Pillars", "silver", "1 Kings 7:6", ["Solomon's porch"]],
+    ["Dagon’s temple", "silver", "Judges 16:23"], ["Hall of Pillars", "silver", "1 Kings 7:6"],
     ["Hall of Judgment", "gold", "1 Kings 7:7"], ["Nebuchadnezzar’s palace", "silver", "Daniel 4:29"],
     ["Fiery furnace", "bronze", "Daniel 3:6"], ["Lions’ den", "bronze", "Daniel 6:16"],
-    ["Manger", "bronze", "Luke 2:7"], ["Tower of Siloam", "gold", "Luke 13:4"],
-    ["Areopagus", "silver", "Acts 17:19", ["Mars Hill"]],
+    ["Solomon’s Colonnade", "bronze", "John 10:23", ["Solomon's portico", "Solomon's porch"]], ["Tower of Siloam", "gold", "Luke 13:4"],
+    ["Tower of Penuel", "silver", "Judges 8:9"],
   ],
   "person-who-fasted": [
-    ["Hannah", "silver", "1 Samuel 1:7"], ["Saul", "bronze", "1 Samuel 28:20"],
     ["The men of Jabesh-gilead", "gold", "1 Samuel 31:13"], ["The Israelites at Bethel", "silver", "Judges 20:26"],
     ["The exiles with Ezra", "silver", "Ezra 8:21"], ["The Jews in Susa", "bronze", "Esther 4:16"],
     ["The disciples of John", "silver", "Matthew 9:14"], ["The church at Antioch", "bronze", "Acts 13:2"],
@@ -445,7 +444,7 @@ export const CATALOG_COMPLETIONS: Record<string, CompletionEntry[]> = {
   "biblical-song": [
     ["Solomon", "bronze", "Song of Solomon 1:1", ["Song of Songs"]], ["The sons of Korah", "silver", "Psalm 42"],
     ["Ethan", "gold", "Psalm 89"], ["Heman", "gold", "Psalm 88"], ["Isaiah", "silver", "Isaiah 5:1"],
-    ["Jonah", "bronze", "Jonah 2:2–9"], ["The redeemed", "gold", "Revelation 5:9"],
+    ["Jonah", "bronze", "Jonah 2:2–9"], ["The four living creatures", "gold", "Revelation 5:9"],
     ["Those who conquered the beast", "gold", "Revelation 15:3", ["song of Moses and the Lamb"]],
   ],
   "person-named-book": [
@@ -498,6 +497,16 @@ export const AUDITED_QUESTION_IDS = [
   "promised-birth", "biblical-father-son", "biblical-song", "person-named-book", "person-who-prayed", "revelation-foundation-stone", "philemon-person", "nehemiah-builder", "david-wife", "aaron-family",
 ] as const;
 
+// The accepted-answer catalog received a complete passage-by-passage review
+// against the official ESV text after the broad completeness pass. Keeping
+// this metadata beside the family checklist makes the review scope explicit.
+export const SCRIPTURE_REVIEW = {
+  completedOn: "2026-11-03",
+  translation: "ESV",
+  source: "https://www.esv.org/",
+  questionIds: AUDITED_QUESTION_IDS,
+} as const;
+
 // Every family now has a reviewed floor, so a future edit cannot silently return
 // to a small sample list while still passing the build.
 export const REVIEWED_FAMILY_FLOORS: Record<string, number> = {
@@ -510,13 +519,13 @@ export const REVIEWED_FAMILY_FLOORS: Record<string, number> = {
   "genesis-woman": 30, "esther-person": 37, "ruth-person": 18, "fruit-of-spirit": 9, "armor-of-god": 6,
   "pauline-letter": 13, "general-epistle": 8, "jesus-city": 25, "jesus-healed-person": 23, "nativity-person": 16,
   "acts-convert": 26, "nt-ruler": 28, "resurrection-witness": 22, "revelation-image": 32, "mary-nt": 6,
-  "one-chapter-book": 5, "renamed-person": 20, "raised-from-dead": 13, "biblical-food": 49, "breastpiece-stone": 12,
+  "one-chapter-book": 5, "renamed-person": 20, "raised-from-dead": 10, "biblical-food": 49, "breastpiece-stone": 12,
   "romans-16-person": 35, "psalm-author": 7, "major-prophet-book": 5, "ezra-nehemiah-person": 34, "ot-nation": 23,
   "ot-instrument": 10, "sanctuary-material": 18, "i-am-saying": 7, "spiritual-gift": 15, "beatitude": 8,
   "gospel-woman": 32, "acts-woman": 19, "nt-prisoner": 19, "biblical-couple": 36, "biblical-sibling": 34,
   "biblical-plant": 44, "biblical-weapon": 26, "biblical-clothing": 25, "biblical-currency": 13, "acts-seven": 7,
-  "david-mighty-man": 44, "second-timothy-greeting": 18, "solomon-official": 23, "biblical-water-site": 21, "wilderness-place": 18,
-  "biblical-metal": 8, "biblical-color": 9, "biblical-structure": 34, "person-who-fasted": 26, "angel-visited": 18,
+  "david-mighty-man": 44, "second-timothy-greeting": 17, "solomon-official": 23, "biblical-water-site": 21, "wilderness-place": 18,
+  "biblical-metal": 7, "biblical-color": 9, "biblical-structure": 34, "person-who-fasted": 24, "angel-visited": 18,
   "promised-birth": 16, "biblical-father-son": 25, "biblical-song": 26, "person-named-book": 34, "person-who-prayed": 38,
   "revelation-foundation-stone": 12, "philemon-person": 12, "nehemiah-builder": 40, "david-wife": 8, "aaron-family": 13,
 };

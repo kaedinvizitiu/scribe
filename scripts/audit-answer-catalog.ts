@@ -1,6 +1,6 @@
 import { QUESTIONS, TIERS, matchAnswer, normalizeAnswer } from "../data/game";
 import { CATALOG_FLOORS } from "../data/catalog-expansions";
-import { AUDITED_QUESTION_IDS, REVIEWED_FAMILY_FLOORS } from "../data/catalog-completions";
+import { AUDITED_QUESTION_IDS, REVIEWED_FAMILY_FLOORS, SCRIPTURE_REVIEW } from "../data/catalog-completions";
 
 const baseQuestions = QUESTIONS.filter((question) =>
   !question.id.endsWith("-identify") && !question.id.endsWith("-example")
@@ -20,11 +20,15 @@ const canonicalBooks = [
 
 const baseQuestionIds = new Set(baseQuestions.map((question) => question.id));
 const auditedQuestionIds = new Set<string>(AUDITED_QUESTION_IDS);
+const scriptureReviewedQuestionIds = new Set<string>(SCRIPTURE_REVIEW.questionIds);
 for (const questionId of baseQuestionIds) {
   if (!auditedQuestionIds.has(questionId)) failures.push(`${questionId}: missing from the family-by-family audit checklist`);
 }
 for (const questionId of auditedQuestionIds) {
   if (!baseQuestionIds.has(questionId)) failures.push(`${questionId}: audit checklist entry has no question family`);
+}
+for (const questionId of baseQuestionIds) {
+  if (!scriptureReviewedQuestionIds.has(questionId)) failures.push(`${questionId}: missing from the ESV Scripture-review checklist`);
 }
 
 for (const question of baseQuestions) {

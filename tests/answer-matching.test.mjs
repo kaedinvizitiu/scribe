@@ -75,4 +75,17 @@ test("uses ESV labels while retaining genuine translation aliases", () => {
   assert.equal(answerFor("biblical-currency", "stater"), "Shekel");
   assert.equal(answerFor("biblical-currency", "quadrans"), "Penny");
   assert.equal(answerFor("biblical-currency", "kesitah"), "Piece of money");
+  assert.equal(answerFor("biblical-island", "Samothrace"), "Samothrace");
+  assert.equal(answerFor("ot-instrument", "lute"), "Lyre");
+  assert.equal(answerFor("biblical-food", "poultry"), "Fattened fowl");
+  assert.equal(answerFor("biblical-weapon", "battle axe"), "War club");
+  assert.equal(answerFor("biblical-structure", "praetorium"), "Governor’s headquarters");
+});
+
+test("rejects adjacent answers removed by the manual Scripture review", () => {
+  assert.equal(answerFor("biblical-island", "Lesbos"), undefined);
+  assert.equal(answerFor("bible-occupation", "dancer"), undefined);
+  assert.equal(answerFor("raised-from-dead", "first resurrection saints"), undefined);
+  assert.equal(answerFor("second-timothy-greeting", "Timothy"), undefined);
+  assert.equal(answerFor("biblical-metal", "antimony"), undefined);
 });

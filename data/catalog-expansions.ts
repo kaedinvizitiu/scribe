@@ -10,7 +10,7 @@ export const CATALOG_FLOORS: Record<string, number> = {
   "biblical-plant": 26, "biblical-weapon": 20, "biblical-clothing": 20,
   "person-who-fasted": 17, "angel-visited": 18, "person-who-prayed": 20,
   "acts-convert": 18, "nt-ruler": 18, "resurrection-witness": 18,
-  "renamed-person": 18, "raised-from-dead": 13, "ezra-nehemiah-person": 19,
+  "renamed-person": 18, "raised-from-dead": 10, "ezra-nehemiah-person": 19,
   "biblical-water-site": 16, "wilderness-place": 18, "biblical-structure": 20,
   "promised-birth": 16, "biblical-song": 18, "romans-16-person": 27,
   "nehemiah-builder": 28,
@@ -180,10 +180,10 @@ export const CATALOG_EXPANSIONS: Record<string, CatalogEntry[]> = {
     ["Diadem", "pearl", "Revelation 12:3"], ["Linen undergarments", "pearl", "Exodus 28:42", ["breeches"]],
   ],
   "person-who-fasted": [
-    ["Elijah", "bronze", "1 Kings 19:8"], ["Samuel", "silver", "1 Samuel 7:6"],
+    ["Elijah", "bronze", "1 Kings 19:8"], ["The people at Mizpah", "silver", "1 Samuel 7:6"],
     ["Jehoshaphat", "silver", "2 Chronicles 20:3"], ["Ahab", "gold", "1 Kings 21:27"],
-    ["Cornelius", "gold", "Acts 10:30"], ["The people of Nineveh", "gold", "Jonah 3:5"],
-    ["The elders of Antioch", "pearl", "Acts 13:2"], ["The Jews at Mizpah", "pearl", "Judges 20:26"],
+    ["Darius", "gold", "Daniel 6:18"], ["The people of Nineveh", "gold", "Jonah 3:5"],
+    ["Barnabas", "pearl", "Acts 13:2"], ["The people of Judah", "pearl", "2 Chronicles 20:3"],
   ],
   "angel-visited": [
     ["Lot", "bronze", "Genesis 19:1"], ["Jacob", "bronze", "Genesis 32:1"],
@@ -204,7 +204,7 @@ export const CATALOG_EXPANSIONS: Record<string, CatalogEntry[]> = {
     ["The household of Cornelius", "silver", "Acts 10:44–48"], ["The household of Lydia", "silver", "Acts 16:15"],
     ["The jailer’s household", "gold", "Acts 16:33"], ["The Bereans", "gold", "Acts 17:12"],
     ["Damaris", "gold", "Acts 17:34"], ["The Ephesian disciples", "pearl", "Acts 19:1–7"],
-    ["The sons of Sceva’s witnesses", "pearl", "Acts 19:17–18", ["Ephesians who confessed"]],
+    ["Many Ephesians", "pearl", "Acts 19:17–18", ["Ephesians who confessed"]],
   ],
   "nt-ruler": [
     ["Caesar Augustus", "ink", "Luke 2:1", ["Augustus"]], ["Tiberius Caesar", "bronze", "Luke 3:1", ["Tiberius"]],
@@ -231,8 +231,6 @@ export const CATALOG_EXPANSIONS: Record<string, CatalogEntry[]> = {
   ],
   "raised-from-dead": [
     ["Jesus", "ink", "Matthew 28:6"], ["The saints in Jerusalem", "silver", "Matthew 27:52–53"],
-    ["The two witnesses", "gold", "Revelation 11:11"], ["The first resurrection saints", "gold", "Revelation 20:4–6"],
-    ["The dead at the last judgment", "pearl", "Revelation 20:12–13"],
   ],
   "ezra-nehemiah-person": [
     ["Cyrus", "ink", "Ezra 1:1"], ["Darius", "bronze", "Ezra 6:1"],

@@ -246,7 +246,7 @@ export const YEAR_QUESTIONS: Question[] = [
     ["Aram", "pearl", "2 Kings 5:1", ["Syria"]], ["Amalek", "pearl", "Exodus 17:8"],
   ]),
   groupedQuestion("ot-instrument", "Name a musical instrument mentioned in the Old Testament.", "Worship", [
-    ["Harp", "ink", "Psalm 33:2", ["lyre"]], ["Trumpet", "ink", "Psalm 150:3"], ["Cymbals", "bronze", "Psalm 150:5"],
+    ["Harp", "ink", "Psalm 33:2"], ["Trumpet", "ink", "Psalm 150:3"], ["Cymbals", "bronze", "Psalm 150:5"],
     ["Tambourine", "bronze", "Exodus 15:20", ["timbrel"]], ["Flute", "silver", "1 Samuel 10:5", ["pipe"]],
     ["Horn", "gold", "Joshua 6:5", ["ram's horn", "shofar"]], ["Ten-stringed instrument", "pearl", "Psalm 33:2", ["ten stringed lyre"]],
   ]),
@@ -321,7 +321,7 @@ export const YEAR_QUESTIONS: Question[] = [
     ["Sword", "ink", "1 Samuel 17:51"], ["Sling", "ink", "1 Samuel 17:40"], ["Spear", "bronze", "1 Samuel 18:10"],
     ["Bow", "bronze", "1 Samuel 20:20"], ["Arrow", "silver", "2 Kings 13:17"], ["Javelin", "silver", "Joshua 8:18"],
     ["Dagger", "gold", "Judges 3:16"], ["Club", "gold", "Matthew 26:47"],
-    ["Sickle", "pearl", "Joel 3:13"], ["Battle-axe", "pearl", "Jeremiah 51:20", ["war club"]],
+    ["Sickle", "pearl", "Joel 3:13"], ["War club", "pearl", "Jeremiah 51:20", ["battle-axe"]],
   ]),
   groupedQuestion("biblical-clothing", "Name an article of clothing mentioned in the Bible.", "Daily Life", [
     ["Robe", "ink", "Genesis 37:3"], ["Sandals", "ink", "Exodus 3:5"], ["Cloak", "bronze", "2 Timothy 4:13", ["mantle"]],
@@ -347,7 +347,7 @@ export const YEAR_QUESTIONS: Question[] = [
     ["Ira the Ithrite", "pearl", "2 Samuel 23:38", ["Ira"]], ["Naharai", "pearl", "2 Samuel 23:37"],
   ]),
   groupedQuestion("second-timothy-greeting", "Name someone mentioned near the end of 2 Timothy.", "Letters", [
-    ["Timothy", "ink", "2 Timothy 4:21"], ["Luke", "ink", "2 Timothy 4:11"], ["Mark", "bronze", "2 Timothy 4:11"],
+    ["Luke", "ink", "2 Timothy 4:11"], ["Mark", "bronze", "2 Timothy 4:11"],
     ["Priscilla", "silver", "2 Timothy 4:19", ["Prisca"]], ["Aquila", "silver", "2 Timothy 4:19"],
     ["Onesiphorus", "gold", "2 Timothy 4:19"], ["Eubulus", "pearl", "2 Timothy 4:21"],
     ["Pudens", "pearl", "2 Timothy 4:21"], ["Claudia", "pearl", "2 Timothy 4:21"],
@@ -371,19 +371,19 @@ export const YEAR_QUESTIONS: Question[] = [
   ]),
   groupedQuestion("biblical-metal", "Name a metal mentioned in the Bible.", "Objects", [
     ["Gold", "ink", "Genesis 2:11–12"], ["Silver", "ink", "Genesis 13:2"], ["Bronze", "bronze", "Exodus 27:2"],
-    ["Iron", "bronze", "Deuteronomy 8:9"], ["Copper", "silver", "Ezra 8:27"], ["Tin", "gold", "Numbers 31:22"],
-    ["Lead", "pearl", "Exodus 15:10"], ["Antimony", "pearl", "Isaiah 54:11"],
+    ["Iron", "bronze", "Deuteronomy 8:9"], ["Copper", "silver", "Job 28:2"], ["Tin", "gold", "Numbers 31:22"],
+    ["Lead", "pearl", "Exodus 15:10"],
   ]),
   groupedQuestion("biblical-color", "Name a color explicitly mentioned in the Bible.", "Images", [
     ["White", "ink", "Revelation 7:9"], ["Red", "ink", "Genesis 25:30"], ["Purple", "bronze", "Acts 16:14"],
     ["Blue", "bronze", "Exodus 26:1"], ["Scarlet", "silver", "Joshua 2:18"], ["Crimson", "silver", "Isaiah 1:18"],
-    ["Black", "gold", "Song of Solomon 1:5"], ["Green", "gold", "Psalm 23:2"], ["Vermilion", "pearl", "Jeremiah 22:14"],
+    ["Black", "gold", "Zechariah 6:2"], ["Green", "gold", "Psalm 23:2"], ["Vermilion", "pearl", "Jeremiah 22:14"],
   ]),
   groupedQuestion("biblical-structure", "Name a building or major structure mentioned in the Bible.", "Places", [
     ["Temple", "ink", "1 Kings 6:1"], ["Tabernacle", "ink", "Exodus 26:1"], ["Noah’s ark", "bronze", "Genesis 6:14", ["ark"]],
     ["Tower of Babel", "bronze", "Genesis 11:4", ["Babel"]], ["Synagogue", "silver", "Luke 4:16"],
     ["Solomon’s palace", "silver", "1 Kings 7:1", ["palace"]], ["Jerusalem wall", "gold", "Nehemiah 2:17", ["wall"]],
-    ["Praetorium", "pearl", "John 18:28"], ["Millo", "pearl", "1 Kings 9:15"],
+    ["Governor’s headquarters", "pearl", "John 18:28", ["praetorium"]], ["Millo", "pearl", "1 Kings 9:15"],
   ]),
   groupedQuestion("person-who-fasted", "Name someone in the Bible who fasted.", "Faith", [
     ["Jesus", "ink", "Matthew 4:2"], ["Moses", "ink", "Exodus 34:28"], ["Esther", "bronze", "Esther 4:16"],
