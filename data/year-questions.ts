@@ -224,9 +224,9 @@ export const YEAR_QUESTIONS: Question[] = [
     ["Tryphena", "gold", "Romans 16:12"], ["Persis", "pearl", "Romans 16:12"], ["Philologus", "pearl", "Romans 16:15"],
   ]),
   groupedQuestion("psalm-author", "Name a person or group credited in a Psalm heading.", "Worship", [
-    ["David", "ink", "Psalm 3 title"], ["Asaph", "ink", "Psalm 50 title"], ["Sons of Korah", "bronze", "Psalm 42 title", ["Korahites"]],
-    ["Solomon", "silver", "Psalm 72 title"], ["Moses", "silver", "Psalm 90 title"],
-    ["Heman", "gold", "Psalm 88 title"], ["Ethan", "pearl", "Psalm 89 title"],
+    ["David", "ink", "Psalm 3"], ["Asaph", "ink", "Psalm 50"], ["Sons of Korah", "bronze", "Psalm 42", ["Korahites"]],
+    ["Solomon", "silver", "Psalm 72"], ["Moses", "silver", "Psalm 90"],
+    ["Heman", "gold", "Psalm 88"], ["Ethan", "pearl", "Psalm 89"],
   ]),
   groupedQuestion("major-prophet-book", "Name a book commonly grouped among the Major Prophets.", "Books", [
     ["Isaiah", "ink", "Isaiah 1:1"], ["Jeremiah", "bronze", "Jeremiah 1:1"],
@@ -324,15 +324,16 @@ export const YEAR_QUESTIONS: Question[] = [
     ["Sickle", "pearl", "Joel 3:13"], ["Battle-axe", "pearl", "Jeremiah 51:20", ["war club"]],
   ]),
   groupedQuestion("biblical-clothing", "Name an article of clothing mentioned in the Bible.", "Daily Life", [
-    ["Robe", "ink", "Genesis 37:3"], ["Sandals", "ink", "Exodus 3:5"], ["Cloak", "bronze", "2 Timothy 4:13"],
+    ["Robe", "ink", "Genesis 37:3"], ["Sandals", "ink", "Exodus 3:5"], ["Cloak", "bronze", "2 Timothy 4:13", ["mantle"]],
     ["Tunic", "bronze", "John 19:23"], ["Veil", "silver", "Genesis 24:65"], ["Belt", "silver", "Acts 21:11"],
-    ["Sackcloth", "gold", "Jonah 3:5"], ["Turban", "gold", "Exodus 28:39"],
+    ["Sackcloth", "gold", "Jonah 3:5", ["haircloth"]], ["Turban", "gold", "Exodus 28:39"],
     ["Ephod", "pearl", "1 Samuel 2:18"], ["Phylactery", "pearl", "Matthew 23:5"],
   ]),
   groupedQuestion("biblical-currency", "Name a coin, currency, or unit of money mentioned in the Bible.", "Daily Life", [
-    ["Denarius", "ink", "Matthew 20:2", ["denarii"]], ["Shekel", "ink", "Exodus 30:13"], ["Talent", "bronze", "Matthew 25:15"],
-    ["Drachma", "silver", "Luke 15:8"], ["Mina", "silver", "Luke 19:13"], ["Lepton", "gold", "Mark 12:42", ["widow's mite", "mite"]],
-    ["Daric", "pearl", "Ezra 2:69"], ["Bekah", "pearl", "Exodus 38:26"],
+    ["Denarius", "ink", "Matthew 20:2", ["denarii"]], ["Shekel", "ink", "Exodus 30:13", ["stater"]], ["Talent", "bronze", "Matthew 25:15"],
+    ["Silver coin", "silver", "Luke 15:8", ["drachma"]], ["Mina", "silver", "Luke 19:13"],
+    ["Small copper coin", "gold", "Mark 12:42", ["lepton", "widow's mite", "mite"]],
+    ["Daric", "pearl", "Ezra 2:69"], ["Beka", "pearl", "Exodus 38:26", ["bekah"]],
   ]),
   groupedQuestion("acts-seven", "Name one of the seven men appointed in Acts 6.", "Early Church", [
     ["Stephen", "ink", "Acts 6:5"], ["Philip", "ink", "Acts 6:5"], ["Prochorus", "bronze", "Acts 6:5"],

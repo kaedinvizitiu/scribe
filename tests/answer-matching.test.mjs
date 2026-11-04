@@ -64,3 +64,15 @@ test("accepts answers recovered by the family-by-family completeness audit", () 
   assert.equal(answerFor("david-mighty-man", "Jashobeam"), "Jashobeam");
   assert.equal(answerFor("jesus-miracle", "feeding 4000"), "Feeding the four thousand");
 });
+
+test("uses ESV labels while retaining genuine translation aliases", () => {
+  assert.equal(answerFor("apostle", "James son of Alphaeus"), "James son of Alphaeus");
+  assert.equal(answerFor("bible-animal", "monkey"), "Ape");
+  assert.equal(answerFor("bible-animal", "pelican"), "Barn owl");
+  assert.equal(answerFor("biblical-clothing", "haircloth"), "Sackcloth");
+  assert.equal(answerFor("biblical-plant", "box tree"), "Pine");
+  assert.equal(answerFor("biblical-currency", "drachma"), "Silver coin");
+  assert.equal(answerFor("biblical-currency", "stater"), "Shekel");
+  assert.equal(answerFor("biblical-currency", "quadrans"), "Penny");
+  assert.equal(answerFor("biblical-currency", "kesitah"), "Piece of money");
+});

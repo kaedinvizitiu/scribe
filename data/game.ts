@@ -60,7 +60,8 @@ const CORE_QUESTIONS: Question[] = [
   q("apostle", "Name one of Jesus’ twelve apostles.", "People", [
     answer("Peter", "ink", "Matthew 10:2", "Peter is named first in Matthew’s list of the twelve.", ["Simon Peter", "Simon"]),
     answer("John", "ink", "Matthew 10:2", "John, the brother of James, was one of the twelve."),
-    answer("James", "bronze", "Matthew 10:2–3", "Two apostles named James appear in the list.", ["James son of Zebedee", "James son of Alphaeus"]),
+    answer("James son of Zebedee", "bronze", "Matthew 10:2", "James the son of Zebedee was one of the twelve.", ["James", "James the son of Zebedee"]),
+    answer("James son of Alphaeus", "gold", "Matthew 10:3", "James the son of Alphaeus was also one of the twelve.", ["James the son of Alphaeus"]),
     answer("Andrew", "bronze", "Matthew 10:2", "Andrew was Peter’s brother and one of the twelve."),
     answer("Thomas", "silver", "Matthew 10:3", "Thomas is included among the twelve apostles.", ["Didymus"]),
     answer("Matthew", "silver", "Matthew 10:3", "Matthew the tax collector was one of the twelve.", ["Levi"]),

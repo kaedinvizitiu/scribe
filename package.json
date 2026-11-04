@@ -12,6 +12,7 @@
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "pnpm run validate:year && pnpm run audit:answers && pnpm run build && pnpm run build:pages && tsx --test tests/*.test.mjs",
     "audit:answers": "tsx scripts/audit-answer-catalog.ts",
+    "audit:esv": "tsx scripts/audit-esv-evidence.ts",
     "validate:year": "tsx scripts/validate-year.ts",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern pages-dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"

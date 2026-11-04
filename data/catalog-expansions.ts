@@ -160,10 +160,10 @@ export const CATALOG_EXPANSIONS: Record<string, CatalogEntry[]> = {
     ["Thorn", "bronze", "Genesis 3:18", ["thorns"]], ["Reed", "bronze", "Matthew 11:7"],
     ["Oak", "silver", "Genesis 35:8"], ["Acacia", "silver", "Exodus 25:10"],
     ["Pomegranate", "silver", "Numbers 13:23"], ["Flax", "gold", "Joshua 2:6"],
-    ["Coriander", "gold", "Exodus 16:31"], ["Caper", "gold", "Ecclesiastes 12:5", ["caperberry"]],
+    ["Coriander", "gold", "Exodus 16:31"], ["Grass", "gold", "Psalm 23:2"],
     ["Aloe", "gold", "John 19:39", ["aloes"]], ["Myrrh", "pearl", "Song of Solomon 4:14"],
     ["Frankincense", "pearl", "Song of Solomon 4:14"], ["Mandrake", "pearl", "Genesis 30:14"],
-    ["Terebinth", "pearl", "Genesis 35:4"], ["Balsam", "pearl", "Genesis 37:25"],
+    ["Terebinth", "pearl", "Genesis 35:4"], ["Balm", "pearl", "Genesis 37:25", ["balsam"]],
   ],
   "biblical-weapon": [
     ["Shield", "ink", "1 Samuel 17:7"], ["Staff", "bronze", "1 Samuel 17:40"],
@@ -176,8 +176,8 @@ export const CATALOG_EXPANSIONS: Record<string, CatalogEntry[]> = {
     ["Crown", "ink", "Esther 2:17"], ["Armor", "bronze", "1 Samuel 17:38"],
     ["Breastpiece", "bronze", "Exodus 28:15", ["breastplate"]], ["Linen garment", "silver", "Leviticus 16:4"],
     ["Head covering", "silver", "1 Corinthians 11:5"], ["Wedding garment", "gold", "Matthew 22:11"],
-    ["Haircloth", "gold", "Revelation 6:12"], ["Coat of mail", "gold", "1 Samuel 17:5"],
-    ["Diadem", "pearl", "Revelation 12:3"], ["Breeches", "pearl", "Exodus 28:42", ["linen undergarments"]],
+    ["Coat of mail", "gold", "1 Samuel 17:5"],
+    ["Diadem", "pearl", "Revelation 12:3"], ["Linen undergarments", "pearl", "Exodus 28:42", ["breeches"]],
   ],
   "person-who-fasted": [
     ["Elijah", "bronze", "1 Kings 19:8"], ["Samuel", "silver", "1 Samuel 7:6"],
