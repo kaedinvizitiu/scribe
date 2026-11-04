@@ -10,7 +10,10 @@ assert.equal(new Set(QUESTIONS.map((question) => question.id)).size, QUESTIONS.l
 
 const scheduledIds = new Set<string>();
 const scheduledDays = new Map<string, number[]>();
+const scheduledFamilyDays = new Map<string, number[]>();
 let scheduledPrompts = 0;
+
+const familyId = (questionId: string) => questionId.replace(/-(identify|example)$/, "");
 
 for (const [dayIndex, scroll] of DAILY_SCROLLS.entries()) {
   assert.match(scroll.dateKey, /^2027-\d{2}-\d{2}$/);
@@ -21,6 +24,8 @@ for (const [dayIndex, scroll] of DAILY_SCROLLS.entries()) {
   scroll.questionIds.forEach((id) => {
     scheduledIds.add(id);
     scheduledDays.set(id, [...(scheduledDays.get(id) ?? []), dayIndex]);
+    const family = familyId(id);
+    scheduledFamilyDays.set(family, [...(scheduledFamilyDays.get(family) ?? []), dayIndex]);
   });
   scheduledPrompts += scroll.questionIds.length;
 }
@@ -30,6 +35,14 @@ assert.equal(scheduledIds.size, QUESTIONS.length, "every curated prompt must app
 for (const [questionId, days] of scheduledDays) {
   const gaps = days.slice(1).map((day, index) => day - days[index]);
   assert.ok(Math.min(...gaps) >= 30, `${questionId} repeats within 30 days`);
+}
+
+// Different wording should not make the same subject feel like a back-to-back repeat.
+// Seven prompts per day across 90 families makes a 30-day family cooldown impossible,
+// but the calendar can and should keep every underlying subject at least 12 days apart.
+for (const [family, days] of scheduledFamilyDays) {
+  const gaps = days.slice(1).map((day, index) => day - days[index]);
+  assert.ok(Math.min(...gaps) >= 12, `${family} topic repeats within 12 days`);
 }
 
 for (const question of QUESTIONS) {
