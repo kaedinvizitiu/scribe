@@ -28,12 +28,17 @@ export const metadata: Metadata = {
   applicationName: "Scribe",
   openGraph: {
     title: "Scribe — Seven questions. One daily scroll.",
+    siteName: "Scribe",
     description: "A daily open-answer Bible knowledge game.",
     type: "website",
     images: [{ url: "/og.png", width: 1730, height: 907, alt: "Scribe — Seven questions. One daily scroll." }],
   },
   twitter: { card: "summary_large_image", images: ["/og.png"] },
-  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
+    shortcut: [{ url: "/favicon.ico", type: "image/x-icon" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export const viewport: Viewport = {

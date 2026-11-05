@@ -25,6 +25,15 @@ test("ships the Scribe daily game instead of starter content", async () => {
   assert.doesNotMatch(`${page}${game}${layout}`, /codex-preview|SkeletonPreview/i);
 });
 
+test("publishes Scribe search branding and raster favicons", async () => {
+  const page = await readFile(new URL("../github-pages/index.html", import.meta.url), "utf8");
+  assert.match(page, /property="og:site_name" content="Scribe"/);
+  assert.match(page, /favicon\.png/);
+  assert.match(page, /favicon\.ico/);
+  assert.match(page, /apple-touch-icon\.png/);
+  assert.match(page, /"@type":"WebSite","name":"Scribe"/);
+});
+
 test("includes the product pages, database, and full 2027 content calendar", async () => {
   const [data, calendar, schema, leaderboard, layout] = await Promise.all([
     readFile(new URL("data/game.ts", root), "utf8"),
