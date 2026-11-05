@@ -65,6 +65,15 @@ test("accepts answers recovered by the family-by-family completeness audit", () 
   assert.equal(answerFor("jesus-miracle", "feeding 4000"), "Feeding the four thousand");
 });
 
+test("accepts nation names and their equivalent people names", () => {
+  assert.equal(answerFor("ot-nation", "Assyrians"), "Assyria");
+  assert.equal(answerFor("ot-nation", "Moabites"), "Moab");
+  assert.equal(answerFor("ot-nation", "Babylonians"), "Babylon");
+  assert.equal(answerFor("ot-nation", "Arameans"), "Aram");
+  assert.equal(answerFor("ot-nation", "Persians"), "Persia");
+  assert.equal(answerFor("ot-nation", "Phoenicians"), "Phoenicia");
+});
+
 test("uses ESV labels while retaining genuine translation aliases", () => {
   assert.equal(answerFor("apostle", "James son of Alphaeus"), "James son of Alphaeus");
   assert.equal(answerFor("bible-animal", "monkey"), "Ape");
