@@ -1,6 +1,7 @@
 import { QUESTIONS, TIERS, matchAnswer, normalizeAnswer } from "../data/game";
 import { CATALOG_FLOORS } from "../data/catalog-expansions";
 import { AUDITED_QUESTION_IDS, REVIEWED_FAMILY_FLOORS, SCRIPTURE_REVIEW } from "../data/catalog-completions";
+import { SCOPED_QUESTION_IDS } from "../data/scoped-questions";
 
 const baseQuestions = QUESTIONS.filter((question) =>
   !question.id.endsWith("-identify") && !question.id.endsWith("-example")
@@ -19,8 +20,9 @@ const canonicalBooks = [
 ];
 
 const baseQuestionIds = new Set(baseQuestions.map((question) => question.id));
-const auditedQuestionIds = new Set<string>(AUDITED_QUESTION_IDS);
-const scriptureReviewedQuestionIds = new Set<string>(SCRIPTURE_REVIEW.questionIds);
+const auditedQuestionIds = new Set<string>([...AUDITED_QUESTION_IDS, ...SCOPED_QUESTION_IDS]);
+// Scoped families reuse only answers already covered by the completed ESV review.
+const scriptureReviewedQuestionIds = new Set<string>([...SCRIPTURE_REVIEW.questionIds, ...SCOPED_QUESTION_IDS]);
 for (const questionId of baseQuestionIds) {
   if (!auditedQuestionIds.has(questionId)) failures.push(`${questionId}: missing from the family-by-family audit checklist`);
 }

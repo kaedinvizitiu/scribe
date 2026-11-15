@@ -7,6 +7,7 @@ assert.equal(DAILY_SCROLLS.at(-1)?.dateKey, "2027-12-31");
 assert.equal(new Set(DAILY_SCROLLS.map((scroll) => scroll.id)).size, 365, "scroll IDs must be unique");
 assert.equal(new Set(DAILY_SCROLLS.map((scroll) => scroll.title)).size, 365, "scroll titles must be unique");
 assert.equal(new Set(QUESTIONS.map((question) => question.id)).size, QUESTIONS.length, "question IDs must be unique");
+assert.equal(new Set(QUESTIONS.map((question) => question.prompt)).size, QUESTIONS.length, "question prompts must be unique");
 
 const scheduledIds = new Set<string>();
 const scheduledDays = new Map<string, number[]>();
@@ -37,12 +38,11 @@ for (const [questionId, days] of scheduledDays) {
   assert.ok(Math.min(...gaps) >= 30, `${questionId} repeats within 30 days`);
 }
 
-// Different wording should not make the same subject feel like a back-to-back repeat.
-// Seven prompts per day across 90 families makes a 30-day family cooldown impossible,
-// but the calendar can and should keep every underlying subject at least 12 days apart.
+// Different wording does not make a repeated subject new. The expanded 210-family
+// catalog keeps every underlying topic at least 30 days apart during the year.
 for (const [family, days] of scheduledFamilyDays) {
   const gaps = days.slice(1).map((day, index) => day - days[index]);
-  assert.ok(Math.min(...gaps) >= 12, `${family} topic repeats within 12 days`);
+  assert.ok(Math.min(...gaps) >= 30, `${family} topic repeats within 30 days`);
 }
 
 for (const question of QUESTIONS) {

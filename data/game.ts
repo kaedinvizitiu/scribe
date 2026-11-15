@@ -1,6 +1,7 @@
 import { build2027Calendar } from "./calendar-2027";
 import { CATALOG_COMPLETIONS } from "./catalog-completions";
 import { CATALOG_EXPANSIONS } from "./catalog-expansions";
+import { SCOPED_QUESTION_SPECS, ScopedQuestionSpec } from "./scoped-questions";
 import { YEAR_QUESTIONS, YEAR_QUESTION_POOLS } from "./year-questions";
 
 export const TIERS = {
@@ -360,7 +361,7 @@ const CORE_QUESTIONS: Question[] = [
   ]),
 ];
 
-const BASE_QUESTIONS: Question[] = [...CORE_QUESTIONS, ...YEAR_QUESTIONS].map((question) => {
+const REVIEWED_QUESTIONS: Question[] = [...CORE_QUESTIONS, ...YEAR_QUESTIONS].map((question) => {
   const existingIds = new Set(question.answers.map((item) => item.id));
   const additions = [
     ...(CATALOG_EXPANSIONS[question.id] ?? []),
@@ -376,6 +377,32 @@ const BASE_QUESTIONS: Question[] = [...CORE_QUESTIONS, ...YEAR_QUESTIONS].map((q
     });
   return additions.length ? { ...question, answers: [...question.answers, ...additions] } : question;
 });
+
+const scopedTierOrder: Tier[] = ["ink", "bronze", "silver", "gold", "pearl"];
+
+function buildScopedQuestion(spec: ScopedQuestionSpec, sources: Map<string, Question>): Question {
+  const source = sources.get(spec.sourceId);
+  if (!source) throw new Error(`${spec.id} has unknown source family ${spec.sourceId}`);
+  const labelSet = spec.labels ? new Set(spec.labels) : null;
+  const selected = source.answers.filter((candidate) => {
+    if (labelSet) return labelSet.has(candidate.label);
+    return spec.books?.some((book) => candidate.reference === book || candidate.reference.startsWith(`${book} `));
+  });
+  if (labelSet && selected.length !== labelSet.size) throw new Error(`${spec.id} contains an unknown answer label`);
+  if (selected.length < scopedTierOrder.length) throw new Error(`${spec.id} needs at least five accepted answers`);
+  return {
+    id: spec.id,
+    prompt: spec.prompt,
+    category: spec.category,
+    answers: selected.map((candidate, index) => ({ ...candidate, tier: scopedTierOrder[index % scopedTierOrder.length] })),
+  };
+}
+
+const reviewedQuestionMap = new Map(REVIEWED_QUESTIONS.map((question) => [question.id, question]));
+const SCOPED_QUESTIONS = Object.values(SCOPED_QUESTION_SPECS)
+  .flat()
+  .map((spec) => buildScopedQuestion(spec, reviewedQuestionMap));
+const BASE_QUESTIONS: Question[] = [...REVIEWED_QUESTIONS, ...SCOPED_QUESTIONS];
 
 function alternatePrompt(prompt: string, style: "identify" | "example") {
   const remainder = prompt.replace(/^Name\s+/i, "").replace(/^one\s+/i, "one ");
@@ -402,10 +429,10 @@ function poolVariants(questionIds: readonly string[]) {
 export const QUESTIONS: Question[] = BASE_QUESTIONS.flatMap(promptVariants);
 
 export const DAILY_SCROLLS: DailyScroll[] = build2027Calendar({
-  oldTestament: poolVariants(["jacob-son", "judge", "judah-king", "ot-woman", "tribe", "tabernacle-object", ...YEAR_QUESTION_POOLS.oldTestament]),
-  newTestament: poolVariants(["apostle", "paul-city", "jesus-miracle", "parable", "paul-companion", "revelation-church", ...YEAR_QUESTION_POOLS.newTestament]),
-  wholeBible: poolVariants(["bible-animal", "prophet", "mountain", "dreamer", "river", "bible-occupation", ...YEAR_QUESTION_POOLS.wholeBible]),
-  niche: poolVariants(["named-well", "gate", "biblical-island", ...YEAR_QUESTION_POOLS.niche]),
+  oldTestament: poolVariants(["jacob-son", "judge", "judah-king", "ot-woman", "tribe", "tabernacle-object", ...YEAR_QUESTION_POOLS.oldTestament, ...SCOPED_QUESTION_SPECS.oldTestament.map(({ id }) => id)]),
+  newTestament: poolVariants(["apostle", "paul-city", "jesus-miracle", "parable", "paul-companion", "revelation-church", ...YEAR_QUESTION_POOLS.newTestament, ...SCOPED_QUESTION_SPECS.newTestament.map(({ id }) => id)]),
+  wholeBible: poolVariants(["bible-animal", "prophet", "mountain", "dreamer", "river", "bible-occupation", ...YEAR_QUESTION_POOLS.wholeBible, ...SCOPED_QUESTION_SPECS.wholeBible.map(({ id }) => id)]),
+  niche: poolVariants(["named-well", "gate", "biblical-island", ...YEAR_QUESTION_POOLS.niche, ...SCOPED_QUESTION_SPECS.niche.map(({ id }) => id)]),
 });
 
 export function normalizeAnswer(value: string) {

@@ -74,6 +74,14 @@ test("accepts nation names and their equivalent people names", () => {
   assert.equal(answerFor("ot-nation", "Phoenicians"), "Phoenicia");
 });
 
+test("keeps new scoped questions broad enough without leaking unrelated answers", () => {
+  assert.equal(answerFor("women-exodus", "Miriam"), "Miriam");
+  assert.equal(answerFor("women-exodus", "Sarah"), undefined);
+  assert.equal(answerFor("miracles-john", "water"), "Water into wine");
+  assert.equal(answerFor("biblical-birds", "raven"), "Raven");
+  assert.equal(answerFor("haman-sons", "Vaizatha"), "Vaizatha");
+});
+
 test("uses ESV labels while retaining genuine translation aliases", () => {
   assert.equal(answerFor("apostle", "James son of Alphaeus"), "James son of Alphaeus");
   assert.equal(answerFor("bible-animal", "monkey"), "Ape");
