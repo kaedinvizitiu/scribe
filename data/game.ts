@@ -429,8 +429,8 @@ function poolVariants(questionIds: readonly string[]) {
 export const QUESTIONS: Question[] = BASE_QUESTIONS.flatMap(promptVariants);
 
 export const DAILY_SCROLLS: DailyScroll[] = build2027Calendar({
-  oldTestament: poolVariants(["jacob-son", "judge", "judah-king", "ot-woman", "tribe", "tabernacle-object", ...YEAR_QUESTION_POOLS.oldTestament, ...SCOPED_QUESTION_SPECS.oldTestament.map(({ id }) => id)]),
-  newTestament: poolVariants(["apostle", "paul-city", "jesus-miracle", "parable", "paul-companion", "revelation-church", ...YEAR_QUESTION_POOLS.newTestament, ...SCOPED_QUESTION_SPECS.newTestament.map(({ id }) => id)]),
+  oldTestament: poolVariants([...SCOPED_QUESTION_SPECS.oldTestament.map(({ id }) => id), "jacob-son", "judge", "judah-king", "ot-woman", "tribe", "tabernacle-object", ...YEAR_QUESTION_POOLS.oldTestament]),
+  newTestament: poolVariants([...SCOPED_QUESTION_SPECS.newTestament.map(({ id }) => id), "apostle", "paul-city", "jesus-miracle", "parable", "paul-companion", "revelation-church", ...YEAR_QUESTION_POOLS.newTestament]),
   wholeBible: poolVariants(["bible-animal", "prophet", "mountain", "dreamer", "river", "bible-occupation", ...YEAR_QUESTION_POOLS.wholeBible, ...SCOPED_QUESTION_SPECS.wholeBible.map(({ id }) => id)]),
   niche: poolVariants(["named-well", "gate", "biblical-island", ...YEAR_QUESTION_POOLS.niche, ...SCOPED_QUESTION_SPECS.niche.map(({ id }) => id)]),
 });
