@@ -95,13 +95,15 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
         );
 
       if (!isComplete) return;
+      const restoredNickname = parsed.nickname?.trim().slice(0, 24) || savedName || "Reader";
       window.setTimeout(() => {
         setResults(parsed.results!);
         setQuestionIndex(questions.length - 1);
-        setNickname(parsed.nickname?.trim().slice(0, 24) || savedName || "Reader");
+        setNickname(restoredNickname);
         setRankMessage("Today’s score was restored from this browser.");
         setRestoredToday(true);
         setStage("results");
+        void submitScore(parsed.results!, restoredNickname);
       }, 0);
     } catch {
       localStorage.removeItem(resultKey);
@@ -182,7 +184,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
     setStage("playing");
   }
 
-  async function submitScore() {
+  async function submitScore(submittedResults = results, submittedNickname = nickname) {
     let playerId = localStorage.getItem("scribe:player-id");
     if (!playerId) {
       playerId = createPlayerId();
@@ -191,7 +193,7 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
 
     localStorage.setItem(
       `scribe:result:${getPacificDateKey()}`,
-      JSON.stringify({ scrollId: scroll.id, nickname, total, results }),
+      JSON.stringify({ scrollId: scroll.id, nickname: submittedNickname, results: submittedResults }),
     );
 
     try {
@@ -199,11 +201,11 @@ export function ScribeGame({ scroll }: { scroll: DailyScroll }) {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          nickname,
+          nickname: submittedNickname,
           playerId,
           dateKey: getPacificDateKey(),
           scrollId: scroll.id,
-          answers: results.map((result) => ({
+          answers: submittedResults.map((result) => ({
             questionId: result.questionId,
             answerId: result.answer?.id ?? null,
             elapsedMs: result.elapsedMs,
