@@ -85,6 +85,16 @@ test("keeps new scoped questions broad enough without leaking unrelated answers"
 test("accepts omitted and naturally shortened answers in the new scoped questions", () => {
   assert.equal(answerFor("occupations-pentateuch", "shepherd"), "Shepherd");
   assert.equal(answerFor("resurrection-matthew", "Mary Magdalene"), "Mary Magdalene");
+  assert.equal(answerFor("resurrection-matthew", "Mary"), "Mary Magdalene");
+  assert.equal(answerFor("resurrection-matthew", "Peter"), "Peter");
+  assert.equal(answerFor("resurrection-matthew", "Andrew"), "Andrew");
+  assert.equal(answerFor("resurrection-matthew", "John"), "John");
+  assert.equal(answerFor("resurrection-matthew", "Bartholomew"), "Bartholomew");
+  assert.equal(answerFor("resurrection-matthew", "Thomas"), "Thomas");
+  assert.equal(answerFor("resurrection-matthew", "Matthew"), "Matthew");
+  assert.equal(answerFor("resurrection-matthew", "Thaddaeus"), "Thaddaeus");
+  assert.equal(answerFor("resurrection-matthew", "Simon the Zealot"), "Simon the Zealot");
+  assert.equal(answerFor("resurrection-matthew", "James"), undefined);
   assert.equal(answerFor("craftspeople", "engraver"), "Engraver");
   assert.equal(answerFor("craftspeople", "stonemason"), "Mason");
   assert.equal(answerFor("animals-proverbs", "eagle"), "Eagle");
