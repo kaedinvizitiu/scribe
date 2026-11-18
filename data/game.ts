@@ -1,7 +1,12 @@
 import { build2027Calendar } from "./calendar-2027";
 import { CATALOG_COMPLETIONS } from "./catalog-completions";
 import { CATALOG_EXPANSIONS } from "./catalog-expansions";
-import { SCOPED_QUESTION_SPECS, ScopedQuestionSpec } from "./scoped-questions";
+import {
+  SCOPED_ANSWER_ADDITIONS,
+  SCOPED_NATURAL_ALIASES,
+  SCOPED_QUESTION_SPECS,
+  ScopedQuestionSpec,
+} from "./scoped-questions";
 import { YEAR_QUESTIONS, YEAR_QUESTION_POOLS } from "./year-questions";
 
 export const TIERS = {
@@ -389,12 +394,35 @@ function buildScopedQuestion(spec: ScopedQuestionSpec, sources: Map<string, Ques
     return spec.books?.some((book) => candidate.reference === book || candidate.reference.startsWith(`${book} `));
   });
   if (labelSet && selected.length !== labelSet.size) throw new Error(`${spec.id} contains an unknown answer label`);
+  for (const addition of SCOPED_ANSWER_ADDITIONS[spec.id] ?? []) {
+    const sourceAnswer = source.answers.find((candidate) => candidate.label === addition.label);
+    const scopedAnswer = sourceAnswer
+      ? {
+          ...sourceAnswer,
+          reference: addition.reference,
+          aliases: [...new Set([...(sourceAnswer.aliases ?? []), ...(addition.aliases ?? [])])],
+        }
+      : answer(
+          addition.label,
+          "ink",
+          addition.reference,
+          `${addition.label} fits this biblical category; see ${addition.reference}.`,
+          [...(addition.aliases ?? [])],
+        );
+    const existingIndex = selected.findIndex((candidate) => candidate.label === addition.label);
+    if (existingIndex >= 0) selected[existingIndex] = scopedAnswer;
+    else selected.push(scopedAnswer);
+  }
   if (selected.length < scopedTierOrder.length) throw new Error(`${spec.id} needs at least five accepted answers`);
   return {
     id: spec.id,
     prompt: spec.prompt,
     category: spec.category,
-    answers: selected.map((candidate, index) => ({ ...candidate, tier: scopedTierOrder[index % scopedTierOrder.length] })),
+    answers: selected.map((candidate, index) => ({
+      ...candidate,
+      tier: scopedTierOrder[index % scopedTierOrder.length],
+      aliases: [...new Set([...(candidate.aliases ?? []), ...(SCOPED_NATURAL_ALIASES[candidate.label] ?? [])])],
+    })),
   };
 }
 

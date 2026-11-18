@@ -7,6 +7,12 @@ export type ScopedQuestionSpec = {
   labels?: readonly string[];
 };
 
+export type ScopedAnswerAddition = {
+  label: string;
+  reference: string;
+  aliases?: readonly string[];
+};
+
 const byBooks = (id: string, sourceId: string, prompt: string, category: string, ...books: string[]): ScopedQuestionSpec =>
   ({ id, sourceId, prompt, category, books });
 
@@ -170,3 +176,224 @@ export const SCOPED_QUESTION_SPECS: Record<QuestionPool, ScopedQuestionSpec[]> =
 };
 
 export const SCOPED_QUESTION_IDS = Object.values(SCOPED_QUESTION_SPECS).flat().map((spec) => spec.id);
+
+// Scoped prompts need their own references when an answer appears in several
+// books but the master catalog cites only one of them.
+export const SCOPED_ANSWER_ADDITIONS: Record<string, readonly ScopedAnswerAddition[]> = {
+  "women-exodus": [
+    { label: "Pharaoh’s daughter", reference: "Exodus 2:5", aliases: ["Pharaoh's daughter"] },
+  ],
+  "women-judges": [
+    { label: "Achsah", reference: "Judges 1:12–15" },
+    { label: "The woman of Thebez", reference: "Judges 9:53", aliases: ["woman at Thebez"] },
+    { label: "Sisera’s mother", reference: "Judges 5:28", aliases: ["Sisera's mother"] },
+  ],
+  "women-first-samuel": [
+    { label: "Eli’s daughter-in-law", reference: "1 Samuel 4:19", aliases: ["Eli's daughter in law", "Phinehas's wife"] },
+  ],
+  "women-second-kings": [
+    { label: "Jezebel", reference: "2 Kings 9:30" },
+    { label: "The prophet’s widow", reference: "2 Kings 4:1", aliases: ["prophet's widow", "widow with the oil"] },
+  ],
+  "animals-genesis": [
+    { label: "Sheep", reference: "Genesis 4:2" },
+    { label: "Lion", reference: "Genesis 49:9" },
+    { label: "Donkey", reference: "Genesis 49:14" },
+    { label: "Raven", reference: "Genesis 8:7" },
+    { label: "Ox", reference: "Genesis 12:16", aliases: ["oxen"] },
+    { label: "Horse", reference: "Genesis 47:17" },
+    { label: "Goat", reference: "Genesis 27:9" },
+    { label: "Calf", reference: "Genesis 18:7" },
+  ],
+  "animals-exodus": [
+    { label: "Sheep", reference: "Exodus 12:5" },
+    { label: "Donkey", reference: "Exodus 13:13" },
+    { label: "Ox", reference: "Exodus 20:17", aliases: ["oxen"] },
+    { label: "Horse", reference: "Exodus 14:9" },
+    { label: "Goat", reference: "Exodus 12:5" },
+    { label: "Eagle", reference: "Exodus 19:4" },
+    { label: "Serpent", reference: "Exodus 7:9", aliases: ["snake"] },
+    { label: "Fish", reference: "Exodus 7:18" },
+    { label: "Dog", reference: "Exodus 11:7" },
+  ],
+  "animals-leviticus": [
+    { label: "Camel", reference: "Leviticus 11:4" },
+    { label: "Hyrax", reference: "Leviticus 11:5", aliases: ["rock badger"] },
+    { label: "Eagle", reference: "Leviticus 11:13" },
+    { label: "Raven", reference: "Leviticus 11:15" },
+    { label: "Ostrich", reference: "Leviticus 11:16" },
+    { label: "Hawk", reference: "Leviticus 11:16" },
+    { label: "Owl", reference: "Leviticus 11:17" },
+    { label: "Locust", reference: "Leviticus 11:22" },
+    { label: "Pig", reference: "Leviticus 11:7", aliases: ["swine"] },
+  ],
+  "animals-job": [
+    { label: "Lion", reference: "Job 4:10" },
+    { label: "Raven", reference: "Job 38:41" },
+    { label: "Eagle", reference: "Job 39:27" },
+    { label: "Horse", reference: "Job 39:19" },
+    { label: "Ox", reference: "Job 6:5", aliases: ["oxen"] },
+    { label: "Donkey", reference: "Job 6:5" },
+    { label: "Jackal", reference: "Job 30:29" },
+  ],
+  "animals-psalms": [
+    { label: "Lion", reference: "Psalm 22:13" },
+    { label: "Eagle", reference: "Psalm 103:5" },
+    { label: "Dog", reference: "Psalm 22:16" },
+    { label: "Ox", reference: "Psalm 8:7", aliases: ["oxen"] },
+    { label: "Horse", reference: "Psalm 33:17" },
+    { label: "Goat", reference: "Psalm 104:18" },
+    { label: "Raven", reference: "Psalm 147:9" },
+    { label: "Jackal", reference: "Psalm 44:19" },
+    { label: "Serpent", reference: "Psalm 58:4", aliases: ["snake"] },
+    { label: "Fish", reference: "Psalm 8:8" },
+    { label: "Bird", reference: "Psalm 50:11" },
+  ],
+  "animals-proverbs": [
+    { label: "Eagle", reference: "Proverbs 30:17" },
+    { label: "Raven", reference: "Proverbs 30:17" },
+    { label: "Serpent", reference: "Proverbs 30:19", aliases: ["snake"] },
+    { label: "Locust", reference: "Proverbs 30:27" },
+    { label: "Lizard", reference: "Proverbs 30:28" },
+    { label: "Rooster", reference: "Proverbs 30:31", aliases: ["cock"] },
+    { label: "Goat", reference: "Proverbs 30:31" },
+    { label: "Sheep", reference: "Proverbs 27:23" },
+    { label: "Bird", reference: "Proverbs 1:17" },
+  ],
+  "occupations-pentateuch": [
+    { label: "Shepherd", reference: "Genesis 4:2", aliases: ["keeper of sheep"] },
+    { label: "Farmer", reference: "Genesis 4:2", aliases: ["worker of the ground", "tiller of the ground"] },
+    { label: "King", reference: "Genesis 14:1" },
+    { label: "Prophet", reference: "Genesis 20:7" },
+    { label: "Cupbearer", reference: "Genesis 40:1", aliases: ["chief cupbearer"] },
+  ],
+  craftspeople: [
+    { label: "Engraver", reference: "Exodus 35:35" },
+    { label: "Embroiderer", reference: "Exodus 35:35" },
+    { label: "Mason", reference: "2 Samuel 5:11", aliases: ["stone mason", "stonemason"] },
+    { label: "Metalworker", reference: "Genesis 4:22", aliases: ["worker of bronze and iron"] },
+  ],
+  "occupations-prophets": [
+    { label: "Shepherd", reference: "Amos 1:1" },
+    { label: "Farmer", reference: "Amos 5:16" },
+    { label: "Priest", reference: "Jeremiah 20:1" },
+    { label: "Prophet", reference: "Isaiah 37:2" },
+    { label: "King", reference: "Isaiah 6:1" },
+    { label: "Scribe", reference: "Jeremiah 36:10" },
+  ],
+  "prophets-kings": [
+    { label: "Isaiah", reference: "2 Kings 19:2" },
+    { label: "Nathan", reference: "1 Kings 1:8" },
+    { label: "Shemaiah", reference: "1 Kings 12:22" },
+  ],
+  "prophets-chronicles": [
+    { label: "Isaiah", reference: "2 Chronicles 26:22" },
+    { label: "Jeremiah", reference: "2 Chronicles 35:25" },
+    { label: "Nathan", reference: "1 Chronicles 29:29" },
+    { label: "Gad", reference: "1 Chronicles 29:29" },
+    { label: "Ahijah", reference: "2 Chronicles 9:29" },
+    { label: "Shemaiah", reference: "2 Chronicles 12:5" },
+    { label: "Iddo", reference: "2 Chronicles 12:15" },
+    { label: "Azariah son of Oded", reference: "2 Chronicles 15:1", aliases: ["Azariah", "Azariah the son of Oded"] },
+  ],
+  "nativity-matthew": [
+    { label: "Mary", reference: "Matthew 1:18", aliases: ["Mary mother of Jesus", "Virgin Mary"] },
+  ],
+  "women-matthew": [
+    { label: "Mary Magdalene", reference: "Matthew 27:56" },
+    { label: "Mary the mother of James", reference: "Matthew 27:56", aliases: ["mother of James"] },
+    { label: "Herodias", reference: "Matthew 14:3" },
+    { label: "The daughter of Herodias", reference: "Matthew 14:6", aliases: ["Herodias's daughter"] },
+    { label: "The Canaanite woman", reference: "Matthew 15:22" },
+    { label: "The bleeding woman", reference: "Matthew 9:20", aliases: ["woman with the flow of blood"] },
+  ],
+  "prophets-acts": [
+    { label: "Moses", reference: "Acts 3:22" },
+    { label: "Samuel", reference: "Acts 3:24" },
+    { label: "Joel", reference: "Acts 2:16" },
+    { label: "David", reference: "Acts 2:30" },
+    { label: "Isaiah", reference: "Acts 8:28" },
+  ],
+  "resurrection-matthew": [
+    { label: "Mary Magdalene", reference: "Matthew 28:1" },
+    { label: "The guards", reference: "Matthew 28:4", aliases: ["guards", "Roman guards", "tomb guards"] },
+  ],
+  "companions-first-corinthians": [
+    { label: "Timothy", reference: "1 Corinthians 4:17" },
+    { label: "Priscilla", reference: "1 Corinthians 16:19", aliases: ["Prisca"] },
+    { label: "Aquila", reference: "1 Corinthians 16:19" },
+    { label: "Peter", reference: "1 Corinthians 1:12", aliases: ["Cephas"] },
+  ],
+  "companions-colossians": [
+    { label: "Timothy", reference: "Colossians 1:1" },
+    { label: "Tychicus", reference: "Colossians 4:7" },
+    { label: "Aristarchus", reference: "Colossians 4:10" },
+    { label: "Mark", reference: "Colossians 4:10", aliases: ["John Mark"] },
+    { label: "Luke", reference: "Colossians 4:14" },
+  ],
+  "plants-matthew": [
+    { label: "Fig tree", reference: "Matthew 21:19", aliases: ["fig"] },
+    { label: "Thorn", reference: "Matthew 13:7", aliases: ["thorns"] },
+    { label: "Grass", reference: "Matthew 6:30" },
+    { label: "Cumin", reference: "Matthew 23:23" },
+    { label: "Grapevine", reference: "Matthew 21:33", aliases: ["vine", "grape vine"] },
+  ],
+  "animals-matthew": [
+    { label: "Sheep", reference: "Matthew 25:32" },
+    { label: "Donkey", reference: "Matthew 21:2" },
+    { label: "Camel", reference: "Matthew 19:24" },
+    { label: "Serpent", reference: "Matthew 10:16", aliases: ["snake"] },
+    { label: "Fish", reference: "Matthew 7:10" },
+    { label: "Dog", reference: "Matthew 7:6" },
+    { label: "Fox", reference: "Matthew 8:20" },
+    { label: "Bird", reference: "Matthew 6:26" },
+  ],
+  "structures-gospels": [
+    { label: "Temple", reference: "Matthew 21:12" },
+    { label: "Altar", reference: "Matthew 23:35" },
+    { label: "Upper room", reference: "Mark 14:15" },
+    { label: "Joseph’s tomb", reference: "Matthew 27:60", aliases: ["Joseph's tomb", "Jesus's tomb", "Jesus' tomb"] },
+    { label: "City gate", reference: "Luke 7:12" },
+  ],
+  "foods-gospels": [
+    { label: "Wine", reference: "Luke 22:18" },
+    { label: "Vinegar", reference: "Matthew 27:48", aliases: ["sour wine"] },
+    { label: "Salt", reference: "Matthew 5:13" },
+  ],
+};
+
+export const SCOPED_NATURAL_ALIASES: Record<string, readonly string[]> = {
+  "The witch of Endor": ["medium of Endor", "Endor medium"],
+  "The eleven disciples": ["eleven disciples", "11 disciples"],
+  "The women at the tomb": ["women at tomb"],
+  "The disciples in Galilee": ["Galilee disciples"],
+  "Purple-goods seller": ["seller of purple", "purple seller"],
+  "Perfumery maker": ["perfume maker", "perfumer"],
+  Cucumbers: ["cucumber"],
+  Melons: ["melon"],
+  Onions: ["onion"],
+  "Wild gourds": ["wild gourd", "gourds", "gourd"],
+  Leeks: ["leek"],
+  "Bitter herbs": ["bitter herb", "herbs"],
+  Figs: ["fig"],
+  Raisins: ["raisin"],
+  Grapes: ["grape"],
+  Olives: ["olive"],
+  Dates: ["date"],
+  Pomegranates: ["pomegranate"],
+  Almonds: ["almond"],
+  Apples: ["apple"],
+  "Sycamore figs": ["sycamore fig"],
+  Locusts: ["locust"],
+  Beans: ["bean"],
+  Sandals: ["sandal"],
+  "Baana son of Ahilud": ["Baana Ahilud", "Baana of Ahilud"],
+  "Baana son of Hushai": ["Baana Hushai", "Baana of Hushai"],
+  "Jehoshaphat son of Paruah": ["Jehoshaphat Paruah"],
+  "Shimei son of Ela": ["Shimei Ela"],
+  "Geber son of Uri": ["Geber Uri"],
+  "Azariah son of Nathan": ["Azariah Nathan"],
+  "Jehoshaphat son of Ahilud": ["Jehoshaphat Ahilud"],
+  "The scroll with seven seals": ["seven seal scroll", "seven sealed scroll"],
+  "Golden bowls of incense": ["incense bowls", "golden bowls"],
+};

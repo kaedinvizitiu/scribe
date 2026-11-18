@@ -82,6 +82,21 @@ test("keeps new scoped questions broad enough without leaking unrelated answers"
   assert.equal(answerFor("haman-sons", "Vaizatha"), "Vaizatha");
 });
 
+test("accepts omitted and naturally shortened answers in the new scoped questions", () => {
+  assert.equal(answerFor("occupations-pentateuch", "shepherd"), "Shepherd");
+  assert.equal(answerFor("resurrection-matthew", "Mary Magdalene"), "Mary Magdalene");
+  assert.equal(answerFor("craftspeople", "engraver"), "Engraver");
+  assert.equal(answerFor("craftspeople", "stonemason"), "Mason");
+  assert.equal(answerFor("animals-proverbs", "eagle"), "Eagle");
+  assert.equal(answerFor("animals-proverbs", "lizard"), "Lizard");
+  assert.equal(answerFor("companions-first-corinthians", "Timothy"), "Timothy");
+  assert.equal(answerFor("companions-first-corinthians", "Cephas"), "Peter");
+  assert.equal(answerFor("biblical-vegetables", "cucumber"), "Cucumbers");
+  assert.equal(answerFor("biblical-vegetables", "gourd"), "Wild gourds");
+  assert.equal(answerFor("solomon-district-officials", "Baana Ahilud"), "Baana son of Ahilud");
+  assert.equal(answerFor("solomon-district-officials", "Geber Uri"), "Geber son of Uri");
+});
+
 test("uses ESV labels while retaining genuine translation aliases", () => {
   assert.equal(answerFor("apostle", "James son of Alphaeus"), "James son of Alphaeus");
   assert.equal(answerFor("bible-animal", "monkey"), "Ape");
